@@ -25,16 +25,37 @@ void MainWindow::hideWindow()
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    this->resize(QSize(1280,800));
-    this->setAttribute(Qt::WA_TranslucentBackground );
-    this->setMouseTracking(true);
-
-    //////////Creating title text//////////
-
     QFont SFProDisplay("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
+
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    this->resize(QSize(1800,800));
+    this->setAttribute(Qt::WA_TranslucentBackground );
+    this->setMouseTracking(true);
+
+    refreshButton = new QPushButton(this);
+    refreshButton->setStyleSheet("QPushButton {"
+                                    "background-color: rgb(28, 28, 28);"
+                                    "color: rgb(100,100,100);"
+                                    "border: 1px solid rgb(50,50,50);"
+                                    "border-radius: 5px"
+                                    "}"
+                                    "QPushButton:hover {"
+                                    "background-color: rgb(20, 20, 20);"
+                                    "color: rgb(80,80,80);"
+                                    "}"
+                                    "QPushButton:pressed {"
+                                    "background-color: rgb(10,10,10);"
+                                    "color: rgb(60,60,60);"
+                                    "border: 1px solid rgb(40, 40, 40);"
+                                    "}");
+    refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
+    refreshButton->setFont(SFProDisplay);
+    refreshButton->setText("Update");
+
+    //////////Creating title text//////////
+
     windowTitle = new QLabel(this);
     windowTitle->setText("Employee Task Control System");
     windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));

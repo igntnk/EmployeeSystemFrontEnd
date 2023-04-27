@@ -33,6 +33,7 @@ private:
     QPushButton* exitButton;
     QPushButton* resizeButton;
     QPushButton* hideButton;
+    QPushButton* refreshButton;
 
     std::vector<QPushButton*> employeeTools;
 

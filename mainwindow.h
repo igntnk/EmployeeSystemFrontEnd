@@ -34,6 +34,8 @@ private:
     QPushButton* resizeButton;
     QPushButton* hideButton;
 
+    std::vector<QPushButton*> employeeTools;
+
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 

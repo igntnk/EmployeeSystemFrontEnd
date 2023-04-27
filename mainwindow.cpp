@@ -5,7 +5,6 @@ void MainWindow::resizeWindow()
     if(this->windowState() == Qt::WindowMaximized)
     {
         this->setWindowState(Qt::WindowNoState);
-        qDebug() << this->size();
         maxTrigger=false;
     }
     else
@@ -91,6 +90,43 @@ MainWindow::MainWindow(QWidget *parent)
                               "}");
     hideButton->setGeometry(65,20,16,16);
     connect(hideButton, &QPushButton::clicked,this,&MainWindow::hideWindow);
+
+    //////////Creating employee control buttons//////////
+    /// 0-add employee
+    /// 1-fire employee
+    /// 2-edit info about employee
+    /// 3-add task for employee
+    /// 4-promote employee
+    /////////////////////////////////////////////////////
+
+    for(int c=0;c<5;c++)
+    {
+        employeeTools.push_back(new QPushButton(this));
+        employeeTools[c]->setStyleSheet("QPushButton {"
+                                        "background-color: rgb(28, 28, 28);"
+                                        "color: rgb(100,100,100);"
+                                        "border: 1px solid rgb(80,80,80);"
+                                        "border-radius: 5px"
+                                        "}"
+                                        "QPushButton:hover {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        "color: rgb(80,80,80);"
+                                        "}"
+                                        "QPushButton:pressed {"
+                                        "background-color: rgb(10,10,10);"
+                                        "color: rgb(60,60,60);"
+                                        "border: 1px solid rgb(40, 40, 40);"
+                                        "}");
+        employeeTools[c]->setGeometry(QRect(QPoint(this->width()/2-512.5+205*c,this->height()-45),QSize(200,40)));
+        employeeTools[c]->setFont(SFProDisplay);
+    }
+
+    employeeTools[0]->setText("Add Eployee");
+    employeeTools[1]->setText("Fire Employee");
+    employeeTools[2]->setText("Edit Employee Info");
+    employeeTools[3]->setText("Add Task");
+    employeeTools[4]->setText("Promote Employee");
+
 }
 
 MainWindow::~MainWindow()
@@ -103,6 +139,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
+
+    for(int c=0;c<5;c++)
+    {
+        employeeTools[c]->setGeometry(QRect(QPoint(this->width()/2-512.5+205*c,this->height()-45),QSize(200,40)));
+    }
 
     QPainter drawer(this);
     doPainting(&drawer);
@@ -195,7 +236,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
     if(isClicked)
     {
-        this->move(event->pos().x()-pressPoint.x(),event->pos().y()-pressPoint.y());
+        this->move(event->globalPosition().x()-pressPoint.x(),event->globalPosition().y()-pressPoint.y());
     }
 }
 
@@ -215,10 +256,11 @@ void MainWindow::changeEvent(QEvent* event)
 {
     if(event->type() == QEvent::WindowStateChange && waiting)
     {
-        waiting = false;
         this->setWindowState(Qt::WindowMaximized);
+
     }
 
+    waiting = false;
     if(event->type() == QEvent::WindowStateChange && maxTrigger)
     {
         waiting = true;

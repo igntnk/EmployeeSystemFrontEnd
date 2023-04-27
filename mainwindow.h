@@ -40,9 +40,13 @@ private:
     QPointF pressPoint;
     bool isClicked =false;
 
+    bool maxTrigger = false;
+    bool waiting = false;
+
 public slots:
     void resizeWindow();
     void hideWindow();
+    void changeEvent(QEvent* e);
 };
 
 #endif // MAINWINDOW_H

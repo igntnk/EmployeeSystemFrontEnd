@@ -5,11 +5,14 @@ void MainWindow::resizeWindow()
     if(this->windowState() == Qt::WindowMaximized)
     {
         this->setGeometry(this->width()/4,this->height()/4,1280,800);
-        this->update();
+        windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
+        maxTrigger=false;
     }
     else
     {
         this->setWindowState(Qt::WindowMaximized);
+         windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
+        maxTrigger = true;
     }
 }
 
@@ -133,7 +136,7 @@ void MainWindow::doPainting(QPainter* drawer)
 
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
-    drawer->drawRect(QRect(QPoint(220,0),QPoint(this->width()-220,this->height()-5)));
+    drawer->drawRect(QRect(QPoint(this->width()/6,0),QPoint(this->width()-this->width()/6,this->height()-5)));
 
     //////////Creating app control panel//////////
 
@@ -198,6 +201,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
 
 void MainWindow::mouseReleaseEvent(QMouseEvent* event)
 {
+    Q_UNUSED(event);
     isClicked = false;
 }
 
@@ -205,5 +209,19 @@ bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
 {
     return (rect.topLeft().x()<point.x() && rect.topLeft().y()<point.y() &&
             rect.bottomRight().x()>point.x() && rect.bottomRight().y()>point.y());
+}
+
+void MainWindow::changeEvent(QEvent* event)
+{
+    if(event->type() == QEvent::WindowStateChange && waiting)
+    {
+        waiting = false;
+        this->setWindowState(Qt::WindowMaximized);
+    }
+
+    if(event->type() == QEvent::WindowStateChange && maxTrigger)
+    {
+        waiting = true;
+    }
 }
 

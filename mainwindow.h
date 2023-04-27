@@ -2,12 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+#include <QGraphicsBlurEffect>
+#include <QLabel>
+#include <QPainter>
+#include <QPainterPath>
+#include <QMouseEvent>
+#include <QPushButton>
+#include <vector>
 
 class MainWindow : public QMainWindow
+
 {
     Q_OBJECT
 
@@ -15,10 +19,26 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_pushButton_clicked();
+protected:
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+
+    bool isOnField(const QPointF& point, const QRectF& rect);
 
 private:
-    Ui::MainWindow *ui;
+
+    QLabel* windowTitle;
+    QPushButton* exitButton;
+    QPushButton* resizeButton;
+    QPushButton* hideButton;
+
+    void paintEvent(QPaintEvent *event);
+    void doPainting(QPainter* drawer);
+
+    QPointF pressPoint;
+    bool isClicked =false;
+
 };
+
 #endif // MAINWINDOW_H

@@ -4,14 +4,13 @@ void MainWindow::resizeWindow()
 {
     if(this->windowState() == Qt::WindowMaximized)
     {
-        this->setGeometry(this->width()/4,this->height()/4,1280,800);
-        windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
+        this->setWindowState(Qt::WindowNoState);
+        qDebug() << this->size();
         maxTrigger=false;
     }
     else
     {
         this->setWindowState(Qt::WindowMaximized);
-         windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
         maxTrigger = true;
     }
 }
@@ -102,6 +101,8 @@ MainWindow::~MainWindow()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+
+    windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
 
     QPainter drawer(this);
     doPainting(&drawer);
@@ -194,8 +195,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
     if(isClicked)
     {
-        QPointF moved = event->globalPosition();
-        this->move(moved.x()-pressPoint.x(),moved.y()-pressPoint.y());
+        this->move(event->pos().x()-pressPoint.x(),event->pos().y()-pressPoint.y());
     }
 }
 

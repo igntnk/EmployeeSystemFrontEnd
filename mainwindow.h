@@ -8,6 +8,7 @@
 #include <QPainterPath>
 #include <QMouseEvent>
 #include <QPushButton>
+#include <QApplication>
 #include <vector>
 
 class MainWindow : public QMainWindow
@@ -39,6 +40,9 @@ private:
     QPointF pressPoint;
     bool isClicked =false;
 
+public slots:
+    void resizeWindow();
+    void hideWindow();
 };
 
 #endif // MAINWINDOW_H

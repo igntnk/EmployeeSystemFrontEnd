@@ -1,5 +1,25 @@
 #include "mainwindow.h"
 
+void MainWindow::resizeWindow()
+{
+    if(this->windowState() == Qt::WindowMaximized)
+    {
+        this->setGeometry(this->width()/4,this->height()/4,1280,800);
+        this->update();
+    }
+    else
+    {
+        this->setWindowState(Qt::WindowMaximized);
+    }
+}
+
+void MainWindow::hideWindow()
+{
+    if(this->windowState() != Qt::WindowMinimized)
+    {
+        this->setWindowState(Qt::WindowMinimized);
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -36,6 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
                               "border: 1px solid rgb(180, 48, 48);"
                               "}");
     exitButton->setGeometry(15,20,16,16);
+    connect(exitButton, &QPushButton::clicked,this, &QMainWindow::close);
+
     resizeButton = new QPushButton(this);
     resizeButton->setStyleSheet("QPushButton {"
                                 "background-color: rgb(230, 197, 78);"
@@ -50,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent)
                                 "border: 1px solid rgb(200, 150, 58);"
                                 "}");
     resizeButton->setGeometry(40,20,16,16);
+    connect(resizeButton, &QPushButton::clicked,this,&MainWindow::resizeWindow);
+
     hideButton = new QPushButton(this);
     hideButton->setStyleSheet("QPushButton {"
                               "background-color: rgb(194, 194, 194);"
@@ -64,6 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
                               "border: 1px solid rgb(170, 170, 170);"
                               "}");
     hideButton->setGeometry(65,20,16,16);
+    connect(hideButton, &QPushButton::clicked,this,&MainWindow::hideWindow);
 }
 
 MainWindow::~MainWindow()

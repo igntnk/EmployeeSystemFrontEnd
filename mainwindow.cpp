@@ -89,11 +89,11 @@ void MainWindow::doPainting(QPainter* drawer)
 
     //////////Creating middle opacity backgrpound//////////
 
-    myPen.setColor(QColor(50,50,50,150));
+    myPen.setColor(QColor(10,10,10));
     myBrush.setColor(QColor(50,50,50,150));
     myBrush.setStyle(Qt::SolidPattern);
     myPath.moveTo(0,0);
-    myPath.addRoundedRect(QRect(QPoint(0,0),QPoint(this->width()-5,this->height()-2)),10,10);
+    myPath.addRoundedRect(QRect(QPoint(1,1),QPoint(this->width()-2,this->height()-2)),10,10);
 
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
@@ -103,17 +103,17 @@ void MainWindow::doPainting(QPainter* drawer)
 
     //////////Creating Task Desription Field//////////
 
-    myPen.setColor(QColor(28,28,28));
+    myPen.setColor(QColor(10,10,10));
     myBrush.setColor(QColor(28,28,28));
 
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
-    drawer->drawRect(QRect(QPoint(220,0),QPoint(this->width()-220,this->height())));
+    drawer->drawRect(QRect(QPoint(220,0),QPoint(this->width()-220,this->height()-5)));
 
     //////////Creating app control panel//////////
 
     myPath.moveTo(0,0);
-    myPath.addRoundedRect(QRect(QPoint(1,1),QPoint(this->width()-5,50)),10,10);
+    myPath.addRoundedRect(QRect(QPoint(1,1),QPoint(this->width()-2,50)),10,10);
     myPen.setColor(QColor(80,80,80));
     myPen.setWidth(1);
     myBrush.setColor(QColor(28,28,28));
@@ -123,14 +123,32 @@ void MainWindow::doPainting(QPainter* drawer)
     drawer->drawPath(myPath);
     myPen.setColor(QColor(15,15,15));
     drawer->setPen(myPen);
-    drawer->drawRect(QRect(QPoint(1,45),QPoint(this->width()-5,50)));
+    drawer->drawRect(QRect(QPoint(1,45),QPoint(this->width()-2,50)));
 
     myPen.setColor(QColor(28,28,28));
 
     drawer->setPen(myPen);
-    drawer->drawRect(QRect(QPoint(2,41),QPoint(this->width()-6,48)));
+    drawer->drawRect(QRect(QPoint(2,41),QPoint(this->width()-3,48)));
 
     myPath.clear();
+
+    //////////Creating employeers control panel//////////
+
+    myPath.addRoundedRect(QRect(QPoint(1,this->height()-50),QPoint(this->width()-3,this->height()-2)),10,10);
+    myPen.setColor(QColor(10,10,10));
+    myBrush.setColor(QColor(70,70,70));
+
+    drawer->setPen(myPen);
+    drawer->setBrush(myBrush);
+    drawer->drawPath(myPath);
+
+    drawer->drawRect(QRect(QPoint(1,this->height()-50),QPoint(this->width()-3,this->height()-30)));
+
+    myPen.setColor(QColor(70,70,70));
+    drawer->setPen(myPen);
+    drawer->drawRect(QRect(QPoint(2,this->height()-45),QPoint(this->width()-4,this->height()-20)));
+
+
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -141,7 +159,6 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
     {
         pressPoint = event->pos();
         isClicked = true;
-        qDebug() << event->pos() << "1";
     }
 }
 
@@ -151,7 +168,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
     {
         QPointF moved = event->globalPosition();
         this->move(moved.x()-pressPoint.x(),moved.y()-pressPoint.y());
-        qDebug() << moved;
     }
 }
 

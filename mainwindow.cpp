@@ -149,6 +149,8 @@ MainWindow::MainWindow(QWidget *parent)
     employeeTools[3]->setText("Add Task");
     employeeTools[4]->setText("Promote Employee");
 
+    //////////Creating in work in vacation buttons//////////
+
     inWork = new QPushButton(this);
     inVacation = new QPushButton(this);
 
@@ -164,7 +166,7 @@ MainWindow::MainWindow(QWidget *parent)
                           "color: rgb(180,180,180);"
                           "}");
     inWork->setText("In Work");
-    inWork->setGeometry(12,55,SFProDislplayMetrics.horizontalAdvance("In Work"),30);
+    inWork->setGeometry(12,55,SFProDislplayMetrics.horizontalAdvance("In Work"),SFProDislplayMetrics.height());
     connect(inWork,&QPushButton::clicked,this,&MainWindow::inWorkPressed);
 
     inVacation->setFont(SFProDisplay);
@@ -179,7 +181,7 @@ MainWindow::MainWindow(QWidget *parent)
                           "color: rgb(180,180,180);"
                           "}");
     inVacation->setText("In Vacation");
-    inVacation->setGeometry(12,55 + inWork->height(),SFProDislplayMetrics.horizontalAdvance("In Vacation"),30);
+    inVacation->setGeometry(12,65 + inWork->height(),SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
     connect(inVacation,&QPushButton::clicked,this, &MainWindow::inVacationPressed);
 }
 
@@ -266,13 +268,56 @@ void MainWindow::doPainting(QPainter* drawer)
     drawer->setBrush(myBrush);
     drawer->drawPath(myPath);
 
+    myPath.clear();
+
     drawer->drawRect(QRect(QPoint(1,this->height()-50),QPoint(this->width()-3,this->height()-30)));
 
     myPen.setColor(QColor(70,70,70));
     drawer->setPen(myPen);
     drawer->drawRect(QRect(QPoint(2,this->height()-45),QPoint(this->width()-4,this->height()-20)));
 
+    //////////Creating left panel triangles//////////
 
+    myPen.setColor(QColor(240,240,240));
+    myBrush.setColor(QColor(240,240,240));
+    drawer->setPen(myPen);
+    drawer->setBrush(myBrush);
+
+    if(inWorkClicked)
+    {
+        myPath.moveTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+7);
+        myPath.lineTo(inWork->geometry().topRight().x()+22,inWork->geometry().topRight().y()+7);
+        myPath.lineTo(inWork->geometry().topRight().x()+16,inWork->geometry().topRight().y()+16);
+        myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+7);
+    }
+    else
+    {
+        myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+5);
+        myPath.lineTo(inWork->geometry().topRight().x()+21,inWork->geometry().topRight().y()+11.5);
+        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+17);
+        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+7);
+    }
+    drawer->drawPath(myPath);
+
+    myPath.clear();
+
+    if(inVacationClicked)
+    {
+        myPath.moveTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+7);
+        myPath.lineTo(inVacation->geometry().topRight().x()+22,inVacation->geometry().topRight().y()+7);
+        myPath.lineTo(inVacation->geometry().topRight().x()+16,inVacation->geometry().topRight().y()+16);
+        myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+7);
+    }
+    else
+    {
+        myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+5);
+        myPath.lineTo(inVacation->geometry().topRight().x()+21,inVacation->geometry().topRight().y()+11.5);
+        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+17);
+        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+7);
+    }
+    drawer->drawPath(myPath);
+
+    myPath.clear();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
@@ -323,9 +368,17 @@ void MainWindow::changeEvent(QEvent* event)
 
 void MainWindow::inWorkPressed()
 {
+    if(inWorkClicked){inWorkClicked = false;}
+    else{inWorkClicked = true;}
+
     qDebug()<< "Should Open Later))";
+    this->update();
 }
 void MainWindow::inVacationPressed()
 {
+    if(inVacationClicked){inVacationClicked = false; }
+    else {inVacationClicked = true;}
+
     qDebug() << "This Shoul Be Open Too)))";
+    this->update();
 }

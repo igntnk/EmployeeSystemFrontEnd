@@ -28,7 +28,7 @@ protected:
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 
-private:
+private:  
 
     QLabel* windowTitle;
     QPushButton* exitButton;
@@ -40,6 +40,8 @@ private:
 
     QPushButton* inWork;
     QPushButton* inVacation;
+    bool inWorkClicked;
+    bool inVacationClicked;
 
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);

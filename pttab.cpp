@@ -10,7 +10,7 @@ PTtab::PTtab(QMainWindow* parent):
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
     infoString = "Unknown Name\nUnknown Surname\nUnknown Rank";
 
-    this->setGeometry(0,90,parent->width()/6,60);
+    this->setGeometry(0,80,parent->width()/6,60);
 
     pixmap.load(":icons/profile_icon.png");
     picture = new QLabel(this);

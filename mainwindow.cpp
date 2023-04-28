@@ -285,16 +285,16 @@ void MainWindow::doPainting(QPainter* drawer)
 
     if(inWorkClicked)
     {
-        myPath.moveTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+7);
-        myPath.lineTo(inWork->geometry().topRight().x()+22,inWork->geometry().topRight().y()+7);
-        myPath.lineTo(inWork->geometry().topRight().x()+16,inWork->geometry().topRight().y()+16);
-        myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+7);
+        myPath.moveTo(inWork->geometry().topRight().x()+11,inWork->geometry().topRight().y()+8);
+        myPath.lineTo(inWork->geometry().topRight().x()+20,inWork->geometry().topRight().y()+8);
+        myPath.lineTo(inWork->geometry().topRight().x()+15,inWork->geometry().topRight().y()+15);
+        myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+8);
     }
     else
     {
-        myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+5);
-        myPath.lineTo(inWork->geometry().topRight().x()+21,inWork->geometry().topRight().y()+11.5);
-        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+17);
+        myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+6);
+        myPath.lineTo(inWork->geometry().topRight().x()+19,inWork->geometry().topRight().y()+10);
+        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+15);
         myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+7);
     }
     drawer->drawPath(myPath);
@@ -303,16 +303,16 @@ void MainWindow::doPainting(QPainter* drawer)
 
     if(inVacationClicked)
     {
-        myPath.moveTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+7);
-        myPath.lineTo(inVacation->geometry().topRight().x()+22,inVacation->geometry().topRight().y()+7);
-        myPath.lineTo(inVacation->geometry().topRight().x()+16,inVacation->geometry().topRight().y()+16);
-        myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+7);
+        myPath.moveTo(inVacation->geometry().topRight().x()+11,inVacation->geometry().topRight().y()+8);
+        myPath.lineTo(inVacation->geometry().topRight().x()+20,inVacation->geometry().topRight().y()+8);
+        myPath.lineTo(inVacation->geometry().topRight().x()+15,inVacation->geometry().topRight().y()+15);
+        myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+8);
     }
     else
     {
-        myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+5);
-        myPath.lineTo(inVacation->geometry().topRight().x()+21,inVacation->geometry().topRight().y()+11.5);
-        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+17);
+        myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+6);
+        myPath.lineTo(inVacation->geometry().topRight().x()+19,inVacation->geometry().topRight().y()+10);
+        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+15);
         myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+7);
     }
     drawer->drawPath(myPath);

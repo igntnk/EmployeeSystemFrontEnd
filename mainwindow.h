@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QApplication>
 #include <vector>
+#include "pttab.h"
 
 class MainWindow : public QMainWindow
 
@@ -37,6 +38,9 @@ private:
 
     std::vector<QPushButton*> employeeTools;
 
+    QPushButton* inWork;
+    QPushButton* inVacation;
+
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
@@ -50,6 +54,9 @@ public slots:
     void resizeWindow();
     void hideWindow();
     void changeEvent(QEvent* e);
+
+    void inWorkPressed();
+    void inVacationPressed();
 };
 
 #endif // MAINWINDOW_H

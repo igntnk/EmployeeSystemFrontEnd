@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     QFont SFProDisplay("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     this->resize(QSize(1800,800));
@@ -148,6 +149,38 @@ MainWindow::MainWindow(QWidget *parent)
     employeeTools[3]->setText("Add Task");
     employeeTools[4]->setText("Promote Employee");
 
+    inWork = new QPushButton(this);
+    inVacation = new QPushButton(this);
+
+    inWork->setFont(SFProDisplay);
+    inWork->setStyleSheet("QPushButton {"
+                          "background-color: rgba(0,0,0,0);"
+                          "color: rgb(240,240,240);"
+                          "}"
+                          "QPushButton:hover {"
+                          "color: rgb(220,220,220);"
+                          "}"
+                          "QPushButton:pressed {"
+                          "color: rgb(180,180,180);"
+                          "}");
+    inWork->setText("In Work");
+    inWork->setGeometry(12,55,SFProDislplayMetrics.horizontalAdvance("In Work"),30);
+    connect(inWork,&QPushButton::clicked,this,&MainWindow::inWorkPressed);
+
+    inVacation->setFont(SFProDisplay);
+    inVacation->setStyleSheet("QPushButton {"
+                          "background-color: rgba(0,0,0,0);"
+                          "color: rgb(240,240,240);"
+                          "}"
+                          "QPushButton:hover {"
+                          "color: rgb(220,220,220);"
+                          "}"
+                          "QPushButton:pressed {"
+                          "color: rgb(180,180,180);"
+                          "}");
+    inVacation->setText("In Vacation");
+    inVacation->setGeometry(12,55 + inWork->height(),SFProDislplayMetrics.horizontalAdvance("In Vacation"),30);
+    connect(inVacation,&QPushButton::clicked,this, &MainWindow::inVacationPressed);
 }
 
 MainWindow::~MainWindow()
@@ -288,3 +321,11 @@ void MainWindow::changeEvent(QEvent* event)
     }
 }
 
+void MainWindow::inWorkPressed()
+{
+    qDebug()<< "Should Open Later))";
+}
+void MainWindow::inVacationPressed()
+{
+    qDebug() << "This Shoul Be Open Too)))";
+}

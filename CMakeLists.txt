@@ -13,8 +13,12 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 add_executable(EmployeeSystemFrontend
-   main.cpp
-   mainwindow.cpp)
+         mainwindow.h
+         pttab.h
+  	 main.cpp
+  	 mainwindow.cpp
+         pttab.cpp
+         pictures.qrc)
 
 target_link_libraries(EmployeeSystemFrontend
         Qt::Core

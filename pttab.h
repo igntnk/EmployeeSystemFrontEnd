@@ -14,10 +14,15 @@ class PTtab:public QLabel
 public:
     PTtab(QMainWindow* parent = nullptr);
 
+    void setPicture(int choice);
+    void setPicture(QString file);
+    void setText(const QString& text,int rowsNum);
+
 private:
 
     //void paintEvent(QPaintEvent *event);
     //void doPainting(QPainter* drawer);
+    QFont SFProDisplay;
 
     QLabel* infoText;
     QString infoString;

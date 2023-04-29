@@ -2,15 +2,43 @@
 
 void MainWindow::resizeWindow()
 {
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
     if(this->windowState() == Qt::WindowMaximized)
     {
         this->setWindowState(Qt::WindowNoState);
         maxTrigger=false;
+        employeeTasks->move(this->width()-this->width()/6+12,58);
+        profilePict->setGeometry(this->width()/6+40,90,200,200);
+        refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
+        mainProfileInfo->move(this->width()/6 +260,120);
+        chapter1->move(this->width()/6+40,320);
+        chapter2->move(this->width()/6+40,this->height()-150);
+        windowTitle->move(this->width()/2-120,15);
+        for(int c=0;c<5;c++)
+        {
+            employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
+        }
+
+        this->update();
     }
     else
     {
         this->setWindowState(Qt::WindowMaximized);
         maxTrigger = true;
+        employeeTasks->move(this->width()-this->width()/6+12,58);
+        profilePict->setGeometry(this->width()/6+40,90,200,200);
+        refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
+        mainProfileInfo->move(this->width()/6 +400,120);
+        chapter1->move(this->width()/6+40,320);
+        chapter2->move(this->width()/6+40,this->height()-150);
+        windowTitle->move(this->width()/2-120,15);
+        for(int c=0;c<5;c++)
+        {
+            employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
+        }
+
+        this->update();
     }
 }
 
@@ -25,10 +53,15 @@ void MainWindow::hideWindow()
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    QFont SFProDisplay("SF Pro Display", 13);
+    SFProDisplay = QFont("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    shadow = new QGraphicsDropShadowEffect(this);
+    shadow->setBlurRadius(30);
+    shadow->setOffset(0,0);
+    shadow->setColor(QColor(0,0,0,200));
 
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     this->resize(QSize(1800,800));
@@ -127,8 +160,8 @@ MainWindow::MainWindow(QWidget *parent)
         employeeTools[c]->setStyleSheet("QPushButton {"
                                         "background-color: rgb(28, 28, 28);"
                                         "color: rgb(100,100,100);"
-                                        "border: 1px solid rgb(80,80,80);"
-                                        "border-radius: 5px"
+                                        "border: 2px solid rgb(80,80,80);"
+                                        "border-radius: 7px"
                                         "}"
                                         "QPushButton:hover {"
                                         "background-color: rgb(20, 20, 20);"
@@ -161,32 +194,73 @@ MainWindow::MainWindow(QWidget *parent)
     inWork->setFont(SFProDisplay);
     inWork->setStyleSheet("QPushButton {"
                           "background-color: rgba(0,0,0,0);"
-                          "color: rgb(240,240,240);"
+                          "color: rgb(200,200,200);"
                           "}"
                           "QPushButton:hover {"
-                          "color: rgb(220,220,220);"
+                          "color: rgb(180,180,180);"
                           "}"
                           "QPushButton:pressed {"
-                          "color: rgb(180,180,180);"
+                          "color: rgb(150,150,150);"
                           "}");
     inWork->setText("In Work");
-    inWork->setGeometry(12,55,SFProDislplayMetrics.horizontalAdvance("In Work"),SFProDislplayMetrics.height());
+    inWork->setGeometry(12,60,SFProDislplayMetrics.horizontalAdvance("In Work"),SFProDislplayMetrics.height());
     connect(inWork,&QPushButton::clicked,this,&MainWindow::inWorkPressed);
 
     inVacation->setFont(SFProDisplay);
     inVacation->setStyleSheet("QPushButton {"
-                          "background-color: rgba(0,0,0,0);"
-                          "color: rgb(240,240,240);"
-                          "}"
-                          "QPushButton:hover {"
-                          "color: rgb(220,220,220);"
-                          "}"
-                          "QPushButton:pressed {"
-                          "color: rgb(180,180,180);"
-                          "}");
+                              "background-color: rgba(0,0,0,0);"
+                              "color: rgb(200,200,200);"
+                              "}"
+                              "QPushButton:hover {"
+                              "color: rgb(180,180,180);"
+                              "}"
+                              "QPushButton:pressed {"
+                              "color: rgb(150,150,150);"
+                              "}");
     inVacation->setText("In Vacation");
-    inVacation->setGeometry(12,65 + inWork->height(),SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
+    inVacation->setGeometry(12,70 + inWork->height(),SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
     connect(inVacation,&QPushButton::clicked,this, &MainWindow::inVacationPressed);
+
+    //////////Creating task panel//////////
+
+    employeeTasks = new QLabel(this);
+    employeeTasks->setText("Employee Tasks");
+    employeeTasks->setFont(SFProDisplay);
+    employeeTasks->setGeometry(this->width()-this->width()/6+12,58,
+                               SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
+    employeeTasks->setStyleSheet("color: rgb(200,200,200);");
+
+    //////////Creating description panel//////////
+
+    profilePix.load(":icons/profile_icon.png");
+    profilePict = new QLabel(this);
+    profilePict->setScaledContents(true);
+    profilePict->setGeometry(this->width()/6+40,90,200,200);
+    profilePict->setPixmap(profilePix);
+    profilePict->setGraphicsEffect(shadow);
+
+    SFProDisplay.setPixelSize(30);
+    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
+
+    mainProfileInfo = new QLabel(this);
+    mainProfileInfo->setFont(SFProDisplay);
+    mainProfileInfo->setText("Name:\nSurname:\nLast Name:\nRank:");
+    mainProfileInfo->setAlignment(Qt::AlignRight);
+    mainProfileInfo->setGeometry(this->width()/6 +260,120,
+                                SFProDislplayMetrics.horizontalAdvance("Last Name: "),SFProDislplayMetrics.height()*4);
+    mainProfileInfo->setStyleSheet("color: rgb(130,130,130);");
+
+    chapter1 = new QLabel(this);
+    chapter1->setFont(SFProDisplay);
+    chapter1->setText("Task Decription");
+    chapter1->setGeometry(this->width()/6+40,320,SFProDislplayMetrics.horizontalAdvance("Task Description"),SFProDislplayMetrics.height());
+    chapter1->setStyleSheet("color: rgb(130,130,130);");
+
+    chapter2 = new QLabel(this);
+    chapter2->setFont(SFProDisplay);
+    chapter2->setText("Employment Date");
+    chapter2->setGeometry(this->width()/6+40,this->height()-150,SFProDislplayMetrics.horizontalAdvance("Employment Date"),SFProDislplayMetrics.height());
+    chapter2->setStyleSheet("color: rgb(130,130,130);");
 }
 
 MainWindow::~MainWindow()
@@ -197,13 +271,6 @@ MainWindow::~MainWindow()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-
-    windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
-
-    for(int c=0;c<5;c++)
-    {
-        employeeTools[c]->setGeometry(QRect(QPoint(this->width()/2-512.5+205*c,this->height()-45),QSize(200,40)));
-    }
 
     QPainter drawer(this);
     doPainting(&drawer);
@@ -322,6 +389,33 @@ void MainWindow::doPainting(QPainter* drawer)
     drawer->drawPath(myPath);
 
     myPath.clear();
+
+    //////////Creating lines near text//////////
+
+    myPen.setColor(QColor(150,150,150,150));
+    myPen.setWidth(1);
+    myBrush.setColor(QColor(0,0,0,0));
+    drawer->setPen(myPen);
+    drawer->setBrush(myBrush);
+    drawer->drawLine(inWork->geometry().topRight().x()+40,inWork->geometry().topRight().y()+inWork->height()/2,                         //In Work
+                     this->width()/6-20,inWork->geometry().topRight().y()+inWork->height()/2);
+
+    drawer->drawLine(inVacation->geometry().topRight().x()+40,inVacation->geometry().topRight().y()+inVacation->height()/2,             //In Vacation
+                     this->width()/6-20,inVacation->geometry().topRight().y()+inWork->height()/2);
+
+    drawer->drawLine(this->width()/6*5+employeeTasks->width()+30,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2,    //Employee Task
+                     this->width()-20,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2);
+
+    myPen.setColor(QColor(50,50,50));
+    drawer->setPen(myPen);
+
+    drawer->drawLine(chapter1->geometry().topRight().x()+40,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
+                     this->width()/6*5-70,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
+
+    drawer->drawLine(chapter2->geometry().topRight().x()+50,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
+                     this->width()/6*5-70,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
+
+
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)

@@ -9,6 +9,7 @@
 #include <QMouseEvent>
 #include <QPushButton>
 #include <QApplication>
+#include <QGraphicsDropShadowEffect>
 #include <vector>
 #include "pttab.h"
 
@@ -28,7 +29,16 @@ protected:
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 
-private:  
+private:
+    QFont SFProDisplay;
+    QGraphicsDropShadowEffect* shadow;
+
+    QPixmap profilePix;
+    QLabel* profilePict;
+    QLabel* mainProfileInfo;
+    QLabel* chapter1;
+    QLabel* taskDescription;
+    QLabel* chapter2;
 
     QLabel* windowTitle;
     QPushButton* exitButton;
@@ -40,6 +50,7 @@ private:
 
     QPushButton* inWork;
     QPushButton* inVacation;
+    QLabel* employeeTasks;
     bool inWorkClicked;
     bool inVacationClicked;
 

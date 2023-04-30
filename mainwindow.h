@@ -63,17 +63,22 @@ private:
     void initShifts();
 
     QPointF pressPoint;
+    QPointF globalPressPoint;
+    QPointF currentPos;
+    int currentWidth;
+    int currentHeight;
+    int whichSide;
     bool isClicked =false;
 
     bool maxTrigger = false;
     bool waiting = false;
+    bool mouseResize = false;
 
     int descPanelShift;
 
 public slots:
     void resizeWindow();
     void hideWindow();
-    void changeEvent(QEvent* e);
 
     void inWorkPressed();
     void inVacationPressed();

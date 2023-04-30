@@ -7,8 +7,6 @@ PTtab::PTtab(QMainWindow* parent):
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
 
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
-
     infoString = "setPicture()- 1-devices,\n 2-profile";
 
     this->setGeometry(0,80,parent->width()/6,60);

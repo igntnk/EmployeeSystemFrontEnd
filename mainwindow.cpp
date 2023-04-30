@@ -5,34 +5,30 @@ void MainWindow::resizeWindow()
     if(this->windowState() == Qt::WindowMaximized)
     {
         this->update();
-        this->setWindowState(Qt::WindowNoState);
-        initShifts();
-
-        maxTrigger=false;
-        employeeTasks->move(this->width()-this->width()/6+12,58);
-        descriptionField->resize(this);
-        refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
-        windowTitle->move(this->width()/2-120,15);
-        for(int c=0;c<5;c++)
+        if(!mouseResize)
         {
-            employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
+            this->setWindowState(Qt::WindowNoState);
         }
     }
     else
     {
         this->update();
-        this->setWindowState(Qt::WindowMaximized);
-        initShifts();
-
-        maxTrigger = true;
-        employeeTasks->move(this->width()-this->width()/6+12,58);
-        descriptionField->resize(this);
-        refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
-        windowTitle->move(this->width()/2-120,15);
-        for(int c=0;c<5;c++)
+        if(!mouseResize)
         {
-            employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
+            this->setWindowState(Qt::WindowMaximized);
         }
+    }
+
+    initShifts();
+
+    maxTrigger = true;
+    employeeTasks->move(this->width()-this->width()/6+12,58);
+    descriptionField->resize(this);
+    refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
+    windowTitle->move(this->width()/2-120,15);
+    for(int c=0;c<5;c++)
+    {
+        employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
     }
 }
 
@@ -379,20 +375,147 @@ void MainWindow::doPainting(QPainter* drawer)
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton &&
-        event->modifiers() == Qt::NoModifier &&
-        isOnField(event->pos(),QRect(QPoint(1,1),QPoint(this->width()-5,50))))
-    {
-        pressPoint = event->pos();
-        isClicked = true;
-    }
+    pressPoint = event->pos();
+    globalPressPoint = event->globalPosition();
+    currentPos = this->geometry().topLeft();
+    currentWidth = this->width();
+    currentHeight = this->height();
+    isClicked = true;
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
-    if(isClicked)
+    if(isClicked &&
+        event->modifiers() == Qt::NoModifier &&
+        isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-10,50))))
     {
         this->move(event->globalPosition().x()-pressPoint.x(),event->globalPosition().y()-pressPoint.y());
+    }
+
+    if(isOnField(event->pos(),QRect(0,this->height()-10,10,10)) or (mouseResize and whichSide == 8))// BOTTOM LEFT
+    {
+        whichSide =8;
+        this->setCursor(Qt::SizeBDiagCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(event->globalPosition().x()-5,currentPos.y(),
+                              currentWidth+(globalPressPoint.x()-event->globalPosition().x()),currentHeight-(globalPressPoint.y()-event->globalPosition().y()));
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(this->width()-10,this->height()-10,10,10))or (mouseResize and whichSide == 6)) // BOTTOM RIGTH
+    {
+        whichSide =6;
+        this->setCursor(Qt::SizeFDiagCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(currentPos.x(),currentPos.y(),
+                              currentWidth-(globalPressPoint.x()-event->globalPosition().x()),currentHeight-(globalPressPoint.y()-event->globalPosition().y()));
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(this->width()-10,0,10,10)) or (mouseResize and whichSide == 4)) //TOP RIGHT
+    {
+        whichSide =4;
+        this->setCursor(Qt::SizeBDiagCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(currentPos.x(),event->globalPosition().y()-5,
+                              currentWidth-(globalPressPoint.x()-event->globalPosition().x()),currentHeight+(globalPressPoint.y()-event->globalPosition().y()));
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(0,0,10,10)) or (mouseResize and whichSide == 2)) //TOP LEFT
+    {
+        whichSide =2;
+        this->setCursor(Qt::SizeFDiagCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(event->globalPosition().x()-5,event->globalPosition().y()-5,
+                              currentWidth+(globalPressPoint.x()-event->globalPosition().x()),currentHeight+(globalPressPoint.y()-event->globalPosition().y()));
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(0,10,10,this->height()-20)) or (mouseResize and whichSide == 1)) //LEFT SIDE
+    {
+        whichSide =1;
+        this->setCursor(Qt::SizeHorCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(event->globalPosition().x()-5,this->geometry().topLeft().y(),
+                              currentWidth+(globalPressPoint.x()-event->globalPosition().x()),this->height());
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(10,0,this->width()-20,10)) or (mouseResize and whichSide == 3)) //TOP SIDE
+    {
+        whichSide =3;
+        this->setCursor(Qt::SizeVerCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(currentPos.x(),event->globalPosition().y()-5,
+                              this->width(),currentHeight+(globalPressPoint.y()-event->globalPosition().y()));
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(this->width()-10,10,10,this->height()-20)) or (mouseResize and whichSide == 5)) // RIGHT SIDE
+    {
+        whichSide =5;
+        this->setCursor(Qt::SizeHorCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(currentPos.x(),currentPos.y(),
+                              currentWidth-(globalPressPoint.x()-event->globalPosition().x()),currentHeight);
+            resizeWindow();
+            return;
+        }
+    }
+
+    if(isOnField(event->pos(),QRect(10,this->height()-10,this->width()-20,20)) or (mouseResize and whichSide == 7)) // BOTTOM SIDE
+    {
+        whichSide =7;
+        this->setCursor(Qt::SizeVerCursor);
+        if(isClicked)
+        {
+            this->setCursor(Qt::ClosedHandCursor);
+            mouseResize = true;
+            this->setGeometry(currentPos.x(),currentPos.y(),
+                              currentWidth,currentHeight-(globalPressPoint.y()-event->globalPosition().y()));
+            resizeWindow();
+            return;
+        }
+    }
+
+
+    if(isOnField(event->pos(),QRect(10,10,this->width()-20,this->height()-20)))
+    {
+        this->setCursor(Qt::ArrowCursor);
     }
 }
 
@@ -400,27 +523,14 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* event)
 {
     Q_UNUSED(event);
     isClicked = false;
+    mouseResize = false;
+    whichSide = 0;
 }
 
 bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
 {
     return (rect.topLeft().x()<point.x() && rect.topLeft().y()<point.y() &&
             rect.bottomRight().x()>point.x() && rect.bottomRight().y()>point.y());
-}
-
-void MainWindow::changeEvent(QEvent* event)
-{
-    if(event->type() == QEvent::WindowStateChange && waiting)
-    {
-        this->setWindowState(Qt::WindowMaximized);
-
-    }
-
-    waiting = false;
-    if(event->type() == QEvent::WindowStateChange && maxTrigger)
-    {
-        waiting = true;
-    }
 }
 
 void MainWindow::inWorkPressed()
@@ -431,6 +541,7 @@ void MainWindow::inWorkPressed()
     qDebug()<< "Should Open Later))";
     this->update();
 }
+
 void MainWindow::inVacationPressed()
 {
     if(inVacationClicked){inVacationClicked = false; }

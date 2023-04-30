@@ -2,43 +2,37 @@
 
 void MainWindow::resizeWindow()
 {
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
-
     if(this->windowState() == Qt::WindowMaximized)
     {
+        this->update();
         this->setWindowState(Qt::WindowNoState);
+        initShifts();
+
         maxTrigger=false;
         employeeTasks->move(this->width()-this->width()/6+12,58);
-        profilePict->setGeometry(this->width()/6+40,90,200,200);
+        descriptionField->resize(this);
         refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
-        mainProfileInfo->move(this->width()/6 +260,120);
-        chapter1->move(this->width()/6+40,320);
-        chapter2->move(this->width()/6+40,this->height()-150);
         windowTitle->move(this->width()/2-120,15);
         for(int c=0;c<5;c++)
         {
             employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
         }
-
-        this->update();
     }
     else
     {
+        this->update();
         this->setWindowState(Qt::WindowMaximized);
+        initShifts();
+
         maxTrigger = true;
         employeeTasks->move(this->width()-this->width()/6+12,58);
-        profilePict->setGeometry(this->width()/6+40,90,200,200);
+        descriptionField->resize(this);
         refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
-        mainProfileInfo->move(this->width()/6 +400,120);
-        chapter1->move(this->width()/6+40,320);
-        chapter2->move(this->width()/6+40,this->height()-150);
         windowTitle->move(this->width()/2-120,15);
         for(int c=0;c<5;c++)
         {
             employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
         }
-
-        this->update();
     }
 }
 
@@ -67,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(QSize(1800,800));
     this->setAttribute(Qt::WA_TranslucentBackground );
     this->setMouseTracking(true);
+
+    initShifts();
 
     refreshButton = new QPushButton(this);
     refreshButton->setStyleSheet("QPushButton {"
@@ -232,35 +228,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //////////Creating description panel//////////
 
-    profilePix.load(":icons/profile_icon.png");
-    profilePict = new QLabel(this);
-    profilePict->setScaledContents(true);
-    profilePict->setGeometry(this->width()/6+40,90,200,200);
-    profilePict->setPixmap(profilePix);
-    profilePict->setGraphicsEffect(shadow);
-
-    SFProDisplay.setPixelSize(30);
-    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
-
-    mainProfileInfo = new QLabel(this);
-    mainProfileInfo->setFont(SFProDisplay);
-    mainProfileInfo->setText("Name:\nSurname:\nLast Name:\nRank:");
-    mainProfileInfo->setAlignment(Qt::AlignRight);
-    mainProfileInfo->setGeometry(this->width()/6 +260,120,
-                                SFProDislplayMetrics.horizontalAdvance("Last Name: "),SFProDislplayMetrics.height()*4);
-    mainProfileInfo->setStyleSheet("color: rgb(130,130,130);");
-
-    chapter1 = new QLabel(this);
-    chapter1->setFont(SFProDisplay);
-    chapter1->setText("Task Decription");
-    chapter1->setGeometry(this->width()/6+40,320,SFProDislplayMetrics.horizontalAdvance("Task Description"),SFProDislplayMetrics.height());
-    chapter1->setStyleSheet("color: rgb(130,130,130);");
-
-    chapter2 = new QLabel(this);
-    chapter2->setFont(SFProDisplay);
-    chapter2->setText("Employment Date");
-    chapter2->setGeometry(this->width()/6+40,this->height()-150,SFProDislplayMetrics.horizontalAdvance("Employment Date"),SFProDislplayMetrics.height());
-    chapter2->setStyleSheet("color: rgb(130,130,130);");
+    descriptionField = new DescriptionField(this);
 }
 
 MainWindow::~MainWindow()
@@ -297,15 +265,6 @@ void MainWindow::doPainting(QPainter* drawer)
     drawer->drawPath(myPath);
 
     myPath.clear();
-
-    //////////Creating Task Desription Field//////////
-
-    myPen.setColor(QColor(10,10,10));
-    myBrush.setColor(QColor(28,28,28));
-
-    drawer->setPen(myPen);
-    drawer->setBrush(myBrush);
-    drawer->drawRect(QRect(QPoint(this->width()/6,0),QPoint(this->width()-this->width()/6,this->height()-5)));
 
     //////////Creating app control panel//////////
 
@@ -409,11 +368,11 @@ void MainWindow::doPainting(QPainter* drawer)
     myPen.setColor(QColor(50,50,50));
     drawer->setPen(myPen);
 
-    drawer->drawLine(chapter1->geometry().topRight().x()+40,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
-                     this->width()/6*5-70,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
+//    drawer->drawLine(chapter1->geometry().topRight().x()+40,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
+//                     this->width()/6*5-70,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
 
-    drawer->drawLine(chapter2->geometry().topRight().x()+50,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
-                     this->width()/6*5-70,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
+//    drawer->drawLine(chapter2->geometry().topRight().x()+50,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
+//                     this->width()/6*5-70,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
 
 
 }
@@ -479,4 +438,9 @@ void MainWindow::inVacationPressed()
 
     qDebug() << "This Shoul Be Open Too)))";
     this->update();
+}
+
+void MainWindow::initShifts()
+{
+    descPanelShift = this->width()/6;
 }

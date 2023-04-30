@@ -15,9 +15,11 @@ find_package(Qt6 COMPONENTS
 add_executable(EmployeeSystemFrontend
          mainwindow.h
          pttab.h
+         descriptionfield.h
   	 main.cpp
   	 mainwindow.cpp
          pttab.cpp
+         descriptionfield.cpp
          pictures.qrc)
 
 target_link_libraries(EmployeeSystemFrontend

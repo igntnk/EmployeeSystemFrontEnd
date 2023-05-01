@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(QSize(1800,800));
     this->setAttribute(Qt::WA_TranslucentBackground );
     this->setMouseTracking(true);
+    this->setMinimumSize(QSize(1280,800));
 
     initShifts();
 
@@ -311,17 +312,17 @@ void MainWindow::doPainting(QPainter* drawer)
 
     if(inWorkClicked)
     {
-        myPath.moveTo(inWork->geometry().topRight().x()+11,inWork->geometry().topRight().y()+10);
-        myPath.lineTo(inWork->geometry().topRight().x()+20,inWork->geometry().topRight().y()+10);
-        myPath.lineTo(inWork->geometry().topRight().x()+15,inWork->geometry().topRight().y()+17);
-        myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+10);
-    }
-    else
-    {
         myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+8);
         myPath.lineTo(inWork->geometry().topRight().x()+19,inWork->geometry().topRight().y()+12);
         myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+17);
         myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+9);
+    }
+    else
+    {
+        myPath.moveTo(inWork->geometry().topRight().x()+11,inWork->geometry().topRight().y()+10);
+        myPath.lineTo(inWork->geometry().topRight().x()+20,inWork->geometry().topRight().y()+10);
+        myPath.lineTo(inWork->geometry().topRight().x()+15,inWork->geometry().topRight().y()+17);
+        myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+10);
     }
     drawer->drawPath(myPath);
 
@@ -329,17 +330,17 @@ void MainWindow::doPainting(QPainter* drawer)
 
     if(inVacationClicked)
     {
-        myPath.moveTo(inVacation->geometry().topRight().x()+11,inVacation->geometry().topRight().y()+10);
-        myPath.lineTo(inVacation->geometry().topRight().x()+20,inVacation->geometry().topRight().y()+10);
-        myPath.lineTo(inVacation->geometry().topRight().x()+15,inVacation->geometry().topRight().y()+17);
-        myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+10);
-    }
-    else
-    {
         myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+8);
         myPath.lineTo(inVacation->geometry().topRight().x()+19,inVacation->geometry().topRight().y()+12);
         myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+17);
         myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+9);
+    }
+    else
+    {
+        myPath.moveTo(inVacation->geometry().topRight().x()+11,inVacation->geometry().topRight().y()+10);
+        myPath.lineTo(inVacation->geometry().topRight().x()+20,inVacation->geometry().topRight().y()+10);
+        myPath.lineTo(inVacation->geometry().topRight().x()+15,inVacation->geometry().topRight().y()+17);
+        myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+10);
     }
     drawer->drawPath(myPath);
 
@@ -364,22 +365,14 @@ void MainWindow::doPainting(QPainter* drawer)
     myPen.setColor(QColor(50,50,50));
     drawer->setPen(myPen);
 
-//    drawer->drawLine(chapter1->geometry().topRight().x()+40,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
-//                     this->width()/6*5-70,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
-
-//    drawer->drawLine(chapter2->geometry().topRight().x()+50,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
-//                     this->width()/6*5-70,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
-
-
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
 {
     pressPoint = event->pos();
     globalPressPoint = event->globalPosition();
-    currentPos = this->geometry().topLeft();
-    currentWidth = this->width();
-    currentHeight = this->height();
+    currentTopLeft = this->geometry().topLeft();
+    currentBottomRigth = this->geometry().bottomRight();
     isClicked = true;
 }
 
@@ -398,10 +391,12 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         this->setCursor(Qt::SizeBDiagCursor);
         if(isClicked)
         {
+
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(event->globalPosition().x()-5,currentPos.y(),
-                              currentWidth+(globalPressPoint.x()-event->globalPosition().x()),currentHeight-(globalPressPoint.y()-event->globalPosition().y()));
+            QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,currentTopLeft.y()),
+                                     QPoint(currentBottomRigth.x(),event->globalPosition().y()-5));
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -415,8 +410,10 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(currentPos.x(),currentPos.y(),
-                              currentWidth-(globalPressPoint.x()-event->globalPosition().x()),currentHeight-(globalPressPoint.y()-event->globalPosition().y()));
+            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
+                                     QPoint(event->globalPosition().x()-5,event->globalPosition().y()-5));
+
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -430,8 +427,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(currentPos.x(),event->globalPosition().y()-5,
-                              currentWidth-(globalPressPoint.x()-event->globalPosition().x()),currentHeight+(globalPressPoint.y()-event->globalPosition().y()));
+            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),event->globalPosition().y()-5),
+                                     QPoint(event->globalPosition().x()-5,currentBottomRigth.y()));
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -445,8 +443,10 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(event->globalPosition().x()-5,event->globalPosition().y()-5,
-                              currentWidth+(globalPressPoint.x()-event->globalPosition().x()),currentHeight+(globalPressPoint.y()-event->globalPosition().y()));
+            QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,event->globalPosition().y()-5),
+                                     QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            qDebug() << neadedRect;
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -460,8 +460,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(event->globalPosition().x()-5,this->geometry().topLeft().y(),
-                              currentWidth+(globalPressPoint.x()-event->globalPosition().x()),this->height());
+            QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,currentTopLeft.y()),
+                                     QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -475,8 +476,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(currentPos.x(),event->globalPosition().y()-5,
-                              this->width(),currentHeight+(globalPressPoint.y()-event->globalPosition().y()));
+            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),event->globalPosition().y()-5),
+                                     QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -490,8 +492,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(currentPos.x(),currentPos.y(),
-                              currentWidth-(globalPressPoint.x()-event->globalPosition().x()),currentHeight);
+            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
+                                     QPoint(event->globalPosition().x()-5,currentBottomRigth.y()));
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
@@ -505,8 +508,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            this->setGeometry(currentPos.x(),currentPos.y(),
-                              currentWidth,currentHeight-(globalPressPoint.y()-event->globalPosition().y()));
+            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
+                                     QPoint(currentBottomRigth.x(),event->globalPosition().y()));
+            this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }

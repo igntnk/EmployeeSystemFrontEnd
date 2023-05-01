@@ -64,9 +64,8 @@ private:
 
     QPointF pressPoint;
     QPointF globalPressPoint;
-    QPointF currentPos;
-    int currentWidth;
-    int currentHeight;
+    QPointF currentTopLeft;
+    QPointF currentBottomRigth;
     int whichSide;
     bool isClicked =false;
 

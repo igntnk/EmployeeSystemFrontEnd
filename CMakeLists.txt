@@ -16,10 +16,18 @@ add_executable(EmployeeSystemFrontend
          mainwindow.h
          pttab.h
          descriptionfield.h
+         database.h
+         employee.h
+         task.h
+         rank.h
   	 main.cpp
   	 mainwindow.cpp
          pttab.cpp
          descriptionfield.cpp
+         database.cpp
+         employee.cpp
+         task.cpp
+         rank.cpp
          pictures.qrc)
 
 target_link_libraries(EmployeeSystemFrontend

@@ -61,6 +61,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     initShifts();
 
+    for(int c=0;c<dataBase.employeeNumbers();c++)
+    {
+        PTtab* refer = new PTtab(QString(dataBase.getEmployee(c).name()+"\n"+
+                      dataBase.getEmployee(c).surname()+"\n"+
+                            dataBase.getEmployee(c).rank().rankName()),1,this);
+        profilePanels.push_back(refer);
+        profilePanels[c]->setGeometry(QRect(0,90+65*c,this->width()/6,60));
+    }
+
     refreshButton = new QPushButton(this);
     refreshButton->setStyleSheet("QPushButton {"
                                     "background-color: rgb(28, 28, 28);"
@@ -199,6 +208,7 @@ MainWindow::MainWindow(QWidget *parent)
     inWork->setGeometry(12,60,SFProDislplayMetrics.horizontalAdvance("In Work"),SFProDislplayMetrics.height());
     connect(inWork,&QPushButton::clicked,this,&MainWindow::inWorkPressed);
 
+
     inVacation->setFont(SFProDisplay);
     inVacation->setStyleSheet("QPushButton {"
                               "background-color: rgba(0,0,0,0);"
@@ -211,7 +221,16 @@ MainWindow::MainWindow(QWidget *parent)
                               "color: rgb(150,150,150);"
                               "}");
     inVacation->setText("In Vacation");
-    inVacation->setGeometry(12,70 + inWork->height(),SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
+    if(inWorkClicked)
+    {
+        inVacation->setGeometry(12,inWork->geometry().bottomLeft().y()+10,
+                                SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
+    }
+    else
+    {
+        inVacation->setGeometry(12,10 + profilePanels[dataBase.employeeNumbers()-1]->geometry().bottomLeft().y(),
+                                SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
+    }
     connect(inVacation,&QPushButton::clicked,this, &MainWindow::inVacationPressed);
 
     //////////Creating task panel//////////
@@ -539,11 +558,28 @@ bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
 
 void MainWindow::inWorkPressed()
 {
-    if(inWorkClicked){inWorkClicked = false;}
-    else{inWorkClicked = true;}
+    if(inWorkClicked){
+        inWorkClicked = false;
+        for(int c=0;c<dataBase.employeeNumbers();c++)
+        {
+            profilePanels[c]->show();
+            inVacation->move(12,10 + profilePanels[dataBase.employeeNumbers()-1]->geometry().bottomLeft().y());
+        }
+    }
+    else{
+        inWorkClicked = true;
+        for(int c=0;c<dataBase.employeeNumbers();c++)
+        {
+            profilePanels[c]->hide();
+            inVacation->move(12,inWork->geometry().bottomLeft().y()+10);
+
+        }
+    }
+
 
     qDebug()<< "Should Open Later))";
     this->update();
+
 }
 
 void MainWindow::inVacationPressed()

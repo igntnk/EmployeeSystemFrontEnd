@@ -11,13 +11,17 @@
 class Employee
 {
 public:
-    Employee();
+    Employee(uint8_t id = 255,QString name = "Unknown",QString surname = "Unknown",
+             Task task = Task(),Rank rank = Rank(),
+             QString username = "unknown12",QString password = "123",
+             QDate hiring_date = QDate(QDate::currentDate()),
+             bool vacation = false);
 
     void setId(uint8_t id );
     void setName(QString name);
     void setSurname(QString surname);
-    void addTask(Task* task);
-    void setRank(uint8_t rank_id);
+    void addTask(Task task);
+    void setRank(Rank rank);
     void setUsername(QString username);
     void setPassword(QString password);
     void setHiringDate(QDate hiring_date);
@@ -26,7 +30,7 @@ public:
     uint8_t id();
     QString name();
     QString surname();
-    Task task();
+    Task task(uint8_t number);
     Rank rank();
     QString username();
     QString password();
@@ -37,7 +41,7 @@ private:
     uint8_t m_id;
     QString m_name;
     QString m_surname;
-    std::vector<Task*> m_task;
+    std::vector<Task> m_task;
     Rank m_rank;
     QString m_username;
     QString m_password;

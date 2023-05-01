@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QMainWindow>
 #include <QFontMetrics>
+#include <QFont>
 #include <iostream>
 
 class PTtab:public QLabel
@@ -12,7 +13,9 @@ class PTtab:public QLabel
     Q_OBJECT
 
 public:
-    PTtab(QMainWindow* parent = nullptr);
+    PTtab(QString text = "Unknown Name\nUnknown Surname\nUnknown Rank" ,
+          int choice= 1, QMainWindow* parent = nullptr);
+    ~PTtab();
 
     void setPicture(int choice);
     void setPicture(QString file);
@@ -20,13 +23,12 @@ public:
 
 private:
 
-    //void paintEvent(QPaintEvent *event);
-    //void doPainting(QPainter* drawer);
     QFont SFProDisplay;
 
     QLabel* infoText;
     QString infoString;
 
+    QString photoFile;
     QPixmap pixmap;
     QLabel* picture;
 };

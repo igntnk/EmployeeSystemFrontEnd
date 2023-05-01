@@ -1,7 +1,10 @@
 
 #include "task.h"
 
-Task::Task()
+Task::Task(uint8_t task_id,QString task_name,
+           uint8_t task_response,QDate time_to_make,QDate getting_date):
+    m_task_id(task_id),m_task_name(task_name),m_task_response(task_response),
+    m_time_to_make(time_to_make),m_getting_date(getting_date)
 {
 
 }

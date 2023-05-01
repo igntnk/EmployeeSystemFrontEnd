@@ -7,7 +7,7 @@
 class Rank
 {
 public:
-    Rank();
+    Rank(uint8_t rank_id = 255, QString rank_name = "Unknown");
 
     uint8_t rankId();
     QString rankName();

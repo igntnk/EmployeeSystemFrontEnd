@@ -1,14 +1,14 @@
 
 #include "employee.h"
 
-Employee::Employee(std::vector<Task> task,uint8_t id,QString name,
-                   QString surname, Rank rank,QString username,
+Employee::Employee(uint8_t id,QString name,
+                   QString surname,Task task, Rank rank,QString username,
                    QString password,QDate hiring_date,bool vacation):
-    m_id(id),m_name(name),m_surname(surname),m_task(task),m_rank(rank),
+    m_id(id),m_name(name),m_surname(surname),m_rank(rank),
     m_username(username),m_password(password),m_hiring_date(hiring_date),
     m_vacation(vacation)
 {
-
+    m_task.push_back(task);
 }
 
 void Employee::setId(uint8_t id){m_id=id;}

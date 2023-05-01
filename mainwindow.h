@@ -12,6 +12,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <vector>
 #include "pttab.h"
+#include "database.h"
 #include "descriptionfield.h"
 
 class MainWindow : public QMainWindow
@@ -36,13 +37,6 @@ private:
 
     DescriptionField* descriptionField;
 
-//    QPixmap profilePix;
-//    QLabel* profilePict;
-//    QLabel* mainProfileInfo;
-//    QLabel* chapter1;
-//    QLabel* taskDescription;
-//    QLabel* chapter2;
-
     QLabel* windowTitle;
     QPushButton* exitButton;
     QPushButton* resizeButton;
@@ -56,6 +50,10 @@ private:
     QLabel* employeeTasks;
     bool inWorkClicked;
     bool inVacationClicked;
+
+    DataBase dataBase;
+    std::vector<PTtab*> profilePanels;
+
 
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);

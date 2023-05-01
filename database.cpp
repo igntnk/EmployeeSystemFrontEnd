@@ -27,9 +27,18 @@ DataBase::DataBase()
                                   "admin","admin",QDate(2022,1,1),false));
     employeers.push_back(Employee(5,"Deinekyn","Irinenko",tasks[5],ranks[2],
                                   "admin","admin",QDate(2022,1,1),false));
-    employeers.push_back(Employee(6,"Zuzenko","Konstant",tasks[4],ranks[4],
+    employeers.push_back(Employee(6,"Zuzenko","Konstant",tasks[4],ranks[3],
                                   "admin","admin",QDate(2022,1,1),false));
-    employeers.push_back(Employee(7,"Bezugl","Kyryllyi",tasks[5],ranks[4],
+    employeers.push_back(Employee(7,"Bezugl","Kyryllyi",tasks[5],ranks[3],
                                   "admin","admin",QDate(2022,1,1),false));
 }
 
+int DataBase::employeeNumbers()
+{
+    return employeers.size();
+}
+
+Employee DataBase::getEmployee(int number)
+{
+    return employeers[number];
+}

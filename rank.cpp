@@ -1,7 +1,7 @@
-
 #include "rank.h"
 
-Rank::Rank()
+Rank::Rank(uint8_t rank_id, QString rank_name):
+    m_rank_id(rank_id),m_rank_name(rank_name)
 {
 
 }

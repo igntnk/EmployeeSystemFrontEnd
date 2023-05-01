@@ -6,7 +6,9 @@
 class Task
 {
 public:
-    Task();
+    Task(uint8_t task_id = 255,QString task_name = "Unknown",
+         uint8_t task_response = 255,QDate time_to_make = QDate(QDate::currentDate()),
+         QDate getting_date = QDate(QDate::currentDate()));
 
     uint8_t taskId();
     QString taskName();

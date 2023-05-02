@@ -22,13 +22,13 @@ DataBase::DataBase()
     employeers.push_back(Employee(2,"Svin","Uhov",tasks[0],ranks[1],
                                   "admin","admin",QDate(2022,1,1),false));
     employeers.push_back(Employee(3,"Semen","Gachimuchivich",tasks[3],ranks[2],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "admin","admin",QDate(2022,1,1),true));
     employeers.push_back(Employee(4,"Lapyh","Dubovich",tasks[2],ranks[2],
                                   "admin","admin",QDate(2022,1,1),false));
     employeers.push_back(Employee(5,"Deinekyn","Irinenko",tasks[5],ranks[2],
                                   "admin","admin",QDate(2022,1,1),false));
     employeers.push_back(Employee(6,"Zuzenko","Konstant",tasks[4],ranks[3],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "admin","admin",QDate(2022,1,1),true));
     employeers.push_back(Employee(7,"Bezugl","Kyryllyi",tasks[5],ranks[3],
                                   "admin","admin",QDate(2022,1,1),false));
 }

@@ -48,11 +48,13 @@ private:
     QPushButton* inWork;
     QPushButton* inVacation;
     QLabel* employeeTasks;
-    bool inWorkClicked;
-    bool inVacationClicked;
+    bool inWorkClicked = true;
+    bool inVacationClicked=false;
 
     DataBase dataBase;
-    std::vector<PTtab*> profilePanels;
+    std::vector<PTtab*> profilePanelsInWork;
+    std::vector<PTtab*> profilePanelsInVacation;
+    std::vector<PTtab*> taskPanels();
 
 
     void paintEvent(QPaintEvent *event);

@@ -61,15 +61,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     initShifts();
 
-    for(int c=0;c<dataBase.employeeNumbers();c++)
-    {
-        PTtab* refer = new PTtab(QString(dataBase.getEmployee(c).name()+"\n"+
-                      dataBase.getEmployee(c).surname()+"\n"+
-                            dataBase.getEmployee(c).rank().rankName()),1,this);
-        profilePanels.push_back(refer);
-        profilePanels[c]->setGeometry(QRect(0,90+65*c,this->width()/6,60));
-    }
-
     refreshButton = new QPushButton(this);
     refreshButton->setStyleSheet("QPushButton {"
                                     "background-color: rgb(28, 28, 28);"
@@ -184,7 +175,34 @@ MainWindow::MainWindow(QWidget *parent)
     employeeTools[3]->setText("Add Task");
     employeeTools[4]->setText("Promote Employee");
 
-    //////////Creating in work in vacation buttons//////////
+    //////////Creating task panel//////////
+
+    employeeTasks = new QLabel(this);
+    employeeTasks->setText("Employee Tasks");
+    employeeTasks->setFont(SFProDisplay);
+    employeeTasks->setGeometry(this->width()-this->width()/6+12,58,
+                               SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
+    employeeTasks->setStyleSheet("color: rgb(200,200,200);");
+
+    //////////Creating description panel//////////
+
+    descriptionField = new DescriptionField(this);
+
+    //////////Creating left panel//////////
+
+    for(int c=0;c<dataBase.employeeNumbers();c++)
+    {
+        static int inwCH = 0;
+        if(!dataBase.getEmployee(c).vacation())
+        {
+            PTtab* refer = new PTtab(QString(dataBase.getEmployee(c).name()+"\n"+
+                                             dataBase.getEmployee(c).surname()+"\n"+
+                                             dataBase.getEmployee(c).rank().rankName()),1,this);
+            profilePanelsInWork.push_back(refer);
+            profilePanelsInWork[inwCH]->setGeometry(QRect(0,90+65*inwCH,this->width()/6,60));
+            inwCH++;
+        }
+    }
 
     inWork = new QPushButton(this);
     inVacation = new QPushButton(this);
@@ -221,30 +239,24 @@ MainWindow::MainWindow(QWidget *parent)
                               "color: rgb(150,150,150);"
                               "}");
     inVacation->setText("In Vacation");
-    if(inWorkClicked)
+    inVacation->setGeometry(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y(),
+                            SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
+    connect(inVacation,&QPushButton::clicked,this,&MainWindow::inVacationPressed);
+
+    for(int c=0;c<dataBase.employeeNumbers();c++)
     {
-        inVacation->setGeometry(12,inWork->geometry().bottomLeft().y()+10,
-                                SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
+        static int invCH = 0;
+        if(dataBase.getEmployee(c).vacation())
+        {
+            PTtab* refer = new PTtab(QString(dataBase.getEmployee(c).name()+"\n"+
+                                             dataBase.getEmployee(c).surname()+"\n"+
+                                             dataBase.getEmployee(c).rank().rankName()),1,this);
+            profilePanelsInVacation.push_back(refer);
+            profilePanelsInVacation[invCH]->setGeometry(QRect(0,10+inVacation->geometry().bottomRight().y()+65*invCH,this->width()/6,60));
+            profilePanelsInVacation[invCH]->hide();
+            invCH++;
+        }
     }
-    else
-    {
-        inVacation->setGeometry(12,10 + profilePanels[dataBase.employeeNumbers()-1]->geometry().bottomLeft().y(),
-                                SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
-    }
-    connect(inVacation,&QPushButton::clicked,this, &MainWindow::inVacationPressed);
-
-    //////////Creating task panel//////////
-
-    employeeTasks = new QLabel(this);
-    employeeTasks->setText("Employee Tasks");
-    employeeTasks->setFont(SFProDisplay);
-    employeeTasks->setGeometry(this->width()-this->width()/6+12,58,
-                               SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
-    employeeTasks->setStyleSheet("color: rgb(200,200,200);");
-
-    //////////Creating description panel//////////
-
-    descriptionField = new DescriptionField(this);
 }
 
 MainWindow::~MainWindow()
@@ -331,17 +343,17 @@ void MainWindow::doPainting(QPainter* drawer)
 
     if(inWorkClicked)
     {
-        myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+8);
-        myPath.lineTo(inWork->geometry().topRight().x()+19,inWork->geometry().topRight().y()+12);
-        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+17);
-        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+9);
-    }
-    else
-    {
         myPath.moveTo(inWork->geometry().topRight().x()+11,inWork->geometry().topRight().y()+10);
         myPath.lineTo(inWork->geometry().topRight().x()+20,inWork->geometry().topRight().y()+10);
         myPath.lineTo(inWork->geometry().topRight().x()+15,inWork->geometry().topRight().y()+17);
         myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+10);
+    }
+    else
+    {
+        myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+8);
+        myPath.lineTo(inWork->geometry().topRight().x()+19,inWork->geometry().topRight().y()+12);
+        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+17);
+        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+9);
     }
     drawer->drawPath(myPath);
 
@@ -349,17 +361,17 @@ void MainWindow::doPainting(QPainter* drawer)
 
     if(inVacationClicked)
     {
-        myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+8);
-        myPath.lineTo(inVacation->geometry().topRight().x()+19,inVacation->geometry().topRight().y()+12);
-        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+17);
-        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+9);
-    }
-    else
-    {
         myPath.moveTo(inVacation->geometry().topRight().x()+11,inVacation->geometry().topRight().y()+10);
         myPath.lineTo(inVacation->geometry().topRight().x()+20,inVacation->geometry().topRight().y()+10);
         myPath.lineTo(inVacation->geometry().topRight().x()+15,inVacation->geometry().topRight().y()+17);
         myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+10);
+    }
+    else
+    {
+        myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+8);
+        myPath.lineTo(inVacation->geometry().topRight().x()+19,inVacation->geometry().topRight().y()+12);
+        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+17);
+        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+9);
     }
     drawer->drawPath(myPath);
 
@@ -560,22 +572,26 @@ void MainWindow::inWorkPressed()
 {
     if(inWorkClicked){
         inWorkClicked = false;
-        for(int c=0;c<dataBase.employeeNumbers();c++)
+        for(int c=0;c<profilePanelsInWork.size();c++)
         {
-            profilePanels[c]->show();
-            inVacation->move(12,10 + profilePanels[dataBase.employeeNumbers()-1]->geometry().bottomLeft().y());
-        }
-    }
-    else{
-        inWorkClicked = true;
-        for(int c=0;c<dataBase.employeeNumbers();c++)
-        {
-            profilePanels[c]->hide();
+            profilePanelsInWork[c]->hide();
             inVacation->move(12,inWork->geometry().bottomLeft().y()+10);
 
         }
     }
+    else{
+        inWorkClicked = true;
+        for(int c=0;c<profilePanelsInWork.size();c++)
+        {
+            profilePanelsInWork[c]->show();
+            inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
+        }
+    }
 
+    for(int c=0;c<profilePanelsInVacation.size();c++)
+    {
+        profilePanelsInVacation[c]->setGeometry(QRect(0,10+inVacation->geometry().bottomRight().y()+65*c,this->width()/6,60));
+    }
 
     qDebug()<< "Should Open Later))";
     this->update();
@@ -584,8 +600,22 @@ void MainWindow::inWorkPressed()
 
 void MainWindow::inVacationPressed()
 {
-    if(inVacationClicked){inVacationClicked = false; }
-    else {inVacationClicked = true;}
+    if(inVacationClicked){
+        inVacationClicked = false;
+        for(int c=0;c<profilePanelsInVacation.size();c++)
+        {
+            profilePanelsInVacation[c]->hide();
+
+        }
+    }
+    else {
+        inVacationClicked = true;
+        for(int c=0;c<profilePanelsInVacation.size();c++)
+        {
+            profilePanelsInVacation[c]->show();
+
+        }
+    }
 
     qDebug() << "This Shoul Be Open Too)))";
     this->update();

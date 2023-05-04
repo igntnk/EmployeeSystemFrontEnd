@@ -16,21 +16,21 @@ DataBase::DataBase()
     tasks.push_back(Task(5,"Cleaning",1,QDate(2023,12,1),QDate(2022,1,1)));
 
     employeers.push_back(Employee(0,"Ignat","Ilyenko",tasks[0],ranks[0],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "Ignat","123",QDate(2022,1,1),false));
     employeers.push_back(Employee(1,"Kabub","Danilenko",tasks[2],ranks[1],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "Kabub","234",QDate(2022,1,1),false));
     employeers.push_back(Employee(2,"Svin","Uhov",tasks[0],ranks[1],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "Svin","345",QDate(2022,1,1),false));
     employeers.push_back(Employee(3,"Semen","Gachimuchivich",tasks[3],ranks[2],
-                                  "admin","admin",QDate(2022,1,1),true));
+                                  "Semen","456",QDate(2022,1,1),true));
     employeers.push_back(Employee(4,"Lapyh","Dubovich",tasks[2],ranks[2],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "Lapyh","567",QDate(2022,1,1),false));
     employeers.push_back(Employee(5,"Deinekyn","Irinenko",tasks[5],ranks[2],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "Deinekyn","678",QDate(2022,1,1),false));
     employeers.push_back(Employee(6,"Zuzenko","Konstant",tasks[4],ranks[3],
-                                  "admin","admin",QDate(2022,1,1),true));
+                                  "Zuzenko","789",QDate(2022,1,1),true));
     employeers.push_back(Employee(7,"Bezugl","Kyryllyi",tasks[5],ranks[3],
-                                  "admin","admin",QDate(2022,1,1),false));
+                                  "Bezugl","890",QDate(2022,1,1),false));
 }
 
 int DataBase::employeeNumbers()
@@ -41,4 +41,9 @@ int DataBase::employeeNumbers()
 Employee DataBase::getEmployee(int number)
 {
     return employeers[number];
+}
+
+std::vector<Employee> DataBase::getEmployeers()
+{
+    return employeers;
 }

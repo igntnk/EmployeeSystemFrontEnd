@@ -26,6 +26,7 @@ void MainWindow::resizeWindow()
     descriptionField->resize(this);
     refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
     windowTitle->move(this->width()/2-120,15);
+    lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -257,6 +258,8 @@ MainWindow::MainWindow(QWidget *parent)
             invCH++;
         }
     }
+    lockScreen = new LockScreen(dataBase.getEmployeers(), this);
+    lockScreen->setMouseTracking(true);
 }
 
 MainWindow::~MainWindow()
@@ -283,7 +286,7 @@ void MainWindow::doPainting(QPainter* drawer)
     //////////Creating middle opacity backgrpound//////////
 
     myPen.setColor(QColor(10,10,10));
-    myBrush.setColor(QColor(50,50,50,150));
+    myBrush.setColor(QColor(50,50,50,200));
     myBrush.setStyle(Qt::SolidPattern);
     myPath.moveTo(0,0);
     myPath.addRoundedRect(QRect(QPoint(1,1),QPoint(this->width()-2,this->height()-2)),10,10);
@@ -395,7 +398,6 @@ void MainWindow::doPainting(QPainter* drawer)
 
     myPen.setColor(QColor(50,50,50));
     drawer->setPen(myPen);
-
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event)

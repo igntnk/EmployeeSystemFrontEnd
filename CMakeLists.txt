@@ -20,6 +20,8 @@ add_executable(EmployeeSystemFrontend
          employee.h
          task.h
          rank.h
+         writepanel.h
+         lockscreen.h
   	 main.cpp
   	 mainwindow.cpp
          pttab.cpp
@@ -28,6 +30,8 @@ add_executable(EmployeeSystemFrontend
          employee.cpp
          task.cpp
          rank.cpp
+         writepanel.cpp
+         lockscreen.cpp
          pictures.qrc)
 
 target_link_libraries(EmployeeSystemFrontend

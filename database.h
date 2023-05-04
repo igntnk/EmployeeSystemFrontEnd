@@ -13,6 +13,7 @@ public:
 
     int employeeNumbers();
     Employee getEmployee(int number);
+    std::vector<Employee> getEmployeers();
 
 private:
 

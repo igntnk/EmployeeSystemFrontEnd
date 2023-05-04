@@ -14,6 +14,7 @@
 #include "pttab.h"
 #include "database.h"
 #include "descriptionfield.h"
+#include "lockscreen.h"
 
 class MainWindow : public QMainWindow
 
@@ -32,6 +33,8 @@ protected:
     bool isOnField(const QPointF& point, const QRectF& rect);
 
 private:
+    LockScreen* lockScreen;
+
     QFont SFProDisplay;
     QGraphicsDropShadowEffect* shadow;
 

@@ -1,6 +1,6 @@
 #include "pttab.h"
 
-PTtab::PTtab(QString text,int choice,QMainWindow* parent):
+PTtab::PTtab(QString text,int choice,QLabel* parent):
     infoString(text),QLabel(parent)
 {
     SFProDisplay = QFont("SF Pro Display", 12);
@@ -8,14 +8,14 @@ PTtab::PTtab(QString text,int choice,QMainWindow* parent):
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    this->setGeometry(0,80,parent->width()/6,60);
+    this->setGeometry(0,80,parent->width(),80);
 
     infoText = new QLabel(this);
     infoText->setText(infoString);
     infoText->setStyleSheet("color: rgb(200,200,200);");
     infoText->setFont(SFProDisplay);
     picture = new QLabel(this);
-    picture->setGeometry(15,0,60,60);
+    picture->setGeometry(10,10,60,60);
     picture->setScaledContents(true);
 
     if(choice)
@@ -39,6 +39,35 @@ PTtab::~PTtab()
 {
 
 }
+
+void PTtab::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+
+    QPainter drawer(this);
+    doPainting(&drawer);
+}
+
+void PTtab::doPainting(QPainter* drawer)
+{
+    drawer->setRenderHint(QPainter::Antialiasing);
+
+    QPen myPen;
+    QBrush myBrush;
+
+    myPen.setColor(QColor(255,255,255,0));
+    myBrush.setColor(QColor(255,255,255,30));
+    myBrush.setStyle(Qt::SolidPattern);
+
+    if(isSelected)
+    {
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+
+        drawer->drawRect(1,1,this->width()-2,this->height()-2);
+    }
+}
+
 
 void PTtab::setPicture(int choice)
 {
@@ -77,4 +106,8 @@ void PTtab::setText(const QString& text, int rowsNum)
                           SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*rowsNum);
 }
 
+void PTtab::setSelected(bool choice)
+{
+    isSelected = choice;
+}
 

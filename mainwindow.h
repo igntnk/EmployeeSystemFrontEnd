@@ -10,11 +10,13 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QGraphicsDropShadowEffect>
+#include <QKeyEvent>
 #include <vector>
 #include "pttab.h"
 #include "database.h"
 #include "descriptionfield.h"
 #include "lockscreen.h"
+#include "leftpanel.h"
 
 class MainWindow : public QMainWindow
 
@@ -48,15 +50,10 @@ private:
 
     std::vector<QPushButton*> employeeTools;
 
-    QPushButton* inWork;
-    QPushButton* inVacation;
     QLabel* employeeTasks;
-    bool inWorkClicked = true;
-    bool inVacationClicked=false;
 
     DataBase dataBase;
-    std::vector<PTtab*> profilePanelsInWork;
-    std::vector<PTtab*> profilePanelsInVacation;
+    LeftPanel* leftPanel;
     std::vector<PTtab*> taskPanels();
 
 
@@ -79,11 +76,10 @@ private:
     int descPanelShift;
 
 public slots:
+
     void resizeWindow();
     void hideWindow();
-
-    void inWorkPressed();
-    void inVacationPressed();
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // MAINWINDOW_H

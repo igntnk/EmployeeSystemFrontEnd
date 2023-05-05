@@ -4,7 +4,6 @@ void MainWindow::resizeWindow()
 {
     if(this->windowState() == Qt::WindowMaximized)
     {
-        this->update();
         if(!mouseResize)
         {
             this->setWindowState(Qt::WindowNoState);
@@ -12,7 +11,6 @@ void MainWindow::resizeWindow()
     }
     else
     {
-        this->update();
         if(!mouseResize)
         {
             this->setWindowState(Qt::WindowMaximized);
@@ -27,6 +25,7 @@ void MainWindow::resizeWindow()
     refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
     windowTitle->move(this->width()/2-120,15);
     lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
+    leftPanel->setGeometry(0,50,this->width()/6,this->height()-101);
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -61,6 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->setMinimumSize(QSize(1280,800));
 
     initShifts();
+
+    leftPanel = new LeftPanel(&dataBase,this);
+    leftPanel->setMouseTracking(true);
 
     refreshButton = new QPushButton(this);
     refreshButton->setStyleSheet("QPushButton {"
@@ -189,75 +191,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     descriptionField = new DescriptionField(this);
 
-    //////////Creating left panel//////////
+    //////////Creating lock screen//////////
 
-    for(int c=0;c<dataBase.employeeNumbers();c++)
-    {
-        static int inwCH = 0;
-        if(!dataBase.getEmployee(c).vacation())
-        {
-            PTtab* refer = new PTtab(QString(dataBase.getEmployee(c).name()+"\n"+
-                                             dataBase.getEmployee(c).surname()+"\n"+
-                                             dataBase.getEmployee(c).rank().rankName()),1,this);
-            profilePanelsInWork.push_back(refer);
-            profilePanelsInWork[inwCH]->setGeometry(QRect(0,90+65*inwCH,this->width()/6,60));
-            inwCH++;
-        }
-    }
-
-    inWork = new QPushButton(this);
-    inVacation = new QPushButton(this);
-
-    SFProDisplay.setPixelSize(20);
-    SFProDisplay.setWeight(QFont::DemiBold);
-    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
-
-    inWork->setFont(SFProDisplay);
-    inWork->setStyleSheet("QPushButton {"
-                          "background-color: rgba(0,0,0,0);"
-                          "color: rgb(200,200,200);"
-                          "}"
-                          "QPushButton:hover {"
-                          "color: rgb(180,180,180);"
-                          "}"
-                          "QPushButton:pressed {"
-                          "color: rgb(150,150,150);"
-                          "}");
-    inWork->setText("In Work");
-    inWork->setGeometry(12,60,SFProDislplayMetrics.horizontalAdvance("In Work"),SFProDislplayMetrics.height());
-    connect(inWork,&QPushButton::clicked,this,&MainWindow::inWorkPressed);
-
-
-    inVacation->setFont(SFProDisplay);
-    inVacation->setStyleSheet("QPushButton {"
-                              "background-color: rgba(0,0,0,0);"
-                              "color: rgb(200,200,200);"
-                              "}"
-                              "QPushButton:hover {"
-                              "color: rgb(180,180,180);"
-                              "}"
-                              "QPushButton:pressed {"
-                              "color: rgb(150,150,150);"
-                              "}");
-    inVacation->setText("In Vacation");
-    inVacation->setGeometry(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y(),
-                            SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
-    connect(inVacation,&QPushButton::clicked,this,&MainWindow::inVacationPressed);
-
-    for(int c=0;c<dataBase.employeeNumbers();c++)
-    {
-        static int invCH = 0;
-        if(dataBase.getEmployee(c).vacation())
-        {
-            PTtab* refer = new PTtab(QString(dataBase.getEmployee(c).name()+"\n"+
-                                             dataBase.getEmployee(c).surname()+"\n"+
-                                             dataBase.getEmployee(c).rank().rankName()),1,this);
-            profilePanelsInVacation.push_back(refer);
-            profilePanelsInVacation[invCH]->setGeometry(QRect(0,10+inVacation->geometry().bottomRight().y()+65*invCH,this->width()/6,60));
-            profilePanelsInVacation[invCH]->hide();
-            invCH++;
-        }
-    }
     lockScreen = new LockScreen(dataBase.getEmployeers(), this);
     lockScreen->setMouseTracking(true);
 }
@@ -310,7 +245,7 @@ void MainWindow::doPainting(QPainter* drawer)
     drawer->drawPath(myPath);
     myPen.setColor(QColor(15,15,15));
     drawer->setPen(myPen);
-    drawer->drawRect(QRect(QPoint(1,45),QPoint(this->width()-2,50)));
+    drawer->drawRect(QRect(QPoint(1,49),QPoint(this->width()-2,50)));
 
     myPen.setColor(QColor(28,28,28));
 
@@ -337,49 +272,6 @@ void MainWindow::doPainting(QPainter* drawer)
     drawer->setPen(myPen);
     drawer->drawRect(QRect(QPoint(2,this->height()-45),QPoint(this->width()-4,this->height()-20)));
 
-    //////////Creating left panel triangles//////////
-
-    myPen.setColor(QColor(240,240,240));
-    myBrush.setColor(QColor(240,240,240));
-    drawer->setPen(myPen);
-    drawer->setBrush(myBrush);
-
-    if(inWorkClicked)
-    {
-        myPath.moveTo(inWork->geometry().topRight().x()+11,inWork->geometry().topRight().y()+10);
-        myPath.lineTo(inWork->geometry().topRight().x()+20,inWork->geometry().topRight().y()+10);
-        myPath.lineTo(inWork->geometry().topRight().x()+15,inWork->geometry().topRight().y()+17);
-        myPath.lineTo(inWork->geometry().topRight().x()+10,inWork->geometry().topRight().y()+10);
-    }
-    else
-    {
-        myPath.moveTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+8);
-        myPath.lineTo(inWork->geometry().topRight().x()+19,inWork->geometry().topRight().y()+12);
-        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+17);
-        myPath.lineTo(inWork->geometry().topRight().x()+12,inWork->geometry().topRight().y()+9);
-    }
-    drawer->drawPath(myPath);
-
-    myPath.clear();
-
-    if(inVacationClicked)
-    {
-        myPath.moveTo(inVacation->geometry().topRight().x()+11,inVacation->geometry().topRight().y()+10);
-        myPath.lineTo(inVacation->geometry().topRight().x()+20,inVacation->geometry().topRight().y()+10);
-        myPath.lineTo(inVacation->geometry().topRight().x()+15,inVacation->geometry().topRight().y()+17);
-        myPath.lineTo(inVacation->geometry().topRight().x()+10,inVacation->geometry().topRight().y()+10);
-    }
-    else
-    {
-        myPath.moveTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+8);
-        myPath.lineTo(inVacation->geometry().topRight().x()+19,inVacation->geometry().topRight().y()+12);
-        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+17);
-        myPath.lineTo(inVacation->geometry().topRight().x()+12,inVacation->geometry().topRight().y()+9);
-    }
-    drawer->drawPath(myPath);
-
-    myPath.clear();
-
     //////////Creating lines near text//////////
 
     myPen.setColor(QColor(150,150,150,150));
@@ -387,11 +279,11 @@ void MainWindow::doPainting(QPainter* drawer)
     myBrush.setColor(QColor(0,0,0,0));
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
-    drawer->drawLine(inWork->geometry().topRight().x()+40,inWork->geometry().topRight().y()+inWork->height()/2,                         //In Work
-                     this->width()/6-20,inWork->geometry().topRight().y()+inWork->height()/2);
+//    drawer->drawLine(inWork->geometry().topRight().x()+40,inWork->geometry().topRight().y()+inWork->height()/2,                         //In Work
+//                     this->width()/6-20,inWork->geometry().topRight().y()+inWork->height()/2);
 
-    drawer->drawLine(inVacation->geometry().topRight().x()+40,inVacation->geometry().topRight().y()+inVacation->height()/2,             //In Vacation
-                     this->width()/6-20,inVacation->geometry().topRight().y()+inWork->height()/2);
+//    drawer->drawLine(inVacation->geometry().topRight().x()+40,inVacation->geometry().topRight().y()+inVacation->height()/2,             //In Vacation
+//                     this->width()/6-20,inVacation->geometry().topRight().y()+inWork->height()/2);
 
     drawer->drawLine(this->width()/6*5+employeeTasks->width()+30,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2,    //Employee Task
                      this->width()-20,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2);
@@ -570,57 +462,12 @@ bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
             rect.bottomRight().x()>point.x() && rect.bottomRight().y()>point.y());
 }
 
-void MainWindow::inWorkPressed()
+void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    if(inWorkClicked){
-        inWorkClicked = false;
-        for(int c=0;c<profilePanelsInWork.size();c++)
-        {
-            profilePanelsInWork[c]->hide();
-            inVacation->move(12,inWork->geometry().bottomLeft().y()+10);
-
-        }
-    }
-    else{
-        inWorkClicked = true;
-        for(int c=0;c<profilePanelsInWork.size();c++)
-        {
-            profilePanelsInWork[c]->show();
-            inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
-        }
-    }
-
-    for(int c=0;c<profilePanelsInVacation.size();c++)
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
     {
-        profilePanelsInVacation[c]->setGeometry(QRect(0,10+inVacation->geometry().bottomRight().y()+65*c,this->width()/6,60));
+        lockScreen->checkPasswords();
     }
-
-    qDebug()<< "Should Open Later))";
-    this->update();
-
-}
-
-void MainWindow::inVacationPressed()
-{
-    if(inVacationClicked){
-        inVacationClicked = false;
-        for(int c=0;c<profilePanelsInVacation.size();c++)
-        {
-            profilePanelsInVacation[c]->hide();
-
-        }
-    }
-    else {
-        inVacationClicked = true;
-        for(int c=0;c<profilePanelsInVacation.size();c++)
-        {
-            profilePanelsInVacation[c]->show();
-
-        }
-    }
-
-    qDebug() << "This Shoul Be Open Too)))";
-    this->update();
 }
 
 void MainWindow::initShifts()

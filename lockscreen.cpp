@@ -8,7 +8,7 @@ LockScreen::LockScreen(std::vector<Employee> passwordRefer, QMainWindow* parent)
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    this->setGeometry(1,51,parent->width()-3,parent->height()-53);
+    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
 
     refer = passwordRefer;
 
@@ -93,6 +93,14 @@ void LockScreen::doPainting(QPainter* drawer)
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
     drawer->drawPath(myPath);
+
+    myPath.clear();
+
+    drawer->drawRect(0,0,this->width(),50);
+
+    myPen.setColor(QColor(10,10,10));
+    drawer->setPen(myPen);
+    drawer->drawLine(1,1,this->width(),1);
 }
 
 void LockScreen::resizeEvent(QResizeEvent *event)
@@ -149,4 +157,5 @@ void LockScreen::checkPasswords()
         wrongPass->show();
     }
 }
+
 

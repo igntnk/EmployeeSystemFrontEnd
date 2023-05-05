@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QFontMetrics>
 #include <QFont>
+#include <QMouseEvent>
 #include <iostream>
 
 class PTtab:public QLabel
@@ -14,14 +15,22 @@ class PTtab:public QLabel
 
 public:
     PTtab(QString text = "Unknown Name\nUnknown Surname\nUnknown Rank" ,
-          int choice= 1, QMainWindow* parent = nullptr);
+          int choice= 1, QLabel* parent = nullptr);
     ~PTtab();
 
     void setPicture(int choice);
     void setPicture(QString file);
     void setText(const QString& text,int rowsNum);
 
+    void setSelected(bool);
+
 private:
+    void paintEvent(QPaintEvent *event);
+    void doPainting(QPainter* drawer);
+
+    bool isOnField(const QPointF& point, const QRectF& rect);
+
+    bool isSelected =false;
 
     QFont SFProDisplay;
 

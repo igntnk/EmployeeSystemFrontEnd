@@ -7,6 +7,7 @@
 #include <QPainterPath>
 #include <QPushButton>
 #include <QGraphicsDropShadowEffect>
+#include <QKeyEvent>
 #include <vector>
 #include "writepanel.h"
 #include "employee.h"
@@ -15,6 +16,8 @@ class LockScreen: public QLabel
 {
 public:
     LockScreen(std::vector<Employee> passwordRefer, QMainWindow* parent =nullptr);
+    void checkPasswords();
+
 
 private:
     void paintEvent(QPaintEvent *event);
@@ -23,8 +26,6 @@ private:
     void resizeEvent(QResizeEvent *event);
     void changeUsernameOp(const QString &text);
     void changePasswordOp(const QString &text);
-
-    void checkPasswords();
 
     QGraphicsDropShadowEffect* shadow;
 
@@ -39,6 +40,10 @@ private:
     QLabel* wrongPass;
 
     std::vector<Employee> refer;
+
+private slots:
+
+    //void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // LOCKSCREEN_H

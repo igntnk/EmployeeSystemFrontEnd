@@ -24,6 +24,7 @@ DescriptionField::DescriptionField(QMainWindow* parent):
     profilePict->setGeometry(pictureShift,pictureShift,pictureSideSize,pictureSideSize);
     profilePict->setPixmap(profilePix);
     profilePict->setGraphicsEffect(shadow);
+    profilePict->hide();
 
     SFProDisplay.setPixelSize(30);
     SFProDislplayMetrics = QFontMetrics(SFProDisplay);
@@ -36,6 +37,7 @@ DescriptionField::DescriptionField(QMainWindow* parent):
                                  profilePict->geometry().topRight().y()+(profilePict->height()-SFProDislplayMetrics.height()*4)/2,
                                  SFProDislplayMetrics.horizontalAdvance("Last Name: "),SFProDislplayMetrics.height()*4);
     mainProfileInfo->setStyleSheet("color: rgb(130,130,130);");
+    mainProfileInfo->hide();
 
     chapter1 = new QLabel(this);
     chapter1->setFont(SFProDisplay);
@@ -43,6 +45,7 @@ DescriptionField::DescriptionField(QMainWindow* parent):
     chapter1->setGeometry(pictureShift,chapter1Shift,
                           SFProDislplayMetrics.horizontalAdvance("Task Description"),SFProDislplayMetrics.height());
     chapter1->setStyleSheet("color: rgb(130,130,130);");
+    chapter1->hide();
 
     chapter2 = new QLabel(this);
     chapter2->setFont(SFProDisplay);
@@ -50,6 +53,7 @@ DescriptionField::DescriptionField(QMainWindow* parent):
     chapter2->setGeometry(pictureShift,this->height()-this->height()/5,
                           SFProDislplayMetrics.horizontalAdvance("Employment Date"),SFProDislplayMetrics.height());
     chapter2->setStyleSheet("color: rgb(130,130,130);");
+    chapter2->hide();
 
 }
 
@@ -79,11 +83,14 @@ void DescriptionField::doPainting(QPainter* drawer)
     myPen.setWidth(2);
     drawer->setPen(myPen);
 
-    drawer->drawLine(chapter1->geometry().topRight().x()+lineShift,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
-                     this->width()-lineShift,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
+    if(isProfileSelected)
+    {
+        drawer->drawLine(chapter1->geometry().topRight().x()+lineShift,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
+                         this->width()-lineShift,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
 
-    drawer->drawLine(chapter2->geometry().topRight().x()+lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
-                     this->width()-lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
+        drawer->drawLine(chapter2->geometry().topRight().x()+lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
+                         this->width()-lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
+    }
 }
 
 void DescriptionField::initShifts()

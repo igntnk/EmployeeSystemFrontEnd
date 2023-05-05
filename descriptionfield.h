@@ -16,6 +16,7 @@ public:
     void resize(QMainWindow* changed);
 
 private:
+    bool isProfileSelected = false;
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 

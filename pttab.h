@@ -24,6 +24,8 @@ public:
 
     void setSelected(bool);
 
+    void resizeByScroller(bool, QRect);
+
 private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);

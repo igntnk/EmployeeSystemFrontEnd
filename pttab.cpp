@@ -111,3 +111,18 @@ void PTtab::setSelected(bool choice)
     isSelected = choice;
 }
 
+void PTtab::resizeByScroller(bool choice , QRect globalRect)
+{
+    if(choice)
+    {
+
+        this->setGeometry(this->geometry().x(),this->geometry().y(),globalRect.width()-25,80);
+
+    }
+    else
+    {
+        this->setGeometry(this->geometry().x(),this->geometry().y(),globalRect.width(),80);
+
+    }
+
+}

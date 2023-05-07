@@ -25,7 +25,8 @@ void MainWindow::resizeWindow()
     refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
     windowTitle->move(this->width()/2-120,15);
     lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
-    leftPanel->setGeometry(0,50,this->width()/6,this->height()-101);
+    leftPanel->setGeometry(5,50,this->width()/6,this->height()-101);
+    leftPanel->resizePanel();
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -370,7 +371,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
             mouseResize = true;
             QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,event->globalPosition().y()-5),
                                      QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
-            qDebug() << neadedRect;
             this->setGeometry(neadedRect);
             resizeWindow();
             return;

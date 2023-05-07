@@ -13,14 +13,20 @@ class LeftPanel : public QLabel
 {
 public:
     LeftPanel(DataBase* dataBase, QMainWindow* parent = nullptr);
+    void resizePanel();
 
 protected:
     void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+    void scrollEvent();
     bool isOnField(const QPointF& point, const QRectF& rect);
 
 private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
+
+    void checkeScroller();
 
     QFont SFProDisplay;
 
@@ -31,6 +37,15 @@ private:
 
     std::vector<PTtab*> profilePanelsInWork;
     std::vector<PTtab*> profilePanelsInVacation;
+
+    int scrollShift=0;
+    double generalHeight = 0;
+    bool scroller=false;
+    bool drag = false;
+    QRect refer;
+    QPoint pressPoint;
+    int currentScrollerY;
+
 
 public slots:
     void inWorkPressed();

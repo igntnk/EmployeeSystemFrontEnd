@@ -1,8 +1,8 @@
 
 #include "descriptionfield.h"
 
-DescriptionField::DescriptionField(QMainWindow* parent):
-    QLabel(parent)
+DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
+    QLabel(parent), referBase(base)
 {
     initShifts();
 
@@ -29,15 +29,18 @@ DescriptionField::DescriptionField(QMainWindow* parent):
     SFProDisplay.setPixelSize(30);
     SFProDislplayMetrics = QFontMetrics(SFProDisplay);
 
-    mainProfileInfo = new QLabel(this);
-    mainProfileInfo->setFont(SFProDisplay);
-    mainProfileInfo->setText("Name:\nSurname:\nLast Name:\nRank:");
-    mainProfileInfo->setAlignment(Qt::AlignRight);
-    mainProfileInfo->setGeometry(profilePict->geometry().topRight().x()+mainProfileInfoShift,
+    chapters = new QLabel(this);
+    chapters->setFont(SFProDisplay);
+    chapters->setText("Name:\nSurname:\nLast Name:\nRank:");
+    chapters->setAlignment(Qt::AlignRight);
+    chapters->setGeometry(profilePict->geometry().topRight().x()+mainProfileInfoShift,
                                  profilePict->geometry().topRight().y()+(profilePict->height()-SFProDislplayMetrics.height()*4)/2,
                                  SFProDislplayMetrics.horizontalAdvance("Last Name: "),SFProDislplayMetrics.height()*4);
-    mainProfileInfo->setStyleSheet("color: rgb(130,130,130);");
-    mainProfileInfo->hide();
+    chapters->setStyleSheet("color: rgb(130,130,130);");
+    chapters->hide();
+
+    profileInfo = new QLabel(this);
+    profileInfo->hide();
 
     chapter1 = new QLabel(this);
     chapter1->setFont(SFProDisplay);
@@ -54,6 +57,16 @@ DescriptionField::DescriptionField(QMainWindow* parent):
                           SFProDislplayMetrics.horizontalAdvance("Employment Date"),SFProDislplayMetrics.height());
     chapter2->setStyleSheet("color: rgb(130,130,130);");
     chapter2->hide();
+
+    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
+
+    taskDescription = new QLabel(this);
+    taskDescription->setStyleSheet("color: rgb(80,80,80);");
+    taskDescription->hide();
+
+    employmentDate = new QLabel(this);
+    employmentDate->setStyleSheet("color: rgb(80,80,80);");
+    employmentDate->hide();
 
 }
 
@@ -103,11 +116,116 @@ void DescriptionField::initShifts()
     topBarHeight = 50;
 }
 
+void DescriptionField::setSelectedNum(int number)
+{
+    selectedNum = number;
+    setVisibility(true);
+    setInfo();
+    setDescription();
+    setEmploymentDate();
+}
+
 void DescriptionField::resize(QMainWindow* changed)
 {
     this->setGeometry(changed->width()/6,topBarHeight,changed->width()/3*2,changed->height()-topBarHeight*2);
 
     chapter1->move(pictureShift,chapter1Shift);
     chapter2->move(pictureShift,this->height()-this->height()/5);
+    employmentDate->move(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20);
 }
 
+void DescriptionField::setInfo()
+{
+    if(selectedNum == -1)
+    {
+        return;
+    }
+
+    SFProDisplay.setPixelSize(30);
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    QString info = referBase->getEmployee(selectedNum).name() + '\n' + referBase->getEmployee(selectedNum).surname()
+                   + '\n' + referBase->getEmployee(selectedNum).lastname() + '\n' + referBase->getEmployee(selectedNum).rank().rankName();
+    profileInfo->setText(info);
+    profileInfo->setFont(SFProDisplay);
+    profileInfo->setGeometry(chapters->geometry().topRight().x()+20,
+                             chapters->geometry().topRight().y(),
+                             SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->getEmployee(selectedNum))),SFProDislplayMetrics.height()*4);
+    profileInfo->setStyleSheet("color: rgb(130,130,130);");
+}
+
+void DescriptionField::setDescription()
+{
+    if(selectedNum == -1)
+    {
+        return;
+    }
+
+    SFProDisplay.setPixelSize(18);
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    taskDescription->setText(referBase->getEmployee(selectedNum).task(0).taskDescription());
+    taskDescription->setFont(SFProDisplay);
+    taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
+                          SFProDislplayMetrics.horizontalAdvance(referBase->getEmployee(selectedNum).task(0).taskDescription()),SFProDislplayMetrics.height());
+}
+
+void DescriptionField::setEmploymentDate()
+{
+    if(selectedNum == -1)
+    {
+        return;
+    }
+
+    SFProDisplay.setPixelSize(25);
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    employmentDate->setText(referBase->getEmployee(selectedNum).hiringDate().toString());
+    employmentDate->setFont(SFProDisplay);
+    employmentDate->setGeometry(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20,
+                                 SFProDislplayMetrics.horizontalAdvance(referBase->getEmployee(selectedNum).hiringDate().toString()),SFProDislplayMetrics.height());
+}
+
+QString DescriptionField::searchLongestWord(Employee refer)
+{
+    QString longest = refer.name();
+
+    if(longest.length() < refer.surname().length())
+    {
+        longest = refer.surname();
+    }
+
+    if(longest.length() < refer.lastname().length())
+    {
+        longest = refer.lastname();
+    }
+
+    return longest;
+}
+
+void DescriptionField::setVisibility(bool choice)
+{
+    isProfileSelected = choice;
+
+    if(isProfileSelected)
+    {
+        profilePict->show();
+        chapters->show();
+        profileInfo->show();
+        chapter1->show();
+        chapter2->show();
+        taskDescription->show();
+        employmentDate->show();
+    }
+    else
+    {
+        profilePict->hide();
+        chapters->hide();
+        profileInfo->hide();
+        chapter1->hide();
+        chapter2->hide();
+        taskDescription->hide();
+        employmentDate->hide();
+    }
+    this->update();
+}

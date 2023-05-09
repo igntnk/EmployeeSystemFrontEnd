@@ -21,6 +21,7 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
                                              dataBase->getEmployee(c).rank().rankName()),1,this);
             profilePanelsInWork.push_back(refer);
             profilePanelsInWork[inwCH]->move(0,40+80*inwCH);
+            inWorkNum.push_back(c);
             generalHeight += profilePanelsInWork[inwCH]->height();
             inwCH++;
         }
@@ -71,6 +72,7 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
             profilePanelsInVacation.push_back(refer);
             profilePanelsInVacation[invCH]->move(0,10+inVacation->geometry().bottomRight().y()+80*invCH+scrollShift);
             profilePanelsInVacation[invCH]->hide();
+            inVacNum.push_back(c);
             generalHeight += profilePanelsInVacation[invCH]->height();
             invCH++;
         }
@@ -180,9 +182,13 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             if(isOnField(event->pos(),profilePanelsInWork[c]->geometry()))
             {
                 profilePanelsInWork[c]->setSelected(true);
+                selectedNum = inWorkNum[c];
+                emit changedSelected(selectedNum);
             }
             else{
                 profilePanelsInWork[c]->setSelected(false);
+                selectedNum = -1;
+                emit changedSelected(selectedNum);
             }
             profilePanelsInWork[c]->update();
         }
@@ -192,9 +198,13 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             if(isOnField(event->pos(),profilePanelsInVacation[c]->geometry()))
             {
                 profilePanelsInVacation[c]->setSelected(true);
+                selectedNum = inVacNum[c];
+                emit changedSelected(selectedNum);
             }
             else{
                 profilePanelsInVacation[c]->setSelected(false);
+                selectedNum = -1;
+                emit changedSelected(selectedNum);
             }
             profilePanelsInVacation[c]->update();
         }
@@ -323,7 +333,11 @@ void LeftPanel::checkeScroller()
     {
         scrollShift = 0;
         inWork->move(12,10+scrollShift);
-        inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
+        if(inWorkClicked)
+        {
+            inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
+        }
+        //inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
 
         for(int c=0;c<profilePanelsInWork.size();c++)
         {
@@ -369,3 +383,10 @@ void LeftPanel::resizePanel()
     }
     checkeScroller();
 }
+
+int LeftPanel::getSelectedPanelNum()
+{
+    return selectedNum;
+}
+
+

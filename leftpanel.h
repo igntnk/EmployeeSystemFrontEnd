@@ -11,9 +11,12 @@
 
 class LeftPanel : public QLabel
 {
+    Q_OBJECT
 public:
     LeftPanel(DataBase* dataBase, QMainWindow* parent = nullptr);
     void resizePanel();
+
+    int getSelectedPanelNum();
 
 protected:
     void mousePressEvent(QMouseEvent* event);
@@ -36,7 +39,9 @@ private:
     bool inVacationClicked=false;
 
     std::vector<PTtab*> profilePanelsInWork;
+    std::vector<int> inWorkNum;
     std::vector<PTtab*> profilePanelsInVacation;
+    std::vector<int> inVacNum;
 
     int scrollShift=0;
     double generalHeight = 0;
@@ -46,10 +51,14 @@ private:
     QPoint pressPoint;
     int currentScrollerY;
 
+    int selectedNum = -1;
 
 public slots:
     void inWorkPressed();
     void inVacationPressed();
+
+signals:
+    void changedSelected(int number);
 };
 
 #endif // LEFTPANEL_H

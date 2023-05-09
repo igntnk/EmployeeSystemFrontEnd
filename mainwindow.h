@@ -80,6 +80,8 @@ public slots:
     void resizeWindow();
     void hideWindow();
     void keyPressEvent(QKeyEvent *event);
+
+
 };
 
 #endif // MAINWINDOW_H

@@ -190,7 +190,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     //////////Creating description panel//////////
 
-    descriptionField = new DescriptionField(this);
+    descriptionField = new DescriptionField(&dataBase,this);
+    descriptionField->setVisibility(false);
+
+    connect(leftPanel,&LeftPanel::changedSelected,descriptionField,&DescriptionField::setSelectedNum);
 
     //////////Creating lock screen//////////
 
@@ -280,11 +283,6 @@ void MainWindow::doPainting(QPainter* drawer)
     myBrush.setColor(QColor(0,0,0,0));
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
-//    drawer->drawLine(inWork->geometry().topRight().x()+40,inWork->geometry().topRight().y()+inWork->height()/2,                         //In Work
-//                     this->width()/6-20,inWork->geometry().topRight().y()+inWork->height()/2);
-
-//    drawer->drawLine(inVacation->geometry().topRight().x()+40,inVacation->geometry().topRight().y()+inVacation->height()/2,             //In Vacation
-//                     this->width()/6-20,inVacation->geometry().topRight().y()+inWork->height()/2);
 
     drawer->drawLine(this->width()/6*5+employeeTasks->width()+30,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2,    //Employee Task
                      this->width()-20,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2);

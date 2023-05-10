@@ -180,6 +180,8 @@ MainWindow::MainWindow(QWidget *parent)
     employeeTools[3]->setText("Add Task");
     employeeTools[4]->setText("Promote Employee");
 
+    connect(employeeTools[0],&QPushButton::clicked,this,&MainWindow::showAddEmMenu);
+
     //////////Creating task panel//////////
 
     employeeTasks = new QLabel(this);
@@ -207,6 +209,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     lockScreen = new LockScreen(dataBase.getEmployeers(), this);
     lockScreen->setMouseTracking(true);
+
+    addMenu = new AddEmployeeMenu(dataBase,this);
+    connect(addMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
 }
 
 MainWindow::~MainWindow()
@@ -460,12 +465,18 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* event)
     isClicked = false;
     mouseResize = false;
     whichSide = 0;
+
 }
 
 bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
 {
     return (rect.topLeft().x()<point.x() && rect.topLeft().y()<point.y() &&
             rect.bottomRight().x()>point.x() && rect.bottomRight().y()>point.y());
+}
+
+void MainWindow::showAddEmMenu()
+{
+    addMenu->show();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

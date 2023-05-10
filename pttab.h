@@ -20,7 +20,7 @@ public:
 
     void setPicture(int choice);
     void setPicture(QString file);
-    void setText(const QString& text,int rowsNum);
+    void setPText(const QString& text,int rowsNum);
 
     void setSelected(bool);
 
@@ -35,6 +35,7 @@ private:
     bool isSelected =false;
 
     QFont SFProDisplay;
+    QFontMetrics SFProDislplayMetrics = QFontMetrics(QFont("SF Pro Display", 12));
 
     QLabel* infoText;
     QString infoString;

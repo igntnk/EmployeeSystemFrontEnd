@@ -125,6 +125,12 @@ void DescriptionField::setSelectedNum(int number)
     setEmploymentDate();
 }
 
+void DescriptionField::changeDesc(int number)
+{
+
+    taskDescription->setText(referBase->getEmployee(selectedNum)->task(number)->taskDescription());
+}
+
 void DescriptionField::resize(QMainWindow* changed)
 {
     this->setGeometry(changed->width()/6,topBarHeight,changed->width()/3*2,changed->height()-topBarHeight*2);
@@ -144,8 +150,8 @@ void DescriptionField::setInfo()
     SFProDisplay.setPixelSize(30);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    QString info = referBase->getEmployee(selectedNum).name() + '\n' + referBase->getEmployee(selectedNum).surname()
-                   + '\n' + referBase->getEmployee(selectedNum).lastname() + '\n' + referBase->getEmployee(selectedNum).rank().rankName();
+    QString info = referBase->getEmployee(selectedNum)->name() + '\n' + referBase->getEmployee(selectedNum)->surname()
+                   + '\n' + referBase->getEmployee(selectedNum)->lastname() + '\n' + referBase->getEmployee(selectedNum)->rank().rankName();
     profileInfo->setText(info);
     profileInfo->setFont(SFProDisplay);
     profileInfo->setGeometry(chapters->geometry().topRight().x()+20,
@@ -164,10 +170,10 @@ void DescriptionField::setDescription()
     SFProDisplay.setPixelSize(18);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    taskDescription->setText(referBase->getEmployee(selectedNum).task(0).taskDescription());
+    taskDescription->setText(referBase->getEmployee(selectedNum)->task(0)->taskDescription());
     taskDescription->setFont(SFProDisplay);
     taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
-                          SFProDislplayMetrics.horizontalAdvance(referBase->getEmployee(selectedNum).task(0).taskDescription()),SFProDislplayMetrics.height());
+                                 SFProDislplayMetrics.horizontalAdvance(referBase->getEmployee(selectedNum)->task(0)->taskDescription()),SFProDislplayMetrics.height());
 }
 
 void DescriptionField::setEmploymentDate()
@@ -180,24 +186,24 @@ void DescriptionField::setEmploymentDate()
     SFProDisplay.setPixelSize(25);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    employmentDate->setText(referBase->getEmployee(selectedNum).hiringDate().toString());
+    employmentDate->setText(referBase->getEmployee(selectedNum)->hiringDate().toString());
     employmentDate->setFont(SFProDisplay);
     employmentDate->setGeometry(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20,
-                                 SFProDislplayMetrics.horizontalAdvance(referBase->getEmployee(selectedNum).hiringDate().toString()),SFProDislplayMetrics.height());
+                                SFProDislplayMetrics.horizontalAdvance(referBase->getEmployee(selectedNum)->hiringDate().toString()),SFProDislplayMetrics.height());
 }
 
-QString DescriptionField::searchLongestWord(Employee refer)
+QString DescriptionField::searchLongestWord(Employee* refer)
 {
-    QString longest = refer.name();
+    QString longest = refer->name();
 
-    if(longest.length() < refer.surname().length())
+    if(longest.length() < refer->surname().length())
     {
-        longest = refer.surname();
+        longest = refer->surname();
     }
 
-    if(longest.length() < refer.lastname().length())
+    if(longest.length() < refer->lastname().length())
     {
-        longest = refer.lastname();
+        longest = refer->lastname();
     }
 
     return longest;

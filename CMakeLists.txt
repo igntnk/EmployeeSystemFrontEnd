@@ -23,6 +23,7 @@ add_executable(EmployeeSystemFrontend
          writepanel.h
          lockscreen.h
          leftpanel.h
+         rightpanel.h
   	 main.cpp
   	 mainwindow.cpp
          pttab.cpp
@@ -34,6 +35,7 @@ add_executable(EmployeeSystemFrontend
          writepanel.cpp
          lockscreen.cpp
          leftpanel.cpp
+         rightpanel.cpp
          pictures.qrc)
 
 target_link_libraries(EmployeeSystemFrontend

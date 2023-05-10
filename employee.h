@@ -32,12 +32,14 @@ public:
     QString name();
     QString surname();
     QString lastname();
-    Task task(uint8_t number);
+    Task* task(uint8_t number);
     Rank rank();
     QString username();
     QString password();
     QDate hiringDate();
     bool vacation();
+
+    int getTasksNumber();
 
 private:
     uint8_t m_id;

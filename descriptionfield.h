@@ -27,11 +27,12 @@ private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
-    void setInfo();
     void setDescription();
+
+    void setInfo();
     void setEmploymentDate();
 
-    QString searchLongestWord(Employee refer);
+    QString searchLongestWord(Employee* refer);
 
     void initShifts();
 
@@ -61,6 +62,7 @@ private:
 public slots:
 
     void setSelectedNum(int number);
+    void changeDesc(int number);
 };
 
 #endif // DESCRIPTIONFIELD_H

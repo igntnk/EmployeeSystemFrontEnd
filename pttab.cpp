@@ -9,6 +9,7 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     this->setGeometry(0,80,parent->width(),80);
+    this->setMouseTracking(true);
 
     infoText = new QLabel(this);
     infoText->setText(infoString);
@@ -17,6 +18,7 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
     picture = new QLabel(this);
     picture->setGeometry(10,10,60,60);
     picture->setScaledContents(true);
+    picture->setMouseTracking(true);
 
     if(choice)
     {
@@ -71,8 +73,6 @@ void PTtab::doPainting(QPainter* drawer)
 
 void PTtab::setPicture(int choice)
 {
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
-
     if(choice){
         pixmap.load(":icons/profile_icon.png");
         picture->setPixmap(pixmap);
@@ -83,7 +83,6 @@ void PTtab::setPicture(int choice)
     }
     else{
         pixmap.load(":icons/devices_icon.png");
-        picture->setPixmap(pixmap);
         infoString = "Unknown Task\nUnknown Task Responsible;";
         infoText->setText(infoString);
         infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*2)/2,
@@ -93,15 +92,14 @@ void PTtab::setPicture(int choice)
 
 void PTtab::setPicture(QString file)
 {
-    pixmap.load(":icons/devices_icon.png");
+    pixmap.load(file);
     picture->setPixmap(pixmap);
 }
 
-void PTtab::setText(const QString& text, int rowsNum)
+void PTtab::setPText(const QString& text, int rowsNum)
 {
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
-
     infoString = text;
+    infoText->setText(infoString);
     infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*rowsNum)/2,
                           SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*rowsNum);
 }

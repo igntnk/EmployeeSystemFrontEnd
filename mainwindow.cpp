@@ -27,6 +27,7 @@ void MainWindow::resizeWindow()
     lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
     leftPanel->setGeometry(5,50,this->width()/6,this->height()-101);
     leftPanel->resizePanel();
+    rightPanel->setGeometry(this->width()-this->width()/6,80,this->width()/6-12,this->height()-130);
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -192,8 +193,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     descriptionField = new DescriptionField(&dataBase,this);
     descriptionField->setVisibility(false);
+    descriptionField->setMouseTracking(true);
 
     connect(leftPanel,&LeftPanel::changedSelected,descriptionField,&DescriptionField::setSelectedNum);
+
+    //////////Creating rigth panel//////////
+
+    rightPanel = new RightPanel(&dataBase,leftPanel->getSelectedPanelNum(),this);
+    connect(leftPanel,&LeftPanel::changedSelected,rightPanel,&RightPanel::updateSelectedEmployee);
+    connect(rightPanel,&RightPanel::changedSelected,descriptionField,&DescriptionField::changeDesc);
 
     //////////Creating lock screen//////////
 

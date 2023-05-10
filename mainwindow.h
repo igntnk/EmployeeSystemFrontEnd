@@ -17,6 +17,7 @@
 #include "descriptionfield.h"
 #include "lockscreen.h"
 #include "leftpanel.h"
+#include "rightpanel.h"
 
 class MainWindow : public QMainWindow
 
@@ -56,6 +57,7 @@ private:
     LeftPanel* leftPanel;
     std::vector<PTtab*> taskPanels();
 
+    RightPanel* rightPanel;
 
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);

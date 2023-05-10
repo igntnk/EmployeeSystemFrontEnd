@@ -10,15 +10,16 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     this->setGeometry(5,50,parent->width()/6,parent->height()-101);
+    this->setMouseTracking(true);
 
     for(int c=0;c<dataBase->employeeNumbers();c++)
     {
         static int inwCH = 0;
-        if(!dataBase->getEmployee(c).vacation())
+        if(!dataBase->getEmployee(c)->vacation())
         {
-            PTtab* refer = new PTtab(QString(dataBase->getEmployee(c).name()+"\n"+
-                                             dataBase->getEmployee(c).surname()+"\n"+
-                                             dataBase->getEmployee(c).rank().rankName()),1,this);
+            PTtab* refer = new PTtab(QString(dataBase->getEmployee(c)->name()+"\n"+
+                                             dataBase->getEmployee(c)->surname()+"\n"+
+                                             dataBase->getEmployee(c)->rank().rankName()),1,this);
             profilePanelsInWork.push_back(refer);
             profilePanelsInWork[inwCH]->move(0,40+80*inwCH);
             inWorkNum.push_back(c);
@@ -64,11 +65,11 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     for(int c=0;c<dataBase->employeeNumbers();c++)
     {
         static int invCH = 0;
-        if(dataBase->getEmployee(c).vacation())
+        if(dataBase->getEmployee(c)->vacation())
         {
-            PTtab* refer = new PTtab(QString(dataBase->getEmployee(c).name()+"\n"+
-                                             dataBase->getEmployee(c).surname()+"\n"+
-                                             dataBase->getEmployee(c).rank().rankName()),1,this);
+            PTtab* refer = new PTtab(QString(dataBase->getEmployee(c)->name()+"\n"+
+                                             dataBase->getEmployee(c)->surname()+"\n"+
+                                             dataBase->getEmployee(c)->rank().rankName()),1,this);
             profilePanelsInVacation.push_back(refer);
             profilePanelsInVacation[invCH]->move(0,10+inVacation->geometry().bottomRight().y()+80*invCH+scrollShift);
             profilePanelsInVacation[invCH]->hide();
@@ -181,14 +182,21 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
         {
             if(isOnField(event->pos(),profilePanelsInWork[c]->geometry()))
             {
+                if(profilePanelsInWork[c]->isHidden())
+                {
+                    return;
+                }
                 profilePanelsInWork[c]->setSelected(true);
                 selectedNum = inWorkNum[c];
                 emit changedSelected(selectedNum);
             }
             else{
+                if(profilePanelsInWork[c]->isHidden())
+                {
+                    return;
+                }
                 profilePanelsInWork[c]->setSelected(false);
                 selectedNum = -1;
-                emit changedSelected(selectedNum);
             }
             profilePanelsInWork[c]->update();
         }
@@ -197,14 +205,21 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
         {
             if(isOnField(event->pos(),profilePanelsInVacation[c]->geometry()))
             {
+                if(profilePanelsInVacation[c]->isHidden())
+                {
+                    return;
+                }
                 profilePanelsInVacation[c]->setSelected(true);
                 selectedNum = inVacNum[c];
                 emit changedSelected(selectedNum);
             }
             else{
+                if(profilePanelsInVacation[c]->isHidden())
+                {
+                    return;
+                }
                 profilePanelsInVacation[c]->setSelected(false);
                 selectedNum = -1;
-                emit changedSelected(selectedNum);
             }
             profilePanelsInVacation[c]->update();
         }
@@ -337,7 +352,6 @@ void LeftPanel::checkeScroller()
         {
             inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
         }
-        //inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
 
         for(int c=0;c<profilePanelsInWork.size();c++)
         {

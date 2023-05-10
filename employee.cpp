@@ -26,9 +26,10 @@ uint8_t Employee::id(){return m_id;}
 QString Employee::name(){return m_name;}
 QString Employee::surname(){return m_surname;}
 QString Employee::lastname(){return m_lastname;}
-Task Employee::task(uint8_t number){return m_task[number];}
+Task* Employee::task(uint8_t number){return &m_task[number];}
 Rank Employee::rank(){return m_rank;}
 QString Employee::username(){return m_username;}
 QString Employee::password(){return m_password;}
 QDate Employee::hiringDate(){return m_hiring_date;}
 bool Employee::vacation(){return m_vacation;}
+int Employee::getTasksNumber(){return m_task.size();}

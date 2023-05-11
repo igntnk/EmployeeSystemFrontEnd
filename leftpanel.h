@@ -33,6 +33,8 @@ private:
 
     QFont SFProDisplay;
 
+    DataBase* localBase;
+
     QPushButton* inWork;
     QPushButton* inVacation;
     bool inWorkClicked = true;
@@ -56,6 +58,8 @@ private:
 public slots:
     void inWorkPressed();
     void inVacationPressed();
+
+    void updateProfilesList();
 
 signals:
     void changedSelected(int number);

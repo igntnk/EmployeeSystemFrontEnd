@@ -206,6 +206,11 @@ QString DescriptionField::searchLongestWord(Employee* refer)
         longest = refer->lastname();
     }
 
+    if(longest.length() < refer->rank().rankName().length())
+    {
+        longest = refer->rank().rankName();
+    }
+
     return longest;
 }
 

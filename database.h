@@ -15,6 +15,14 @@ public:
     Employee* getEmployee(int number);
     std::vector<Employee> getEmployeers();
 
+    Task* getTask(int number);
+    Task getTask(QString name);
+    int taskNumbers();
+
+    Rank getRank(int number);
+
+    void addEmployee(const Employee& refer);
+
 private:
 
     std::vector<Employee> employeers;

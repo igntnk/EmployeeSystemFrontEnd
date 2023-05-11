@@ -1,7 +1,7 @@
 #include "leftpanel.h"
 
 LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
-    QLabel(parent)
+    QLabel(parent),localBase(dataBase)
 {
     SFProDisplay = QFont("SF Pro Display");
     SFProDisplay.setPixelSize(20);
@@ -259,6 +259,67 @@ bool LeftPanel::isOnField(const QPointF& point, const QRectF& rect)
 {
     return (rect.topLeft().x()<point.x() && rect.topLeft().y()<point.y() &&
             rect.bottomRight().x()>point.x() && rect.bottomRight().y()>point.y());
+}
+
+void LeftPanel::updateProfilesList()
+{
+    scrollShift = 0;
+    inWork->move(12,10+scrollShift);
+
+    for(int c=0;c<profilePanelsInWork.size();c++)
+    {
+        generalHeight -= profilePanelsInWork[c]->height();
+        delete profilePanelsInWork[c];
+
+    }
+    for(int c=0;c<profilePanelsInVacation.size();c++)
+    {
+        generalHeight -= profilePanelsInVacation[c]->height();
+        delete profilePanelsInVacation[c];
+
+    }
+
+    profilePanelsInWork.clear();
+    profilePanelsInVacation.clear();
+    inWorkNum.clear();
+    inVacNum.clear();
+
+    for(int c=0;c<localBase->employeeNumbers();c++)
+    {
+        static int inwCH = 0;
+        if(!localBase->getEmployee(c)->vacation())
+        {
+            PTtab* refer = new PTtab(QString(localBase->getEmployee(c)->name()+"\n"+
+                                             localBase->getEmployee(c)->surname()+"\n"+
+                                             localBase->getEmployee(c)->rank().rankName()),1,this);
+            profilePanelsInWork.push_back(refer);
+            profilePanelsInWork[inwCH]->move(0,40+80*inwCH);
+            profilePanelsInWork[inwCH]->show();
+            inWorkNum.push_back(c);
+            generalHeight += profilePanelsInWork[inwCH]->height();
+            inwCH++;
+        }
+    }
+
+    inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
+
+    for(int c=0;c<localBase->employeeNumbers();c++)
+    {
+        static int invCH = 0;
+        if(localBase->getEmployee(c)->vacation())
+        {
+            PTtab* refer = new PTtab(QString(localBase->getEmployee(c)->name()+"\n"+
+                                             localBase->getEmployee(c)->surname()+"\n"+
+                                             localBase->getEmployee(c)->rank().rankName()),1,this);
+            profilePanelsInVacation.push_back(refer);
+            profilePanelsInVacation[invCH]->move(0,10+inVacation->geometry().bottomRight().y()+80*invCH+scrollShift);
+            profilePanelsInVacation[invCH]->show();
+            inVacNum.push_back(c);
+            generalHeight += profilePanelsInVacation[invCH]->height();
+            invCH++;
+        }
+    }
+    checkeScroller();
 }
 
 void LeftPanel::inWorkPressed()

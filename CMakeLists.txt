@@ -12,7 +12,10 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
+set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons/appIcon.rc")
+
 add_executable(EmployeeSystemFrontend
+        WIN32
          mainwindow.h
          pttab.h
          descriptionfield.h
@@ -38,7 +41,9 @@ add_executable(EmployeeSystemFrontend
          leftpanel.cpp
          rightpanel.cpp
          addemployeemenu.cpp
-         pictures.qrc)
+         pictures.qrc
+     ${APP_ICON_RESOURCE_WINDOWS}
+ )
 
 target_link_libraries(EmployeeSystemFrontend
         Qt::Core

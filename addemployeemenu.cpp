@@ -192,16 +192,6 @@ void AddEmployeeMenu::on_checkBox_stateChanged(int arg1)
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-///
-///
-///
-///  Здесь должен быть запрос на добавление пользователя в базу данных
-///
-///
-///
-
-
 void AddEmployeeMenu::addToBase()
 {
     Employee refer(localBase.employeeNumbers()+1,m_name->getText(),m_surname->getText(),
@@ -214,14 +204,6 @@ void AddEmployeeMenu::addToBase()
     emit baseChanged();
 }
 
-///
-///
-///
-///
-///
-///
-///
-//////////////////////////////////////////////////////////////////////
 
 
 

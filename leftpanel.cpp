@@ -184,7 +184,7 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             {
                 if(profilePanelsInWork[c]->isHidden())
                 {
-                    return;
+                    continue;
                 }
                 profilePanelsInWork[c]->setSelected(true);
                 selectedNum = inWorkNum[c];
@@ -193,7 +193,7 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             else{
                 if(profilePanelsInWork[c]->isHidden())
                 {
-                    return;
+                    continue;
                 }
                 profilePanelsInWork[c]->setSelected(false);
                 selectedNum = -1;
@@ -207,7 +207,7 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             {
                 if(profilePanelsInVacation[c]->isHidden())
                 {
-                    return;
+                    continue;
                 }
                 profilePanelsInVacation[c]->setSelected(true);
                 selectedNum = inVacNum[c];
@@ -216,7 +216,7 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             else{
                 if(profilePanelsInVacation[c]->isHidden())
                 {
-                    return;
+                    continue;
                 }
                 profilePanelsInVacation[c]->setSelected(false);
                 selectedNum = -1;
@@ -244,7 +244,7 @@ void LeftPanel::mouseMoveEvent(QMouseEvent* event)
         {
             refer = deader;
         }
-        scrollShift = -(refer.topLeft().y()-5);
+        scrollShift = -(refer.topLeft().y()*(generalHeight/this->height())-5);
         scrollEvent();
         this->update();
     }
@@ -266,59 +266,34 @@ void LeftPanel::updateProfilesList()
     scrollShift = 0;
     inWork->move(12,10+scrollShift);
 
-    for(int c=0;c<profilePanelsInWork.size();c++)
-    {
-        generalHeight -= profilePanelsInWork[c]->height();
-        delete profilePanelsInWork[c];
+    Employee* refEm = localBase->getEmployee(localBase->employeeNumbers()-1);
+    PTtab* refer = new PTtab(QString(refEm->name()+"\n"+
+                                     refEm->surname()+"\n"+
+                                     refEm->rank().rankName()),1,this);
 
+    if(localBase->employeeNumbers() > profilePanelsInVacation.size()+profilePanelsInWork.size())
+    {
+        profilePanelsInWork.push_back(refer);
+        for(int c=0;c<profilePanelsInWork.size();c++)
+        {
+            profilePanelsInWork[c]->move(0,40+80*c);
+        }
+        profilePanelsInWork[profilePanelsInWork.size()-1]->show();
+        inWorkNum.push_back(refEm->id()-1);
+        generalHeight += profilePanelsInWork[0]->height();
     }
+    else
+    {
+        delete refer;
+    }
+
+    inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
+
     for(int c=0;c<profilePanelsInVacation.size();c++)
     {
-        generalHeight -= profilePanelsInVacation[c]->height();
-        delete profilePanelsInVacation[c];
-
+        profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
     }
 
-    profilePanelsInWork.clear();
-    profilePanelsInVacation.clear();
-    inWorkNum.clear();
-    inVacNum.clear();
-
-    for(int c=0;c<localBase->employeeNumbers();c++)
-    {
-        static int inwCH = 0;
-        if(!localBase->getEmployee(c)->vacation())
-        {
-            PTtab* refer = new PTtab(QString(localBase->getEmployee(c)->name()+"\n"+
-                                             localBase->getEmployee(c)->surname()+"\n"+
-                                             localBase->getEmployee(c)->rank().rankName()),1,this);
-            profilePanelsInWork.push_back(refer);
-            profilePanelsInWork[inwCH]->move(0,40+80*inwCH);
-            profilePanelsInWork[inwCH]->show();
-            inWorkNum.push_back(c);
-            generalHeight += profilePanelsInWork[inwCH]->height();
-            inwCH++;
-        }
-    }
-
-    inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
-
-    for(int c=0;c<localBase->employeeNumbers();c++)
-    {
-        static int invCH = 0;
-        if(localBase->getEmployee(c)->vacation())
-        {
-            PTtab* refer = new PTtab(QString(localBase->getEmployee(c)->name()+"\n"+
-                                             localBase->getEmployee(c)->surname()+"\n"+
-                                             localBase->getEmployee(c)->rank().rankName()),1,this);
-            profilePanelsInVacation.push_back(refer);
-            profilePanelsInVacation[invCH]->move(0,10+inVacation->geometry().bottomRight().y()+80*invCH+scrollShift);
-            profilePanelsInVacation[invCH]->show();
-            inVacNum.push_back(c);
-            generalHeight += profilePanelsInVacation[invCH]->height();
-            invCH++;
-        }
-    }
     checkeScroller();
 }
 
@@ -339,7 +314,7 @@ void LeftPanel::inWorkPressed()
         {
             profilePanelsInWork[c]->show();
             generalHeight +=profilePanelsInWork[c]->height();
-            inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
+            inVacation->move(12,10 + (profilePanelsInWork[profilePanelsInWork.size()]-1)->geometry().bottomLeft().y()+scrollShift);
         }
     }
 

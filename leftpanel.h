@@ -30,6 +30,7 @@ private:
     void doPainting(QPainter* drawer);
 
     void checkeScroller();
+    void setDrag(QMouseEvent* event);
 
     QFont SFProDisplay;
 

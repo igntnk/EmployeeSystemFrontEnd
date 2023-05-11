@@ -79,8 +79,11 @@ private:
     bool mouseResize = false;
 
     int descPanelShift;
+    int selected = 1;
 
     AddEmployeeMenu* addMenu;
+
+    void deleteEmployee();
 
 public slots:
 
@@ -88,7 +91,7 @@ public slots:
     void hideWindow();
     void keyPressEvent(QKeyEvent *event);
 
-
+    void setSelected(int number);
 };
 
 #endif // MAINWINDOW_H

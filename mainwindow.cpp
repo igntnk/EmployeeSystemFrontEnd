@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     leftPanel = new LeftPanel(&dataBase,this);
     leftPanel->setMouseTracking(true);
+    connect(leftPanel,&LeftPanel::changedSelected,this,&MainWindow::setSelected);
 
     refreshButton = new QPushButton(this);
     refreshButton->setStyleSheet("QPushButton {"
@@ -181,6 +182,7 @@ MainWindow::MainWindow(QWidget *parent)
     employeeTools[4]->setText("Promote Employee");
 
     connect(employeeTools[0],&QPushButton::clicked,this,&MainWindow::showAddEmMenu);
+    connect(employeeTools[1],&QPushButton::clicked, this, &MainWindow::deleteEmployee);
 
     //////////Creating task panel//////////
 
@@ -212,6 +214,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     addMenu = new AddEmployeeMenu(dataBase,this);
     connect(addMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
+
 }
 
 MainWindow::~MainWindow()
@@ -487,7 +490,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void MainWindow::setSelected(int number)
+{
+    selected = number;
+}
+
 void MainWindow::initShifts()
 {
     descPanelShift = this->width()/6;
+}
+
+void MainWindow::deleteEmployee()
+{
+    dataBase.deleteEmployee(selected);
+    leftPanel->updateProfilesList();
 }

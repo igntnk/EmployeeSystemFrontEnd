@@ -83,3 +83,8 @@ void DataBase::addEmployee(const Employee &refer)
 {
     employeers.push_back(refer);
 }
+
+void DataBase::deleteEmployee(int number)
+{
+    employeers.erase(employeers.begin()+number);
+}

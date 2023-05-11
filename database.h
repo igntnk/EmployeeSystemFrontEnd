@@ -22,6 +22,7 @@ public:
     Rank getRank(int number);
 
     void addEmployee(const Employee& refer);
+    void deleteEmployee(int number);
 
 private:
 

@@ -176,6 +176,8 @@ void LeftPanel::doPainting(QPainter* drawer)
 
 void LeftPanel::mousePressEvent(QMouseEvent* event)
 {
+    setDrag(event);
+
     if(isOnField(event->pos(),QRect(0,50,width(),this->height())))
     {
         for(int c=0;c<profilePanelsInWork.size();c++)
@@ -184,7 +186,7 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             {
                 if(profilePanelsInWork[c]->isHidden())
                 {
-                    continue;
+                    return;
                 }
                 profilePanelsInWork[c]->setSelected(true);
                 selectedNum = inWorkNum[c];
@@ -193,10 +195,9 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             else{
                 if(profilePanelsInWork[c]->isHidden())
                 {
-                    continue;
+                    return;
                 }
                 profilePanelsInWork[c]->setSelected(false);
-                selectedNum = -1;
             }
             profilePanelsInWork[c]->update();
         }
@@ -207,7 +208,7 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             {
                 if(profilePanelsInVacation[c]->isHidden())
                 {
-                    continue;
+                    return;
                 }
                 profilePanelsInVacation[c]->setSelected(true);
                 selectedNum = inVacNum[c];
@@ -216,20 +217,12 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
             else{
                 if(profilePanelsInVacation[c]->isHidden())
                 {
-                    continue;
+                    return;
                 }
                 profilePanelsInVacation[c]->setSelected(false);
-                selectedNum = -1;
             }
             profilePanelsInVacation[c]->update();
         }
-    }
-
-    if(isOnField(event->pos(),refer) and scroller)
-    {
-        drag = true;
-        pressPoint = event->pos();
-        currentScrollerY = refer.topLeft().y();
     }
 }
 
@@ -284,7 +277,38 @@ void LeftPanel::updateProfilesList()
     }
     else
     {
-        delete refer;
+        for(int c=0;c<inWorkNum.size();c++)
+        {
+            if(inWorkNum[c] == selectedNum)
+            {
+                inWorkNum.erase(inWorkNum.begin()+c);
+                delete profilePanelsInWork[c];
+                generalHeight -= profilePanelsInWork[0]->height();
+                profilePanelsInWork.erase(profilePanelsInWork.begin()+c);
+            }
+        }
+        for(int c=0;c<inVacNum.size();c++)
+        {
+            if(inVacNum[c] == selectedNum)
+            {
+                inVacNum.erase(inVacNum.begin()+c);
+                delete profilePanelsInVacation[c];
+                generalHeight -= profilePanelsInVacation[0]->height();
+                profilePanelsInVacation.erase(profilePanelsInVacation.begin()+c);
+            }
+        }
+        for(int a =0;a<inVacNum.size();a++){if(inVacNum[a]>selectedNum){--inVacNum[a];}}
+        for(int a =0;a<inWorkNum.size();a++){if(inWorkNum[a]>selectedNum){--inWorkNum[a];}}
+
+        for(int c=0;c<profilePanelsInWork.size();c++)
+        {
+            profilePanelsInWork[c]->move(0,40+80*c);
+        }
+
+        for(int c=0;c<profilePanelsInVacation.size();c++)
+        {
+            profilePanelsInVacation[c]->move(0,40+80*c);
+        }
     }
 
     inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
@@ -293,6 +317,7 @@ void LeftPanel::updateProfilesList()
     {
         profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
     }
+    this->update();
 
     checkeScroller();
 }
@@ -314,7 +339,7 @@ void LeftPanel::inWorkPressed()
         {
             profilePanelsInWork[c]->show();
             generalHeight +=profilePanelsInWork[c]->height();
-            inVacation->move(12,10 + (profilePanelsInWork[profilePanelsInWork.size()]-1)->geometry().bottomLeft().y()+scrollShift);
+            inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
         }
     }
 
@@ -401,6 +426,16 @@ void LeftPanel::checkeScroller()
     }
 
     refer = QRect(this->width()-20,5,10,this->height()/(generalHeight/this->height())-10);
+}
+
+void LeftPanel::setDrag(QMouseEvent* event)
+{
+    if(isOnField(event->pos(),refer) and scroller)
+    {
+        drag = true;
+        pressPoint = event->pos();
+        currentScrollerY = refer.topLeft().y();
+    }
 }
 
 void LeftPanel::scrollEvent()

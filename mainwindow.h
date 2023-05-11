@@ -18,7 +18,6 @@
 #include "lockscreen.h"
 #include "leftpanel.h"
 #include "rightpanel.h"
-#include "addemployeemenu.h"
 
 class MainWindow : public QMainWindow
 
@@ -35,8 +34,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event);
 
     bool isOnField(const QPointF& point, const QRectF& rect);
-
-    void showAddEmMenu();
 
 private:
     LockScreen* lockScreen;
@@ -79,8 +76,6 @@ private:
     bool mouseResize = false;
 
     int descPanelShift;
-
-    AddEmployeeMenu* addMenu;
 
 public slots:
 

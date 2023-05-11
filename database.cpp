@@ -13,7 +13,7 @@ DataBase::DataBase()
 
     tasks.push_back(Task(0,"Cleaning",taskDesc + "1",0,QDate(2023,8,12),QDate(2022,8,23)));
     tasks.push_back(Task(1,"Shopping",taskDesc+ "2",0,QDate(2024,1,1),QDate(2021,1,12)));
-    tasks.push_back(Task(2,"Climbing","something different",2,QDate(2023,11,1),QDate(2021,5,22)));
+    tasks.push_back(Task(2,"Climbing",taskDesc+ "3",2,QDate(2023,11,1),QDate(2021,5,22)));
     tasks.push_back(Task(3,"Writing",taskDesc+ "4",4,QDate(2023,11,1),QDate(2022,11,30)));
     tasks.push_back(Task(4,"Celebrating",taskDesc+ "5",0,QDate(2025,10,1),QDate(2022,6,3)));
     tasks.push_back(Task(5,"Codding",taskDesc+ "6",1,QDate(2023,12,1),QDate(2022,1,1)));
@@ -50,36 +50,4 @@ Employee* DataBase::getEmployee(int number)
 std::vector<Employee> DataBase::getEmployeers()
 {
     return employeers;
-}
-
-Task *DataBase::getTask(int number)
-{
-    return &tasks[number];
-}
-
-Task DataBase::getTask(QString name)
-{
-    for(int c=0;c<tasks.size();c++)
-    {
-        if(tasks[c].taskName()== name)
-        {
-            return tasks[c];
-        }
-    }
-    return tasks[0];
-}
-
-int DataBase::taskNumbers()
-{
-    return tasks.size();
-}
-
-Rank DataBase::getRank(int number)
-{
-    return ranks[number];
-}
-
-void DataBase::addEmployee(const Employee &refer)
-{
-    employeers.push_back(refer);
 }

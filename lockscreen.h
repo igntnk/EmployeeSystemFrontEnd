@@ -41,6 +41,9 @@ private:
 
     std::vector<Employee> refer;
 
+private slots:
+
+    //void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // LOCKSCREEN_H

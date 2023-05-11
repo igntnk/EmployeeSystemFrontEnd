@@ -23,6 +23,7 @@ public:
     void hideText();
     void showText();
 
+
     QLineEdit* getEditPanel();
 
 private:

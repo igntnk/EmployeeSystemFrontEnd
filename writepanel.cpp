@@ -22,7 +22,7 @@ WritePanel::WritePanel(QLabel* parent):
     text = new QLabel(this);
     text->setText("SETTEXT");
     text->setFont(SFProDisplay);
-    text->setStyleSheet("color: rgb(80,80,80)");
+    text->setStyleSheet("color: rgb(120,120,120)");
     text->setGeometry(this->geometry().topLeft().x()+10,this->geometry().topLeft().y()+10,
                       this->width(),SFProDislplayMetrics.height());
     text->setAttribute(Qt::WA_TransparentForMouseEvents);

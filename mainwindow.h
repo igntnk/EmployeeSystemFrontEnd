@@ -79,7 +79,7 @@ private:
     bool mouseResize = false;
 
     int descPanelShift;
-    int selected = 1;
+    int selected = -1;
 
     AddEmployeeMenu* addMenu;
 

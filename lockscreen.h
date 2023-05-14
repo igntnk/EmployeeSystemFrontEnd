@@ -18,7 +18,7 @@ public:
     LockScreen(std::vector<Employee> passwordRefer, QMainWindow* parent =nullptr);
     void checkPasswords();
 
-
+    int getLogginedId();
 private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
@@ -41,6 +41,7 @@ private:
 
     std::vector<Employee> refer;
 
+    int logginedId;
 };
 
 #endif // LOCKSCREEN_H

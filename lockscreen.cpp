@@ -145,6 +145,7 @@ void LockScreen::checkPasswords()
         if(username->getText() == refer[c].username() and password->getText() == refer[c].password())
         {
             pass = true;
+            logginedId = refer[c].id();
         }
     }
 
@@ -156,6 +157,11 @@ void LockScreen::checkPasswords()
     {
         wrongPass->show();
     }
+}
+
+int LockScreen::getLogginedId()
+{
+    return logginedId;
 }
 
 

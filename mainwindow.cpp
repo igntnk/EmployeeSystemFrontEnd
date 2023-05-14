@@ -502,6 +502,44 @@ void MainWindow::initShifts()
 
 void MainWindow::deleteEmployee()
 {
+    QMessageBox message;
+    message.setInformativeText("To delete employee you need to click on one to selectd");
+    message.setText("You trying to delete unselected employee");
+    message.setStandardButtons(QMessageBox::Ok);
+    SFProDisplay.setPixelSize(15);
+    message.setFont(SFProDisplay);
+    message.setIcon(QMessageBox::Information);
+    message.button(QMessageBox::Ok)->setStyleSheet("QAbstractButton {"
+                                                   "background-color: rgb(28, 28, 28);"
+                                                   "color: rgb(100,100,100);"
+                                                   "border: 2px solid rgb(80,80,80);"
+                                                   "border-radius: 7px;"
+                                                   "width: 100px"
+                                                   "}"
+                                                   "QPushButton:hover {"
+                                                   "background-color: rgb(20, 20, 20);"
+                                                   "color: rgb(80,80,80);"
+                                                   "}"
+                                                   "QPushButton:pressed {"
+                                                   "background-color: rgb(10,10,10);"
+                                                   "color: rgb(60,60,60);"
+                                                   "border: 1px solid rgb(40, 40, 40);"
+                                                   "}");
+    if(selected == -1)
+    {
+        message.open();
+        message.exec();
+        return;
+    }
+    else if(selected == lockScreen->getLogginedId())
+    {
+        message.setInformativeText("You can't delete loggined employee");
+        message.setText("Worng Delete");
+        message.open();
+        message.exec();
+        return;
+    }
+
     dataBase.deleteEmployee(selected);
     leftPanel->updateProfilesList();
 }

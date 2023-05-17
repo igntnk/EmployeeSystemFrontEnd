@@ -35,6 +35,7 @@ private:
     QFont SFProDisplay;
 
     DataBase* localBase;
+    PTtab* referPT;
 
     QPushButton* inWork;
     QPushButton* inVacation;

@@ -27,6 +27,7 @@ private:
     QFont SFProDisplay;
 
     DataBase*& localBase;
+
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
@@ -55,6 +56,8 @@ private:
     void changeLastNameOp(const QString &text);
     void changeUsernameOp(const QString &text);
     void changePasswordOp(const QString &text);
+
+    Employee* referEm;
 
 signals:
     void baseChanged();

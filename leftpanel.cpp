@@ -93,7 +93,7 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
         generalHeight += profilePanelsInVacation[d]->height();
     }
 
-    generalHeight += inWork->height()+inVacation->height()-100;
+    generalHeight += inWork->height()+inVacation->height();
 
     if(generalHeight > this->height())
     {
@@ -274,19 +274,19 @@ void LeftPanel::updateProfilesList()
     inWork->move(12,10+scrollShift);
 
     Employee* refEm = localBase->employee(localBase->employeesAmount()-1);
-    PTtab* refer = new PTtab(QString(refEm->name()+"\n"+
+    referPT = new PTtab(QString(refEm->name()+"\n"+
                                      refEm->surname()+"\n"+
                                      refEm->rank()->name()),1,this);
 
     if(localBase->employeesAmount() > profilePanelsInVacation.size()+profilePanelsInWork.size())
     {
-        profilePanelsInWork.push_back(refer);
+        profilePanelsInWork.push_back(referPT);
         for(int c=0;c<profilePanelsInWork.size();c++)
         {
             profilePanelsInWork[c]->move(0,40+80*c);
         }
         profilePanelsInWork[profilePanelsInWork.size()-1]->show();
-        inWorkNum.push_back(refEm->id()-1);
+        inWorkNum.push_back(refEm->id());
         generalHeight += profilePanelsInWork[0]->height();
     }
     else

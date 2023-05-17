@@ -194,19 +194,17 @@ void AddEmployeeMenu::on_checkBox_stateChanged(int arg1)
 
 void AddEmployeeMenu::addToBase()
 {
-//    Employee* refer(m_username->getText(),
-//                   m_password->getText(),m_hiringDate->date(),false);
-//    refer->setId(localBase.employeesAmount()+1);
-//    refer->setName(m_name->getText());
-//    refer->setSurname(m_surname->getText());
-//    refer->addTask(localBase.task(m_rank->currentText()));
-//    refer->setRank(localBase.rank(localBase.ranksAmount()-1));
-//    refer->
+    referEm = new Employee();
+    referEm->setId(localBase->employeesAmount());
+    referEm->setName(m_name->getText());
+    referEm->setSurname(m_surname->getText());
+    referEm->addTask(localBase->task(m_rank->currentText()));
+    referEm->setRank(localBase->rank(localBase->ranksAmount()-1));
 
-//    localBase.addEmployee(refer);
-//    setDefault();
-//    this->hide();
-//    emit baseChanged();
+    localBase->addEmployee(referEm);
+    setDefault();
+    this->hide();
+    emit baseChanged();
 }
 
 

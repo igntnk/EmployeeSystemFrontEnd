@@ -8,15 +8,7 @@ Employee::Employee()
 
 Employee::~Employee()
 {
-    if(m_fire_date != nullptr)
-    {
-        delete m_fire_date;
-    }
 
-    if(m_rank != nullptr)
-    {
-        delete m_rank;
-    }
 }
 
 void Employee::setId(int id){m_id=id;}

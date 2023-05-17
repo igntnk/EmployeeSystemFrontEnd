@@ -38,45 +38,63 @@ DataBase::DataBase()
 
     m_tasks.push_back(referTask);
 
+    Department* referDep = new Department();
+    referDep->setId(departmentsAmount());
+    referDep->setName("Programming");
+
+    m_departments.push_back(referDep);
+
+    referDep = new Department();
+    referDep->setId(departmentsAmount());
+    referDep->setName("Video Editor");
+
+    m_departments.push_back(referDep);
+
+    referDep = new Department();
+    referDep->setId(departmentsAmount());
+    referDep->setName("Text editor");
+
+    m_departments.push_back(referDep);
+
     Rank* referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Admin");
-    referRank->setDepartment(nullptr);
+    referRank->setDepartment(department(1));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Director");
-    referRank->setDepartment(nullptr);
+    referRank->setDepartment(department(0));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Assistant");
-    referRank->setDepartment(nullptr);
+    referRank->setDepartment(department(1));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Manager");
-    referRank->setDepartment(nullptr);
+    referRank->setDepartment(department(0));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Instructor");
-    referRank->setDepartment(nullptr);
+    referRank->setDepartment(department(2));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Worker");
-    referRank->setDepartment(nullptr);
+    referRank->setDepartment(department(2));
 
     m_ranks.push_back(referRank);
 

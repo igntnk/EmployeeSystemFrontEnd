@@ -7,10 +7,7 @@ Event::Event()
 
 Event::~Event()
 {
-    if(m_employee != nullptr)
-    {
-        delete m_employee;
-    }
+
 }
 
 int Event::id()

@@ -23,7 +23,7 @@ private:
 
     uint8_t m_id;
     QString m_name;
-    Department* m_department;
+    Department* m_department=nullptr;
 };
 
 #endif // RANK_H

@@ -19,6 +19,7 @@
 #include "leftpanel.h"
 #include "rightpanel.h"
 #include "addemployeemenu.h"
+#include "messagewindow.h"
 
 class MainWindow : public QMainWindow
 
@@ -39,6 +40,7 @@ protected:
     void showAddEmMenu();
 
 private:
+    MessageWindow* test;
     DataBase* dataBase;
 
     LockScreen* lockScreen;

@@ -9,15 +9,7 @@ EmployeeRole::EmployeeRole()
 
 EmployeeRole::~EmployeeRole()
 {
-    if(m_employee != nullptr)
-    {
-        delete m_employee;
-    }
 
-    if(m_role != nullptr)
-    {
-        delete m_role;
-    }
 }
 
 void EmployeeRole::setEmployee(Employee *employee)

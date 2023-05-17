@@ -10,10 +10,7 @@ RoleAuthority::RoleAuthority()
 
 RoleAuthority::~RoleAuthority()
 {
-    if(m_role != nullptr)
-    {
-        delete m_role;
-    }
+
 }
 
 uint32_t RoleAuthority::id()

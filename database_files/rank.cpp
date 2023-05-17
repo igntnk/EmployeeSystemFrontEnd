@@ -9,10 +9,7 @@ Rank::Rank()
 
 Rank::~Rank()
 {
-    if(m_department !=nullptr)
-    {
-        delete m_department;
-    }
+
 }
 
 uint8_t Rank::id(){return m_id;}

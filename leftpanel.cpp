@@ -338,6 +338,8 @@ void LeftPanel::updateProfilesList()
 
 void LeftPanel::inWorkPressed()
 {
+    checkScroller();
+
     if(inWorkClicked){
         inWorkClicked = false;
         for(int c=0;c<profilePanelsInWork.size();c++)
@@ -357,8 +359,6 @@ void LeftPanel::inWorkPressed()
         }
     }
 
-    checkScroller();
-
     for(int c=0;c<profilePanelsInVacation.size();c++)
     {
         profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
@@ -370,6 +370,8 @@ void LeftPanel::inWorkPressed()
 
 void LeftPanel::inVacationPressed()
 {
+    checkScroller();
+
     if(inVacationClicked){
         inVacationClicked = false;
         for(int c=0;c<profilePanelsInVacation.size();c++)
@@ -387,7 +389,6 @@ void LeftPanel::inVacationPressed()
         }
     }
 
-    checkScroller();
     this->update();
 }
 

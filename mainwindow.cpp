@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     dataBase = new DataBase();
 
+
     SFProDisplay = QFont("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
@@ -217,6 +218,9 @@ MainWindow::MainWindow(QWidget *parent)
     addMenu = new AddEmployeeMenu(dataBase,this);
     connect(addMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
 
+    test = new MessageWindow("Warning","Some awesome words",true,true,this);
+    test->show();
+    connect(test,&MessageWindow::cnslPressed,test,&MessageWindow::close);
 }
 
 MainWindow::~MainWindow()

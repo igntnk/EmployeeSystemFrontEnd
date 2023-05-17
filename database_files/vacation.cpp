@@ -10,10 +10,7 @@ Vacation::Vacation()
 
 Vacation::~Vacation()
 {
-    if(m_employee != nullptr)
-    {
-        delete m_employee;
-    }
+
 }
 
 void Vacation::setId(uint32_t id)

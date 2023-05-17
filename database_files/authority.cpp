@@ -8,10 +8,7 @@ Authority::Authority()
 
 Authority::~Authority()
 {
-    if(m_roleauthority != nullptr)
-    {
-        delete m_roleauthority;
-    }
+
 }
 
 RoleAuthority *Authority::roleauthority()

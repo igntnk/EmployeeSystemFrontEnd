@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initShifts();
 
-    leftPanel = new LeftPanel(&dataBase,this);
+    leftPanel = new LeftPanel(dataBase,this);
     leftPanel->setMouseTracking(true);
     connect(leftPanel,&LeftPanel::changedSelected,this,&MainWindow::setSelected);
 
@@ -195,7 +195,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //////////Creating description panel//////////
 
-    descriptionField = new DescriptionField(&dataBase,this);
+    descriptionField = new DescriptionField(dataBase,this);
     descriptionField->setVisibility(false);
     descriptionField->setMouseTracking(true);
 
@@ -203,13 +203,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     //////////Creating rigth panel//////////
 
-    rightPanel = new RightPanel(&dataBase,leftPanel->getSelectedPanelNum(),this);
+    rightPanel = new RightPanel(dataBase,leftPanel->getSelectedPanelNum(),this);
     connect(leftPanel,&LeftPanel::changedSelected,rightPanel,&RightPanel::updateSelectedEmployee);
     connect(rightPanel,&RightPanel::changedSelected,descriptionField,&DescriptionField::changeDesc);
 
     //////////Creating lock screen//////////
 
-    lockScreen = new LockScreen(dataBase.getEmployeers(), this);
+    lockScreen = new LockScreen(dataBase, this);
     lockScreen->setMouseTracking(true);
 
     addMenu = new AddEmployeeMenu(dataBase,this);
@@ -540,6 +540,6 @@ void MainWindow::deleteEmployee()
         return;
     }
 
-    dataBase.deleteEmployee(selected);
+    dataBase->removeEmployee(selected);
     leftPanel->updateProfilesList();
 }

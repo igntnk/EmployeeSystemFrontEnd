@@ -13,7 +13,7 @@
 #include <QKeyEvent>
 #include <vector>
 #include "pttab.h"
-#include "database.h"
+#include "database_files/database.h"
 #include "descriptionfield.h"
 #include "lockscreen.h"
 #include "leftpanel.h"
@@ -56,7 +56,7 @@ private:
 
     QLabel* employeeTasks;
 
-    DataBase dataBase;
+    DataBase* dataBase;
     LeftPanel* leftPanel;
     std::vector<PTtab*> taskPanels();
 

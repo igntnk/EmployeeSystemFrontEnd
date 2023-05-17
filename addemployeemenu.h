@@ -12,21 +12,21 @@
 #include <QGraphicsDropShadowEffect>
 #include <QPushButton>
 #include "writepanel.h"
-#include "database.h"
+#include "database_files/database.h"
 
 class AddEmployeeMenu : public QLabel
 {
     Q_OBJECT
 
 public:
-    AddEmployeeMenu(DataBase& refer,QMainWindow* parent = nullptr);
+    AddEmployeeMenu(DataBase*& refer,QMainWindow* parent = nullptr);
 
     void setDefault();
 
 private:
     QFont SFProDisplay;
 
-    DataBase& localBase;
+    DataBase*& localBase;
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 

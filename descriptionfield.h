@@ -1,4 +1,3 @@
-
 #ifndef DESCRIPTIONFIELD_H
 #define DESCRIPTIONFIELD_H
 
@@ -9,8 +8,8 @@
 #include <QPainter>
 #include <QGraphicsDropShadowEffect>
 #include <vector>
-#include "employee.h"
-#include "database.h"
+#include "database_files/employee.h"
+#include "database_files/database.h"
 
 class DescriptionField : public QLabel
 {

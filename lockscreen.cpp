@@ -1,6 +1,6 @@
 #include "lockscreen.h"
 
-LockScreen::LockScreen(std::vector<Employee> passwordRefer, QMainWindow* parent):
+LockScreen::LockScreen(DataBase* passwordRefer, QMainWindow* parent):
     QLabel(parent)
 {
     QFont SFProDisplay = QFont("SF Pro Display", 13);
@@ -140,12 +140,12 @@ void LockScreen::changePasswordOp(const QString &text)
 void LockScreen::checkPasswords()
 {
     bool pass = false;
-    for(int c=0;c<refer.size();c++)
+    for(int c=0;c<refer->employeesAmount();c++)
     {
-        if(username->getText() == refer[c].username() and password->getText() == refer[c].password())
+        if(username->getText() == refer->employee(c)->username() and password->getText() == refer->employee(c)->password())
         {
             pass = true;
-            logginedId = refer[c].id();
+            logginedId = refer->employee(c)->id();
         }
     }
 

@@ -1,6 +1,6 @@
 #include "addemployeemenu.h"
 
-AddEmployeeMenu::AddEmployeeMenu(DataBase& refer, QMainWindow* parent):
+AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
     QLabel(parent),localBase(refer)
 {
     SFProDisplay = QFont("SF Pro Display", 13);
@@ -100,9 +100,9 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase& refer, QMainWindow* parent):
                                 "border: 2px solid rgb(120,120,120);"
                                 "border-radius: 7px;"
                                 "}");
-    for(int c=0;c<localBase.taskNumbers();c++)
+    for(int c=0;c<localBase->tasksAmount();c++)
     {
-        m_rank->addItem(localBase.getTask(c)->taskName());
+        m_rank->addItem(localBase->task(c)->name());
     }
 
     m_enter->setStyleSheet("QPushButton {"
@@ -194,14 +194,19 @@ void AddEmployeeMenu::on_checkBox_stateChanged(int arg1)
 
 void AddEmployeeMenu::addToBase()
 {
-    Employee refer(localBase.employeeNumbers()+1,m_name->getText(),m_surname->getText(),
-                   m_lastname->getText(),localBase.getTask(m_rank->currentText()), localBase.getRank(3),m_username->getText(),
-                   m_password->getText(),m_hiringDate->date(),false);
+//    Employee* refer(m_username->getText(),
+//                   m_password->getText(),m_hiringDate->date(),false);
+//    refer->setId(localBase.employeesAmount()+1);
+//    refer->setName(m_name->getText());
+//    refer->setSurname(m_surname->getText());
+//    refer->addTask(localBase.task(m_rank->currentText()));
+//    refer->setRank(localBase.rank(localBase.ranksAmount()-1));
+//    refer->
 
-    localBase.addEmployee(refer);
-    setDefault();
-    this->hide();
-    emit baseChanged();
+//    localBase.addEmployee(refer);
+//    setDefault();
+//    this->hide();
+//    emit baseChanged();
 }
 
 

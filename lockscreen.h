@@ -10,12 +10,12 @@
 #include <QKeyEvent>
 #include <vector>
 #include "writepanel.h"
-#include "employee.h"
+#include "database_files/database.h"
 
 class LockScreen: public QLabel
 {
 public:
-    LockScreen(std::vector<Employee> passwordRefer, QMainWindow* parent =nullptr);
+    LockScreen(DataBase* passwordRefer, QMainWindow* parent =nullptr);
     void checkPasswords();
 
     int getLogginedId();
@@ -39,7 +39,7 @@ private:
 
     QLabel* wrongPass;
 
-    std::vector<Employee> refer;
+    DataBase* refer;
 
     int logginedId;
 };

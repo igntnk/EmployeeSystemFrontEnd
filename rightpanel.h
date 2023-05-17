@@ -6,9 +6,9 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 #include <vector>
-#include "employee.h"
+#include "database_files/employee.h"
 #include "pttab.h"
-#include "database.h"
+#include "database_files/database.h"
 
 class RightPanel : public QLabel
 {

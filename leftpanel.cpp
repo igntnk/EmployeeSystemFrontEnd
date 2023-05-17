@@ -12,19 +12,17 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     this->setGeometry(5,50,parent->width()/6,parent->height()-101);
     this->setMouseTracking(true);
 
-    for(int c=0;c<dataBase->employeeNumbers();c++)
+    for(int c=0;c<dataBase->vacationsAmount();c++)
     {
-        static int inwCH = 0;
-        if(!dataBase->getEmployee(c)->vacation())
+        if(dataBase->vacation(c)->endDate() >= QDate::currentDate())
         {
-            PTtab* refer = new PTtab(QString(dataBase->getEmployee(c)->name()+"\n"+
-                                             dataBase->getEmployee(c)->surname()+"\n"+
-                                             dataBase->getEmployee(c)->rank().rankName()),1,this);
+            PTtab* refer = new PTtab(QString(dataBase->vacation(c)->employee()->name()+"\n"+
+                                             dataBase->vacation(c)->employee()->surname()+"\n"+
+                                             dataBase->employee(c)->rank()->name()),1,this);
             profilePanelsInWork.push_back(refer);
-            profilePanelsInWork[inwCH]->move(0,40+80*inwCH);
-            inWorkNum.push_back(c);
-            generalHeight += profilePanelsInWork[inwCH]->height();
-            inwCH++;
+            profilePanelsInWork[c]->move(0,40+80*c);
+            inWorkNum.push_back(dataBase->vacation(c)->employee()->id());
+            generalHeight += profilePanelsInWork[c]->height();
         }
     }
 
@@ -62,28 +60,33 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
                             SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());
     connect(inVacation,&QPushButton::clicked,this,&LeftPanel::inVacationPressed);
 
-    for(int c=0;c<dataBase->employeeNumbers();c++)
+    for(int c=0;c<dataBase->employeesAmount();c++)
     {
-        static int invCH = 0;
-        if(dataBase->getEmployee(c)->vacation())
+        bool contVac =false;
+        for(int a=0;a<dataBase->vacationsAmount();a++)
         {
-            PTtab* refer = new PTtab(QString(dataBase->getEmployee(c)->name()+"\n"+
-                                             dataBase->getEmployee(c)->surname()+"\n"+
-                                             dataBase->getEmployee(c)->rank().rankName()),1,this);
-            profilePanelsInVacation.push_back(refer);
-            profilePanelsInVacation[invCH]->move(0,10+inVacation->geometry().bottomRight().y()+80*invCH+scrollShift);
-            profilePanelsInVacation[invCH]->hide();
-            inVacNum.push_back(c);
-            generalHeight += profilePanelsInVacation[invCH]->height();
-            invCH++;
+            if(dataBase->employee(c)->id() == dataBase->vacation(a)->employee()->id())
+            {
+                contVac=true;
+            }
         }
+        if(contVac){continue;}
+        PTtab* refer = new PTtab(QString(dataBase->employee(c)->name()+"\n"+
+                                         dataBase->employee(c)->surname()+"\n"+
+                                         dataBase->employee(c)->rank()->name()),1,this);
+        profilePanelsInVacation.push_back(refer);
+        profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
+        profilePanelsInVacation[c]->hide();
+        inVacNum.push_back(c);
+        generalHeight += profilePanelsInVacation[c]->height();
+
     }
 
     generalHeight += inWork->height()+inVacation->height()-100;
 
     if(generalHeight > this->height())
     {
-        checkeScroller();
+        checkScroller();
     }
 
 }
@@ -259,12 +262,12 @@ void LeftPanel::updateProfilesList()
     scrollShift = 0;
     inWork->move(12,10+scrollShift);
 
-    Employee* refEm = localBase->getEmployee(localBase->employeeNumbers()-1);
+    Employee* refEm = localBase->employee(localBase->employeesAmount()-1);
     PTtab* refer = new PTtab(QString(refEm->name()+"\n"+
                                      refEm->surname()+"\n"+
-                                     refEm->rank().rankName()),1,this);
+                                     refEm->rank()->name()),1,this);
 
-    if(localBase->employeeNumbers() > profilePanelsInVacation.size()+profilePanelsInWork.size())
+    if(localBase->employeesAmount() > profilePanelsInVacation.size()+profilePanelsInWork.size())
     {
         profilePanelsInWork.push_back(refer);
         for(int c=0;c<profilePanelsInWork.size();c++)
@@ -319,7 +322,7 @@ void LeftPanel::updateProfilesList()
     }
     this->update();
 
-    checkeScroller();
+    checkScroller();
 }
 
 void LeftPanel::inWorkPressed()
@@ -343,7 +346,7 @@ void LeftPanel::inWorkPressed()
         }
     }
 
-    checkeScroller();
+    checkScroller();
 
     for(int c=0;c<profilePanelsInVacation.size();c++)
     {
@@ -373,11 +376,11 @@ void LeftPanel::inVacationPressed()
         }
     }
 
-    checkeScroller();
+    checkScroller();
     this->update();
 }
 
-void LeftPanel::checkeScroller()
+void LeftPanel::checkScroller()
 {
     if(generalHeight > this->height())
     {
@@ -466,7 +469,7 @@ void LeftPanel::resizePanel()
     {
         profilePanelsInWork[c]->resizeByScroller(scroller, this->geometry());
     }
-    checkeScroller();
+    checkScroller();
 }
 
 int LeftPanel::getSelectedPanelNum()

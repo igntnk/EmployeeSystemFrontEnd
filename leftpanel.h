@@ -6,7 +6,7 @@
 #include <QPushButton>
 #include <QPainter>
 #include <QPainterPath>
-#include "database.h"
+#include "database_files/database.h"
 #include "pttab.h"
 
 class LeftPanel : public QLabel
@@ -29,7 +29,7 @@ private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
-    void checkeScroller();
+    void checkScroller();
     void setDrag(QMouseEvent* event);
 
     QFont SFProDisplay;

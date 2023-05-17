@@ -6,7 +6,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     parentSize = parent->geometry();
     this->setGeometry(parent->width()-parent->width()/6,80,parent->width()/6-12,parent->height()-130);
     this->setMouseTracking(true);
-    selectedEm = refer->getEmployee(number);
+    selectedEm = refer->employee(number);
     referBase = refer;
 
     for(int c=0;c<15;c++)
@@ -24,7 +24,7 @@ void RightPanel::updateSelectedEmployee(int refer)
         return;
     }
 
-    selectedEm = referBase->getEmployee(refer);
+    selectedEm = referBase->employee(refer);
     updateTaskPanel(refer);
 }
 
@@ -35,11 +35,10 @@ void RightPanel::updateTaskPanel(int number)
         taskPanels[c]->hide();
     }
 
-    for(int c=0;c<selectedEm->getTasksNumber();c++)
+    for(int c=0;c<selectedEm->tasksAmount();c++)
     {
         taskPanels[c]->setPicture(0);
-        taskPanels[c]->setPText(QString("Task Name: "+selectedEm->task(c)->taskName() + '\n'
-                                        + "Responsible ID: " + QString::number(selectedEm->task(c)->taskResponse())),2);
+        taskPanels[c]->setPText(QString("Task Name: " + selectedEm->task(c)->name()),1);
         taskPanels[c]->move(0,0+80*c);
         taskPanels[c]->show();
     }
@@ -49,7 +48,7 @@ void RightPanel::mousePressEvent(QMouseEvent* event)
 {
     if(isOnField(event->pos(),QRect(0,0,width(),this->height())))
     {
-        for(int c=0;c<selectedEm->getTasksNumber();c++)
+        for(int c=0;c<selectedEm->tasksAmount();c++)
         {
             if(isOnField(event->pos(),taskPanels[c]->geometry()))
             {

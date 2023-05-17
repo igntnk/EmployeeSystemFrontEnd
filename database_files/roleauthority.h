@@ -7,6 +7,7 @@ class RoleAuthority
 {
 public:
     RoleAuthority();
+    ~RoleAuthority();
 
     uint32_t id();
     Role* role();

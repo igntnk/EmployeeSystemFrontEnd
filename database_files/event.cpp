@@ -5,6 +5,14 @@ Event::Event()
 
 }
 
+Event::~Event()
+{
+    if(m_employee != nullptr)
+    {
+        delete m_employee;
+    }
+}
+
 int Event::id()
 {
     return m_id;
@@ -37,7 +45,7 @@ void Event::setName(QString name)
 
 void Event::setEmployee(Employee *employee)
 {
-    delete m_employee;
+    if(m_employee!=nullptr){delete m_employee;}
     m_employee = employee;
 }
 

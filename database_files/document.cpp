@@ -4,7 +4,7 @@ Document::Document()
 {
     setId(255);
     setName("Set Name");
-    setCode(99999999);
+    setCode("99999999");
 }
 
 void Document::setId(uint32_t id)
@@ -17,7 +17,7 @@ void Document::setName(QString name)
     m_name=name;
 }
 
-void Document::setCode(uint32_t code)
+void Document::setCode(QString code)
 {
     m_code=code;
 }
@@ -32,7 +32,7 @@ QString Document::name()
     return m_name;
 }
 
-uint32_t Document::code()
+QString Document::code()
 {
     return m_code;
 }

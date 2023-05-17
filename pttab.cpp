@@ -101,7 +101,7 @@ void PTtab::setPText(const QString& text, int rowsNum)
     infoString = text;
     infoText->setText(infoString);
     infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*rowsNum)/2,
-                          SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*rowsNum);
+                          SFProDislplayMetrics.horizontalAdvance(infoString)+20,SFProDislplayMetrics.height()*rowsNum);
 }
 
 void PTtab::setSelected(bool choice)

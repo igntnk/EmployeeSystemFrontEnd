@@ -7,6 +7,14 @@ Rank::Rank()
     m_department = new Department();
 }
 
+Rank::~Rank()
+{
+    if(m_department !=nullptr)
+    {
+        delete m_department;
+    }
+}
+
 uint8_t Rank::id(){return m_id;}
 QString Rank::name(){return m_name;}
 Department* Rank::department(){return m_department;}
@@ -16,6 +24,6 @@ void Rank::setName(QString name){m_name = name;}
 
 void Rank::setDepartment(Department* dep)
 {
-    delete m_department;
+    if(m_department != nullptr){delete m_department;}
     m_department = dep;
 }

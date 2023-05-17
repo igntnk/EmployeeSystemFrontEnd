@@ -9,6 +9,7 @@ class Rank
 {
 public:
     Rank();
+    ~Rank();
 
     uint8_t id();
     QString name();

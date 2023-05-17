@@ -8,6 +8,14 @@ RoleAuthority::RoleAuthority()
     setAuthority_id(255);
 }
 
+RoleAuthority::~RoleAuthority()
+{
+    if(m_role != nullptr)
+    {
+        delete m_role;
+    }
+}
+
 uint32_t RoleAuthority::id()
 {
     return m_id;

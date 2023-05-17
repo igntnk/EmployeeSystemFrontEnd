@@ -8,6 +8,7 @@ class Authority
 {
 public:
     Authority();
+    ~Authority();
 
     RoleAuthority* roleauthority();
     QString name();

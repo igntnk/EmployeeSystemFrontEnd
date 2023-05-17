@@ -2,6 +2,272 @@
 
 DataBase::DataBase()
 {
+    Task* referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Create DataBase");
+    referTask->setDescription("Create data base using PostgreSQL and Qt");
+    referTask->setDeadline(QDate(2023,5,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Create OpenGl cube");
+    referTask->setDescription("Create textured cube model using OpenGl 1998 year version");
+    referTask->setDeadline(QDate(2023,6,12));
+    referTask->setStartline(QDate(2021,5,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Create Refer DB Video");
+    referTask->setDescription("Create simple video with data base programm using After Effects");
+    referTask->setDeadline(QDate(2023,5,12));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Create Coursework Text");
+    referTask->setDescription("Create text about coursework programm");
+    referTask->setDeadline(QDate(2023,5,12));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    Rank* referRank = new Rank();
+    referRank->setId(ranksAmount());
+    referRank->setName("Admin");
+    referRank->setDepartment(nullptr);
+
+    m_ranks.push_back(referRank);
+
+    referRank = new Rank();
+    referRank->setId(ranksAmount());
+    referRank->setName("Director");
+    referRank->setDepartment(nullptr);
+
+    m_ranks.push_back(referRank);
+
+    referRank = new Rank();
+    referRank->setId(ranksAmount());
+    referRank->setName("Assistant");
+    referRank->setDepartment(nullptr);
+
+    m_ranks.push_back(referRank);
+
+    referRank = new Rank();
+    referRank->setId(ranksAmount());
+    referRank->setName("Manager");
+    referRank->setDepartment(nullptr);
+
+    m_ranks.push_back(referRank);
+
+    referRank = new Rank();
+    referRank->setId(ranksAmount());
+    referRank->setName("Instructor");
+    referRank->setDepartment(nullptr);
+
+    m_ranks.push_back(referRank);
+
+    referRank = new Rank();
+    referRank->setId(ranksAmount());
+    referRank->setName("Worker");
+    referRank->setDepartment(nullptr);
+
+    m_ranks.push_back(referRank);
+
+    Document* referDoc = new Document();
+    referDoc->setCode("2017122374");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("Passport");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("48095351208");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("SNILS");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("82763692");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("Medical book");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("2018122374");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("Passport");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("56245967124");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("SNILS");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("73855262");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("Medical book");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("2003256666");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("Passport");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("82653719752");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("SNILS");
+
+    m_documents.push_back(referDoc);
+
+    referDoc = new Document();
+    referDoc->setCode("28165735");
+    referDoc->setId(documentsAmount());
+    referDoc->setName("Medical book");
+
+    m_documents.push_back(referDoc);
+
+    Payment* referPay = new Payment();
+    referPay->setId(paymentsAmount());
+    referPay->setName("Ilya Salary");
+    referPay->setAmount(40000);
+
+    m_payments.push_back(referPay);
+
+    referPay = new Payment();
+    referPay->setId(paymentsAmount());
+    referPay->setName("Danil Salary");
+    referPay->setAmount(30000);
+
+    m_payments.push_back(referPay);
+
+    referPay = new Payment();
+    referPay->setId(paymentsAmount());
+    referPay->setName("Andrey Salary");
+    referPay->setAmount(280000);
+
+    m_payments.push_back(referPay);
+
+    referPay = new Payment();
+    referPay->setId(paymentsAmount());
+    referPay->setName("Zuzev Salary");
+    referPay->setAmount(500000);
+
+    m_payments.push_back(referPay);
+
+    Employee* referEmployee = new Employee();
+    referEmployee->setId(employeesAmount());
+    referEmployee->setName("Ilya");
+    referEmployee->setSurname("Ignatenko");
+    referEmployee->setUsername("Ilya");
+    referEmployee->setPassword("123");
+    referEmployee->setHireDate(QDate::currentDate());
+    referEmployee->addTask(m_tasks[0]);
+    referEmployee->addTask(m_tasks[1]);
+    referEmployee->addTask(m_tasks[2]);
+    referEmployee->setRank(m_ranks[ranksAmount()-3]);
+    referEmployee->addDocument(m_documents[0]);
+    referEmployee->addDocument(m_documents[1]);
+    referEmployee->addDocument(m_documents[2]);
+    referEmployee->addPayment(m_payments[0]);
+
+    m_employeers.push_back(referEmployee);
+
+    referEmployee = new Employee();
+    referEmployee->setId(employeesAmount());
+    referEmployee->setName("Danil");
+    referEmployee->setSurname("Svinoukhov");
+    referEmployee->setUsername("Danil");
+    referEmployee->setPassword("234");
+    referEmployee->setHireDate(QDate(2022,12,2));
+    referEmployee->addTask(m_tasks[1]);
+    referEmployee->setRank(m_ranks[ranksAmount()-1]);
+    referEmployee->addDocument(m_documents[3]);
+    referEmployee->addDocument(m_documents[1]);
+    referEmployee->addDocument(m_documents[4]);
+    referEmployee->addPayment(m_payments[1]);
+
+    m_employeers.push_back(referEmployee);
+
+    referEmployee = new Employee();
+    referEmployee->setId(employeesAmount());
+    referEmployee->setName("Danil");
+    referEmployee->setSurname("Kabirov");
+    referEmployee->setUsername("Danil");
+    referEmployee->setPassword("345");
+    referEmployee->setHireDate(QDate(2021,2,12));
+    referEmployee->addTask(m_tasks[2]);
+    referEmployee->setRank(m_ranks[0]);
+    referEmployee->addDocument(m_documents[3]);
+    referEmployee->addDocument(m_documents[1]);
+    referEmployee->addDocument(m_documents[4]);
+    referEmployee->addPayment(m_payments[1]);
+
+    m_employeers.push_back(referEmployee);
+
+    referEmployee = new Employee();
+    referEmployee->setId(employeesAmount());
+    referEmployee->setName("Andrew");
+    referEmployee->setSurname("Abramov");
+    referEmployee->setUsername("Andrey");
+    referEmployee->setPassword("567");
+    referEmployee->setHireDate(QDate(1272,8,27));
+    referEmployee->addTask(m_tasks[3]);
+    referEmployee->setRank(m_ranks[ranksAmount()-1]);
+    referEmployee->addDocument(m_documents[3]);
+    referEmployee->addDocument(m_documents[1]);
+    referEmployee->addDocument(m_documents[4]);
+    referEmployee->addPayment(m_payments[1]);
+
+    m_employeers.push_back(referEmployee);
+
+    referEmployee = new Employee();
+    referEmployee->setId(employeesAmount());
+    referEmployee->setName("Kirill");
+    referEmployee->setSurname("Bezuglyi");
+    referEmployee->setUsername("Kirill");
+    referEmployee->setPassword("678");
+    referEmployee->setHireDate(QDate(2009,12,3));
+    referEmployee->addTask(m_tasks[3]);
+    referEmployee->setRank(m_ranks[ranksAmount()-3]);
+    referEmployee->addDocument(m_documents[3]);
+    referEmployee->addDocument(m_documents[1]);
+    referEmployee->addDocument(m_documents[4]);
+    referEmployee->addPayment(m_payments[3]);
+
+    m_employeers.push_back(referEmployee);
+
+    Vacation* referVac = new Vacation();
+    referVac->setId(vacationsAmount());
+    referVac->setBeginDate(QDate(2021,12,22));
+    referVac->setEndDate(QDate(2022,1,22));
+    referVac->setEmployee(m_employeers[1]);
+
+    m_vacations.push_back(referVac);
+
+    referVac = new Vacation();
+    referVac->setId(vacationsAmount());
+    referVac->setBeginDate(QDate(2023,5,12));
+    referVac->setEndDate(QDate(2023,5,30));
+    referVac->setEmployee(m_employeers[2]);
+
+    m_vacations.push_back(referVac);
 
 }
 
@@ -12,7 +278,7 @@ DataBase::DataBase()
 
 int DataBase::vacationsAmount()
 {
-    m_vacations.size();
+    return m_vacations.size();
 }
 
 Vacation *DataBase::vacation(int number)

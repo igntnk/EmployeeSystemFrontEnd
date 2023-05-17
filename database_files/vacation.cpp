@@ -8,6 +8,14 @@ Vacation::Vacation()
     m_employee = new Employee();
 }
 
+Vacation::~Vacation()
+{
+    if(m_employee != nullptr)
+    {
+        delete m_employee;
+    }
+}
+
 void Vacation::setId(uint32_t id)
 {
     m_id = id;
@@ -25,7 +33,7 @@ void Vacation::setEndDate(QDate end_date)
 
 void Vacation::setEmployee(Employee *employee)
 {
-    delete m_employee;
+    if(m_employee != nullptr){delete m_employee;}
     m_employee = employee;
 }
 

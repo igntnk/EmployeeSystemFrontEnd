@@ -7,6 +7,7 @@ class Event
 {
 public:
     Event();
+    ~Event();
 
     int id();
     QDate date();

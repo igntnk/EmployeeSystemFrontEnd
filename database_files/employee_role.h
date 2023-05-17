@@ -8,6 +8,7 @@ class EmployeeRole
 {
 public:
     EmployeeRole();
+    ~EmployeeRole();
 
     void setEmployee(Employee* employee);
     void setRole(Role* role);

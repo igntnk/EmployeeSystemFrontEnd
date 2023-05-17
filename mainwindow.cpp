@@ -45,6 +45,8 @@ void MainWindow::hideWindow()
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    dataBase = new DataBase();
+
     SFProDisplay = QFont("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);

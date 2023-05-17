@@ -38,7 +38,13 @@ void RightPanel::updateTaskPanel(int number)
     for(int c=0;c<selectedEm->tasksAmount();c++)
     {
         taskPanels[c]->setPicture(0);
-        taskPanels[c]->setPText(QString("Task Name: " + selectedEm->task(c)->name()),1);
+        QString taskName = selectedEm->task(c)->name();
+        if(taskName.length()>20)
+        {
+            taskName.truncate(20);
+            taskName += " ...";
+        }
+        taskPanels[c]->setPText(QString(taskName),1);
         taskPanels[c]->move(0,0+80*c);
         taskPanels[c]->show();
     }

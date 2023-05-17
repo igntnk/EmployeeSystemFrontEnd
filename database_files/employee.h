@@ -14,6 +14,7 @@ class Employee
 {
 public:
     Employee();
+    ~Employee();
 
     void setId(int id );
     void setName(QString name);
@@ -52,7 +53,7 @@ private:
     QDate m_hire_date = QDate::currentDate();
     QDate* m_fire_date = nullptr;
     std::vector<Task*> m_task;
-    Rank* m_rank;
+    Rank* m_rank = nullptr;
     std::vector<Document*> m_document;
     std::vector<Payment*> m_payment;
 };

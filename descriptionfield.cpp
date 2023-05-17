@@ -31,11 +31,11 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
 
     chapters = new QLabel(this);
     chapters->setFont(SFProDisplay);
-    chapters->setText("Name:\nSurname:\nLast Name:\nRank:");
+    chapters->setText("Name:\nSurname:\nRank:");
     chapters->setAlignment(Qt::AlignRight);
     chapters->setGeometry(profilePict->geometry().topRight().x()+mainProfileInfoShift,
-                                 profilePict->geometry().topRight().y()+(profilePict->height()-SFProDislplayMetrics.height()*4)/2,
-                                 SFProDislplayMetrics.horizontalAdvance("Last Name: "),SFProDislplayMetrics.height()*4);
+                                 profilePict->geometry().topRight().y()+(profilePict->height()-SFProDislplayMetrics.height()*3)/2,
+                                 SFProDislplayMetrics.horizontalAdvance("Last Name: "),SFProDislplayMetrics.height()*3);
     chapters->setStyleSheet("color: rgb(130,130,130);");
     chapters->hide();
 
@@ -127,8 +127,12 @@ void DescriptionField::setSelectedNum(int number)
 
 void DescriptionField::changeDesc(int number)
 {
+    SFProDisplay.setPixelSize(18);
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     taskDescription->setText(referBase->employee(selectedNum)->task(number)->description());
+    taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
+                                 SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->task(number)->description()),SFProDislplayMetrics.height());
 }
 
 void DescriptionField::resize(QMainWindow* changed)
@@ -156,7 +160,7 @@ void DescriptionField::setInfo()
     profileInfo->setFont(SFProDisplay);
     profileInfo->setGeometry(chapters->geometry().topRight().x()+20,
                              chapters->geometry().topRight().y(),
-                             SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->employee(selectedNum))),SFProDislplayMetrics.height()*4);
+                             SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->employee(selectedNum))),SFProDislplayMetrics.height()*3);
     profileInfo->setStyleSheet("color: rgb(130,130,130);");
 }
 

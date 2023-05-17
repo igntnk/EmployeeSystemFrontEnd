@@ -39,6 +39,8 @@ protected:
     void showAddEmMenu();
 
 private:
+    DataBase* dataBase;
+
     LockScreen* lockScreen;
 
     QFont SFProDisplay;
@@ -56,7 +58,6 @@ private:
 
     QLabel* employeeTasks;
 
-    DataBase* dataBase;
     LeftPanel* leftPanel;
     std::vector<PTtab*> taskPanels();
 

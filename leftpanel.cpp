@@ -12,18 +12,27 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     this->setGeometry(5,50,parent->width()/6,parent->height()-101);
     this->setMouseTracking(true);
 
-    for(int c=0;c<dataBase->vacationsAmount();c++)
+    for(int c=0;c<dataBase->employeesAmount();c++)
     {
-        if(dataBase->vacation(c)->endDate() >= QDate::currentDate())
+        bool contVac =false;
+        static int d=-1;
+        for(int a=0;a<dataBase->vacationsAmount();a++)
         {
-            PTtab* refer = new PTtab(QString(dataBase->vacation(c)->employee()->name()+"\n"+
-                                             dataBase->vacation(c)->employee()->surname()+"\n"+
-                                             dataBase->employee(c)->rank()->name()),1,this);
-            profilePanelsInWork.push_back(refer);
-            profilePanelsInWork[c]->move(0,40+80*c);
-            inWorkNum.push_back(dataBase->vacation(c)->employee()->id());
-            generalHeight += profilePanelsInWork[c]->height();
+            if(dataBase->employee(c)->id() == dataBase->vacation(a)->employee()->id() and
+                dataBase->vacation(a)->endDate() > QDate::currentDate())
+            {
+                contVac=true;
+            }
         }
+        if(contVac){continue;}
+        d++;
+        PTtab* refer = new PTtab(QString(dataBase->employee(c)->name()+"\n"+
+                                         dataBase->employee(c)->surname()+"\n"+
+                                         dataBase->employee(c)->rank()->name()),1,this);
+        profilePanelsInWork.push_back(refer);
+        profilePanelsInWork[d]->move(0,40+80*d);
+        inWorkNum.push_back(dataBase->employee(c)->id());
+        generalHeight += profilePanelsInWork[d]->height();
     }
 
     inWork = new QPushButton(this);
@@ -62,12 +71,15 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
 
     for(int c=0;c<dataBase->employeesAmount();c++)
     {
-        bool contVac =false;
+        bool contVac =true;
+        static int d=-1;
         for(int a=0;a<dataBase->vacationsAmount();a++)
         {
-            if(dataBase->employee(c)->id() == dataBase->vacation(a)->employee()->id())
+            if(dataBase->employee(c)->id() == dataBase->vacation(a)->employee()->id() and
+                dataBase->vacation(a)->endDate() > QDate::currentDate())
             {
-                contVac=true;
+                contVac=false;
+                d++;
             }
         }
         if(contVac){continue;}
@@ -75,11 +87,10 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
                                          dataBase->employee(c)->surname()+"\n"+
                                          dataBase->employee(c)->rank()->name()),1,this);
         profilePanelsInVacation.push_back(refer);
-        profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
-        profilePanelsInVacation[c]->hide();
-        inVacNum.push_back(c);
-        generalHeight += profilePanelsInVacation[c]->height();
-
+        profilePanelsInVacation[d]->move(0,10+inVacation->geometry().bottomRight().y()+80*d+scrollShift);
+        profilePanelsInVacation[d]->hide();
+        inVacNum.push_back(dataBase->employee(c)->id());
+        generalHeight += profilePanelsInVacation[d]->height();
     }
 
     generalHeight += inWork->height()+inVacation->height()-100;

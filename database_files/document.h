@@ -10,17 +10,17 @@ public:
 
     void setId(uint32_t);
     void setName(QString);
-    void setCode(uint32_t);
+    void setCode(QString);
 
     uint32_t id();
     QString name();
-    uint32_t code();
+    QString code();
 
 private:
 
-    int m_id;
+    uint32_t m_id;
     QString m_name;
-    int m_code;
+    QString m_code;
 };
 
 #endif // DOCUMENT_H

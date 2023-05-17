@@ -31,6 +31,8 @@ add_executable(EmployeeSystemFrontend
          database_files/rank.h
          database_files/rank.cpp
          writepanel.h
+         messagewindow.h
+         messagewindow.cpp
          writepanel.cpp
          lockscreen.h
          lockscreen.cpp

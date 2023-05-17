@@ -8,6 +8,7 @@ class Vacation
 {
 public:
     Vacation();
+    ~Vacation();
 
     void setId(uint32_t);
     void setBeginDate(QDate);

@@ -338,16 +338,15 @@ void LeftPanel::updateProfilesList()
 
 void LeftPanel::inWorkPressed()
 {
-    checkScroller();
-
     if(inWorkClicked){
         inWorkClicked = false;
         for(int c=0;c<profilePanelsInWork.size();c++)
         {
             profilePanelsInWork[c]->hide();
             generalHeight -=profilePanelsInWork[c]->height();
-            inVacation->move(12,inWork->geometry().bottomLeft().y()+10+scrollShift);
         }
+
+        inVacation->move(inWork->geometry().topLeft().x(),inWork->geometry().bottomLeft().y()+10+scrollShift);
     }
     else{
         inWorkClicked = true;
@@ -355,8 +354,8 @@ void LeftPanel::inWorkPressed()
         {
             profilePanelsInWork[c]->show();
             generalHeight +=profilePanelsInWork[c]->height();
-            inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
         }
+        inVacation->move(inWork->geometry().topLeft().x(),10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
     }
 
     for(int c=0;c<profilePanelsInVacation.size();c++)
@@ -364,14 +363,13 @@ void LeftPanel::inWorkPressed()
         profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
     }
 
+    checkScroller();
     this->update();
 
 }
 
 void LeftPanel::inVacationPressed()
 {
-    checkScroller();
-
     if(inVacationClicked){
         inVacationClicked = false;
         for(int c=0;c<profilePanelsInVacation.size();c++)
@@ -388,6 +386,8 @@ void LeftPanel::inVacationPressed()
             generalHeight +=profilePanelsInVacation[c]->height();
         }
     }
+
+    checkScroller();
 
     this->update();
 }
@@ -423,16 +423,22 @@ void LeftPanel::checkScroller()
     if(!scroller)
     {
         scrollShift = 0;
-        inWork->move(12,10+scrollShift);
-        if(inWorkClicked)
-        {
-            inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
-        }
+        inWork->move(12,10);
 
         for(int c=0;c<profilePanelsInWork.size();c++)
         {
             profilePanelsInWork[c]->move(0,40+80*c+scrollShift);
         }
+
+        if(inWorkClicked)
+        {
+            inVacation->move(inWork->geometry().topLeft().x(),10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
+        }
+        else
+        {
+            inVacation->move(inWork->geometry().topLeft().x(),10+inWork->geometry().bottomLeft().y());
+        }
+
         for(int c=0;c<profilePanelsInVacation.size();c++)
         {
             profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c);
@@ -457,17 +463,29 @@ void LeftPanel::scrollEvent()
 {
     for(int c=0;c<profilePanelsInWork.size();c++)
     {
-        profilePanelsInWork[c]->move(0,40+80*c+scrollShift);
+        if(!profilePanelsInWork[c]->isHidden())
+        {
+            profilePanelsInWork[c]->move(0,40+80*c+scrollShift);
+        }
     }
 
     inWork->move(12,10+scrollShift);
 
-    inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
+    if(!profilePanelsInWork[0]->isHidden())
+    {
+        inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
+    }
+    else
+    {
+        inVacation->move(14,10 + inWork->geometry().bottomLeft().y());
+    }
 
     for(int c=0;c<profilePanelsInVacation.size();c++)
     {
-        profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c);
-
+        if(!profilePanelsInVacation[c]->isHidden())
+        {
+            profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c);
+        }
     }
 }
 

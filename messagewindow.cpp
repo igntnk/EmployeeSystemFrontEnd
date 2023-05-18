@@ -11,7 +11,7 @@ MessageWindow::MessageWindow(QString textTitle,QString textMain,
     QFontMetrics SFProDisplayMetrics(SFProDisplay);
 
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    this->setMinimumSize(400,200);
+    this->setMinimumSize(300,170);
     this->setAttribute(Qt::WA_TranslucentBackground );
     this->setMouseTracking(true);
     this->setModal(true);
@@ -49,7 +49,7 @@ MessageWindow::MessageWindow(QString textTitle,QString textMain,
     okBtn->setFont(SFProDisplay);
     okBtn->setText("Ok");
     okBtn->hide();
-    okBtn->setGeometry(this->geometry().center().x()-50,this->height()/2,
+    okBtn->setGeometry(this->geometry().center().x()-50,this->height()-this->height()/4,
                        100,30);
 
     cnslBtn = new QPushButton(this);

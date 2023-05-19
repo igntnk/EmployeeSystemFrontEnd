@@ -133,31 +133,8 @@ void LockScreen::resizeEvent(QResizeEvent *event)
     password->move(username->geometry().topLeft().x(),username->geometry().bottomLeft().y()+20);
 
     enter->move(password->geometry().center().x()-50,password->geometry().bottomLeft().y()+20);
+    exit->move(password->geometry().center().x()-50,enter->geometry().bottomLeft().y()+10);
 }
-
-//void LockScreen::changeUsernameOp(const QString &text)
-//{
-//    if(username->getText() == "")
-//    {
-//        username->showText();
-//    }
-//    else
-//    {
-//        username->hideText();
-//    }
-//}
-
-//void LockScreen::changePasswordOp(const QString &text)
-//{
-//    if(password->getText() == "")
-//    {
-//        password->showText();
-//    }
-//    else
-//    {
-//        password->hideText();
-//    }
-//}
 
 void LockScreen::checkPasswords()
 {

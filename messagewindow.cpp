@@ -28,7 +28,7 @@ MessageWindow::MessageWindow(QString textTitle,QString textMain,
     titleText->move(this->geometry().center().x()-titleText->width()/2,this->geometry().topLeft().y()+11);
     mainText->move(this->geometry().center().x()-mainText->width()/2,this->height()-this->height()/1.8);
     titleText->setStyleSheet("color: rgb(100,100,100);");
-    mainText->setStyleSheet("color: rgb(170,170,170);");
+    mainText->setStyleSheet("color: rgb(120,120,120);");
 
     okBtn = new QPushButton(this);
     okBtn->setStyleSheet("QPushButton {"
@@ -176,7 +176,7 @@ void MessageWindow::doPainting(QPainter *drawer)
     QPainterPath myPath;
 
     myPen.setColor(QColor(10,10,10));
-    myBrush.setColor(QColor(50,50,50,240));
+    myBrush.setColor(QColor(40,40,40,240));
     myBrush.setStyle(Qt::SolidPattern);
     myPath.moveTo(0,0);
     myPath.addRoundedRect(QRect(QPoint(1,1),QPoint(this->width()-2,this->height()-2)),10,10);
@@ -198,12 +198,12 @@ void MessageWindow::doPainting(QPainter *drawer)
     drawer->drawPath(myPath);
     myPen.setColor(QColor(15,15,15));
     drawer->setPen(myPen);
-    drawer->drawRect(QRect(QPoint(1,35),QPoint(this->width()-2,40)));
+    drawer->drawRect(QRect(QPoint(1,15),QPoint(this->width()-2,40)));
 
     myPen.setColor(QColor(28,28,28));
 
     drawer->setPen(myPen);
-    drawer->drawRect(QRect(QPoint(2,30),QPoint(this->width()-3,38)));
+    drawer->drawRect(QRect(QPoint(3,10),QPoint(this->width()-4,38)));
 
     myPath.clear();
 }

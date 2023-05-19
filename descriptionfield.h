@@ -13,6 +13,7 @@
 #include <vector>
 #include "database_files/employee.h"
 #include "database_files/database.h"
+#include "messagewindow.h"
 #include "writepanel.h"
 
 class DescriptionField : public QLabel

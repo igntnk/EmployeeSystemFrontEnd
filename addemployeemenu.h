@@ -23,6 +23,7 @@ public:
     AddEmployeeMenu(DataBase*& refer,QMainWindow* parent = nullptr);
 
     void setDefault();
+    void resize(QRect parent);
 
 private:
     QFont SFProDisplay;

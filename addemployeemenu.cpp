@@ -167,6 +167,23 @@ void AddEmployeeMenu::setDefault()
     currentHiringDate->setCheckState(Qt::Unchecked);
 }
 
+void AddEmployeeMenu::resize(QRect parent)
+{
+    this->setGeometry(1,50,parent.width()-3,parent.height()-52);
+    m_name->move(parent.width()/2-m_name->width()/2,parent.height()/4);
+    m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomRight().y()+panelsShift);
+    m_username->move(m_name->geometry().bottomLeft().x(),m_surname->geometry().bottomRight().y()+panelsShift);
+    m_password->move(m_name->geometry().bottomLeft().x(),m_username->geometry().bottomRight().y()+panelsShift);
+    m_hiringDate->move(m_name->geometry().bottomLeft().x(),m_password->geometry().bottomRight().y()+panelsShift);
+    currentHiringDate->move(m_hiringDate->geometry().bottomRight().x()+panelsShift,m_password->geometry().bottomRight().y()+panelsShift+3);
+    m_rank->move(m_name->geometry().bottomLeft().x(),m_hiringDate->geometry().bottomRight().y()+panelsShift);
+    m_document->move(m_name->geometry().bottomLeft().x(),m_rank->geometry().bottomRight().y()+panelsShift);
+    m_enter->move(m_rank->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20);
+    m_cancel->move(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10);
+
+    picture->move(parent.width()/2-350,parent.height()/2-130);
+}
+
 void AddEmployeeMenu::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -218,7 +235,6 @@ void AddEmployeeMenu::on_checkBox_stateChanged(int arg1)
 void AddEmployeeMenu::addToBase()
 {
     MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false);
-    wrongInfo->setModal(true);
     connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
     referEm = new Employee();
     referEm->setId(localBase->employeesAmount());

@@ -247,6 +247,21 @@ void DescriptionField::exitEditMode()
 
 void DescriptionField::saveChanges()
 {
+    MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false);
+    connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
+
+    if(m_name->getText().length() < 2 and m_name->getText() != "")
+    {
+        wrongInfo->show();
+        return;
+    }
+    if(m_surname->getText().length() < 3 and m_surname->getText() != "")
+    {
+        wrongInfo->setMainText("You've entered too short surname");
+        wrongInfo->show();
+        return;
+    }
+
     if(m_name->getText() != "")
     {
         referBase->employee(selectedNum)->setName(m_name->getText());
@@ -291,7 +306,7 @@ void DescriptionField::setInfo()
     profileInfo->setFont(SFProDisplay);
     profileInfo->setGeometry(chapters->geometry().topRight().x()+20,
                              chapters->geometry().topRight().y(),
-                             SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->employee(selectedNum))),SFProDislplayMetrics.height()*3);
+                             SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->employee(selectedNum)))+10,SFProDislplayMetrics.height()*3);
     profileInfo->setStyleSheet("color: rgb(130,130,130);");
 
     department->setText("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name());

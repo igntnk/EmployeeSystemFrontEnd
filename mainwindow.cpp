@@ -28,6 +28,7 @@ void MainWindow::resizeWindow()
     leftPanel->setGeometry(5,50,this->width()/6,this->height()-101);
     leftPanel->resizePanel();
     rightPanel->setGeometry(this->width()-this->width()/6,80,this->width()/6-12,this->height()-130);
+    addMenu->resize(this->geometry());
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -62,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(QSize(1800,800));
     this->setAttribute(Qt::WA_TranslucentBackground );
     this->setMouseTracking(true);
-    this->setMinimumSize(QSize(1280,800));
+    this->setMinimumSize(QSize(1500,800));
 
     initShifts();
 

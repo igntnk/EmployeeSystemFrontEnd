@@ -20,7 +20,7 @@ void Employee::setHireDate(QDate date){m_hire_date=date;}
 void Employee::setFireDate(QDate* date){m_fire_date = date;}
 void Employee::addTask(Task* task){m_task.push_back(task);}
 void Employee::removeTask(int number){if(m_task[number] != nullptr){delete m_task[number];}; m_task.erase(m_task.begin()+number);}
-void Employee::setRank(Rank* rank){if(m_rank != nullptr){delete m_rank;}m_rank=rank;}
+void Employee::setRank(Rank* rank){m_rank=rank;}
 void Employee::addDocument(Document* document){m_document.push_back(document);}
 void Employee::removeDocument(int number){if(m_document[number] != nullptr){delete m_document[number];} m_document.erase(m_document.begin()+number);}
 void Employee::addPayment(Payment* payment){m_payment.push_back(payment);}

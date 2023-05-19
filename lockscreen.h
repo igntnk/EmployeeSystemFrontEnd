@@ -24,8 +24,8 @@ private:
     void doPainting(QPainter* drawer);
 
     void resizeEvent(QResizeEvent *event);
-    void changeUsernameOp(const QString &text);
-    void changePasswordOp(const QString &text);
+//    void changeUsernameOp(const QString &text);
+//    void changePasswordOp(const QString &text);
 
     QGraphicsDropShadowEffect* shadow;
 
@@ -36,6 +36,7 @@ private:
     WritePanel* password;
 
     QPushButton* enter;
+    QPushButton* exit;
 
     QLabel* wrongPass;
 

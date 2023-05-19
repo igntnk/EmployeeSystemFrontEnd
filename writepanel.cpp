@@ -23,7 +23,7 @@ WritePanel::WritePanel(QLabel* parent):
     text->setText("SETTEXT");
     text->setFont(SFProDisplay);
     text->setStyleSheet("color: rgb(80,80,80)");
-    text->setGeometry(this->geometry().topLeft().x()+10,this->geometry().topLeft().y()+10,
+    text->setGeometry(this->geometry().topLeft().x()+10,this->height()/4,
                       this->width(),SFProDislplayMetrics.height());
     text->setAttribute(Qt::WA_TransparentForMouseEvents);
 }
@@ -57,7 +57,21 @@ void WritePanel::doPainting(QPainter* drawer)
     drawer->setPen(myPen);
     drawer->drawPath(myPath);
 
+    connect(edit,&QLineEdit::textChanged,this,&WritePanel::setVisibility);
+
     myPath.clear();
+}
+
+void WritePanel::setVisibility()
+{
+    if(getText() == "")
+    {
+        showText();
+    }
+    else
+    {
+        hideText();
+    }
 }
 
 QString WritePanel::getText()
@@ -88,6 +102,7 @@ void WritePanel::setPasswordType(bool type)
 
 void WritePanel::setText(const QString& refer)
 {
+    edit->clear();
     text->setText(refer);
 }
 

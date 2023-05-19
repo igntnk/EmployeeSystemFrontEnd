@@ -11,7 +11,7 @@ MessageWindow::MessageWindow(QString textTitle,QString textMain,
     QFontMetrics SFProDisplayMetrics(SFProDisplay);
 
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    this->setMinimumSize(300,170);
+    this->resize(300,170);
     this->setAttribute(Qt::WA_TranslucentBackground );
     this->setMouseTracking(true);
     this->setModal(true);
@@ -90,6 +90,75 @@ MessageWindow::MessageWindow(QString textTitle,QString textMain,
 
 }
 
+void MessageWindow::setMainText(QString text)
+{
+    QFontMetrics SFProDisplayMetrics(SFProDisplay);
+
+    mainText->resize(SFProDisplayMetrics.horizontalAdvance(text),SFProDisplayMetrics.height());
+    mainText->move(this->geometry().center().x()-mainText->width()/2,this->height()-this->height()/1.8);
+    mainText->setText(text);
+}
+
+void MessageWindow::setTitleText(QString text)
+{
+    QFontMetrics SFProDisplayMetrics(SFProDisplay);
+
+    titleText->resize(SFProDisplayMetrics.horizontalAdvance(text),SFProDisplayMetrics.height());
+    titleText->move(this->geometry().center().x()-titleText->width()/2,this->geometry().topLeft().y()+11);
+
+    titleText->setText(text);
+}
+
+void MessageWindow::setOkButton(bool checker)
+{
+    if(checker)
+    {
+        okBtn->show();
+        connect(okBtn,&QPushButton::clicked,this,&MessageWindow::signalOk);
+        if(cnslBtn->isHidden())
+        {
+            okBtn->setGeometry(this->geometry().center().x()-50,this->height()-this->height()/4,
+                               100,30);
+        }
+        else
+        {
+            okBtn->setGeometry(this->geometry().center().x()+5,this->height()-this->height()/4,
+                               100,30);
+            cnslBtn->setGeometry(this->geometry().center().x()-105,this->height()-this->height()/4,
+                                 100,30);
+        }
+    }
+    else
+    {
+        okBtn->hide();
+    }
+}
+
+void MessageWindow::setCancelButton(bool checker)
+{
+    if(checker)
+    {
+        cnslBtn->show();
+        connect(cnslBtn, &QPushButton::clicked,this,&MessageWindow::signalCancel);
+        if(okBtn->isHidden())
+        {
+            cnslBtn->setGeometry(this->geometry().center().x()-50,this->height()-this->height()/4,
+                               100,30);
+        }
+        else
+        {
+            okBtn->setGeometry(this->geometry().center().x()+5,this->height()-this->height()/4,
+                               100,30);
+            cnslBtn->setGeometry(this->geometry().center().x()-105,this->height()-this->height()/4,
+                                 100,30);
+        }
+    }
+    else
+    {
+        okBtn->hide();
+    }
+}
+
 void MessageWindow::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -141,12 +210,12 @@ void MessageWindow::doPainting(QPainter *drawer)
 
 void MessageWindow::signalOk()
 {
-    emit okPressed();
+    emit okPressed(0);
 }
 
 void MessageWindow::signalCancel()
 {
-    emit cnslPressed();
+    emit cnslPressed(0);
 }
 
 void MessageWindow::mousePressEvent(QMouseEvent* event)

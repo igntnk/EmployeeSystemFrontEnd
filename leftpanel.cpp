@@ -289,7 +289,8 @@ void LeftPanel::updateProfilesList()
         inWorkNum.push_back(refEm->id());
         generalHeight += profilePanelsInWork[0]->height();
     }
-    else
+
+    if(localBase->employeesAmount() < profilePanelsInVacation.size()+profilePanelsInWork.size())
     {
         for(int c=0;c<inWorkNum.size();c++)
         {
@@ -334,6 +335,30 @@ void LeftPanel::updateProfilesList()
     this->update();
 
     checkScroller();
+}
+
+void LeftPanel::changePTInfo()
+{
+    Employee* refEm = localBase->employee(selectedNum);
+
+    for(int c=0;c<profilePanelsInWork.size();c++)
+    {
+        if(selectedNum == inWorkNum[c])
+        {
+            profilePanelsInWork[c]->setPText(QString(refEm->name()+"\n"+
+                                                     refEm->surname()+"\n"+
+                                                     refEm->rank()->name()),3);
+        }
+    }
+    for(int c=0;c<profilePanelsInVacation.size();c++)
+    {
+        if(selectedNum == inWorkNum[c])
+        {
+            profilePanelsInVacation[c]->setPText(QString(refEm->name()+"\n"+
+                                                     refEm->surname()+"\n"+
+                                                     refEm->rank()->name()),3);
+        }
+    }
 }
 
 void LeftPanel::inWorkPressed()

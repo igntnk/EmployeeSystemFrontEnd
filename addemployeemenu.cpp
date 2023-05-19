@@ -26,34 +26,27 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
 
     m_name = new WritePanel(this);
     m_surname = new WritePanel(this);
-    m_lastname = new WritePanel(this);
+    m_document = new QComboBox(this);
     m_rank = new QComboBox(this);
     m_username = new WritePanel(this);
     m_password = new WritePanel(this);
     m_hiringDate = new QDateTimeEdit(this);
     currentHiringDate = new QCheckBox(this);
     m_enter = new QPushButton(this);
+    m_cancel = new QPushButton(this);
 
     m_name->setText("Name");
     m_name->setFont(SFProDisplay);
-    connect(m_name->getEditPanel(),&QLineEdit::textChanged,this,&AddEmployeeMenu::changeNameOp);
     m_surname->setText("Surname");
     m_surname->setFont(SFProDisplay);
-    connect(m_surname->getEditPanel(),&QLineEdit::textChanged,this,&AddEmployeeMenu::changeSurnamedOp);
-    m_lastname->setText("Last Name");
-    m_lastname->setFont(SFProDisplay);
-    connect(m_lastname->getEditPanel(),&QLineEdit::textChanged,this,&AddEmployeeMenu::changeLastNameOp);
     m_username->setText("Username");
     m_username->setFont(SFProDisplay);
-    connect(m_username->getEditPanel(),&QLineEdit::textChanged,this,&AddEmployeeMenu::changeUsernameOp);
     m_password->setText("Password");
     m_password->setFont(SFProDisplay);
-    connect(m_password->getEditPanel(),&QLineEdit::textChanged,this,&AddEmployeeMenu::changePasswordOp);
 
     m_name->move(parent->width()/2-m_name->width()/2,parent->height()/4);
     m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomRight().y()+panelsShift);
-    m_lastname->move(m_name->geometry().bottomLeft().x(),m_surname->geometry().bottomRight().y()+panelsShift);
-    m_username->move(m_name->geometry().bottomLeft().x(),m_lastname->geometry().bottomRight().y()+panelsShift);
+    m_username->move(m_name->geometry().bottomLeft().x(),m_surname->geometry().bottomRight().y()+panelsShift);
     m_password->move(m_name->geometry().bottomLeft().x(),m_username->geometry().bottomRight().y()+panelsShift);
 
     m_hiringDate->setGeometry(m_name->geometry().bottomLeft().x(),m_password->geometry().bottomRight().y()+panelsShift,
@@ -105,6 +98,22 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
         m_rank->addItem(localBase->task(c)->name());
     }
 
+    m_document->setGeometry(m_name->geometry().bottomLeft().x(),m_rank->geometry().bottomRight().y()+panelsShift,
+                            200,40);
+    m_document->setFont(SFProDisplay);
+    m_document->setStyleSheet("QComboBox {"
+                          "padding-left: 5 px;"
+                          "background-color: rgb(20,20,20);"
+                          "color: rgb(120,120,120);"
+                          "border: 2px solid rgb(120,120,120);"
+                          "border-radius: 7px;"
+                          "}");
+
+    for(int c=0;c<localBase->tasksAmount();c++)
+    {
+        m_document->addItem(QString(localBase->document(c)->name() + " (" + localBase->document(c)->code()) + ")");
+    }
+
     m_enter->setStyleSheet("QPushButton {"
                          "background-color: rgb(28, 28, 28);"
                          "color: rgb(100,100,100);"
@@ -122,24 +131,38 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
                          "}");
     m_enter->setFont(SFProDisplay);
     m_enter->setText("Enter");
-    m_enter->setGeometry(m_rank->geometry().center().x()-50,m_rank->geometry().bottomLeft().y()+20,
+    m_enter->setGeometry(m_rank->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20,
                        100,30);
+    m_cancel->setStyleSheet("QPushButton {"
+                           "background-color: rgb(28, 28, 28);"
+                           "color: rgb(100,100,100);"
+                           "border: 2px solid rgb(120,120,120);"
+                           "border-radius: 7px"
+                           "}"
+                           "QPushButton:hover {"
+                           "background-color: rgb(20, 20, 20);"
+                           "color: rgb(80,80,80);"
+                           "}"
+                           "QPushButton:pressed {"
+                           "background-color: rgb(10,10,10);"
+                           "color: rgb(60,60,60);"
+                           "border: 1px solid rgb(40, 40, 40);"
+                           "}");
+    m_cancel->setFont(SFProDisplay);
+    m_cancel->setText("Cancel");
+    m_cancel->setGeometry(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10,
+                         100,30);
 
     connect(m_enter,&QPushButton::clicked,this,&AddEmployeeMenu::addToBase);
+    connect(m_cancel,&QPushButton::clicked,this,&AddEmployeeMenu::hideMenu);
 }
 
 void AddEmployeeMenu::setDefault()
 {
     m_name->setText("Name");
-    m_name->setFont(SFProDisplay);
     m_surname->setText("Surname");
-    m_surname->setFont(SFProDisplay);
-    m_lastname->setText("Last Name");
-    m_lastname->setFont(SFProDisplay);
     m_username->setText("Username");
-    m_username->setFont(SFProDisplay);
     m_password->setText("Password");
-    m_password->setFont(SFProDisplay);
 
     currentHiringDate->setCheckState(Qt::Unchecked);
 }
@@ -194,79 +217,59 @@ void AddEmployeeMenu::on_checkBox_stateChanged(int arg1)
 
 void AddEmployeeMenu::addToBase()
 {
+    MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false);
+    wrongInfo->setModal(true);
+    connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
     referEm = new Employee();
     referEm->setId(localBase->employeesAmount());
+
+    if(m_name->getText().length() < 2)
+    {
+        wrongInfo->show();
+        return;
+    }
+    if(m_surname->getText().length() < 3)
+    {
+        wrongInfo->setMainText("You've entered too short surname");
+        wrongInfo->show();
+        return;
+    }
+    if(findSimilar())
+    {
+        wrongInfo->setMainText("This username is busy");
+        wrongInfo->show();
+        return;
+    }
+
     referEm->setName(m_name->getText());
     referEm->setSurname(m_surname->getText());
     referEm->addTask(localBase->task(m_rank->currentText()));
     referEm->setRank(localBase->rank(localBase->ranksAmount()-1));
+    referEm->addDocument(localBase->document(m_document->currentText()));
 
     localBase->addEmployee(referEm);
     setDefault();
+    delete wrongInfo;
     this->hide();
     emit baseChanged();
 }
 
-
-
-
-void AddEmployeeMenu::changeNameOp(const QString &text)
+void AddEmployeeMenu::hideMenu()
 {
-    if(m_name->getText() == "")
-    {
-        m_name->showText();
-    }
-    else
-    {
-        m_name->hideText();
-    }
+    setDefault();
+    this->hide();
 }
 
-void AddEmployeeMenu::changeSurnamedOp(const QString &text)
+bool AddEmployeeMenu::findSimilar()
 {
-    if(m_surname->getText() == "")
+    bool isSame;
+    isSame = false;
+    for(int c=0;c<localBase->employeesAmount();c++)
     {
-        m_surname->showText();
+        if(localBase->employee(c)->username() == m_username->getText())
+        {
+            isSame = true;
+        }
     }
-    else
-    {
-        m_surname->hideText();
-    }
+    return isSame;
 }
-
-void AddEmployeeMenu::changeLastNameOp(const QString &text)
-{
-    if(m_lastname->getText() == "")
-    {
-        m_lastname->showText();
-    }
-    else
-    {
-        m_lastname->hideText();
-    }
-}
-
-void AddEmployeeMenu::changeUsernameOp(const QString &text)
-{
-    if(m_username->getText() == "")
-    {
-        m_username->showText();
-    }
-    else
-    {
-        m_username->hideText();
-    }
-}
-
-void AddEmployeeMenu::changePasswordOp(const QString &text)
-{
-    if(m_password->getText() == "")
-    {
-        m_password->showText();
-    }
-    else
-    {
-        m_password->hideText();
-    }
-}
-

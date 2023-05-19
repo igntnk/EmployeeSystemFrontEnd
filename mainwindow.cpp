@@ -186,6 +186,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(employeeTools[0],&QPushButton::clicked,this,&MainWindow::showAddEmMenu);
     connect(employeeTools[1],&QPushButton::clicked, this, &MainWindow::deleteEmployee);
+    connect(employeeTools[2],&QPushButton::clicked,this,&MainWindow::editMenu);
+    connect(employeeTools[4],&QPushButton::clicked, this, &MainWindow::promoteEmployee);
 
     //////////Creating task panel//////////
 
@@ -203,6 +205,7 @@ MainWindow::MainWindow(QWidget *parent)
     descriptionField->setMouseTracking(true);
 
     connect(leftPanel,&LeftPanel::changedSelected,descriptionField,&DescriptionField::setSelectedNum);
+    connect(descriptionField,&DescriptionField::baseChanged,leftPanel,&LeftPanel::changePTInfo);
 
     //////////Creating rigth panel//////////
 
@@ -485,6 +488,50 @@ void MainWindow::showAddEmMenu()
     addMenu->show();
 }
 
+void MainWindow::editMenu()
+{
+    test = new MessageWindow("Warning","",true,false,this);
+
+    if(selected == -1)
+    {
+        test->setMainText("You haven't selected any user");
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+        return;
+    }
+
+    descriptionField->setEditMode();
+}
+
+void MainWindow::promoteEmployee()
+{
+    test = new MessageWindow("Warning","",true,false,this);
+
+    if(selected == -1)
+    {
+        test->setMainText("You haven't selected any user");
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+        return;
+    }
+
+    if(lockScreen->getLogginedId() == selected)
+    {
+        test->setMainText("You can't promote yourself");
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+        return;
+    }
+
+    test->setCancelButton(true);
+    test->setMainText("Are you sure, promote " + dataBase->employee(selected)->name() + " ?");
+    test->show();
+
+    connect(test,&MessageWindow::okPressed,this,&MainWindow::promoteSlot);
+    connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+    connect(test,&MessageWindow::cnslPressed,test,&MessageWindow::close);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
@@ -498,6 +545,29 @@ void MainWindow::setSelected(int number)
     selected = number;
 }
 
+void MainWindow::deleteSlot()
+{
+    dataBase->removeEmployee(selected);
+    leftPanel->updateProfilesList();
+    descriptionField->setVisibility(false);
+}
+
+void MainWindow::promoteSlot()
+{
+    if(dataBase->employee(selected)->rank()->id() > 1)
+    {
+        dataBase->employee(selected)->setRank(dataBase->rank(dataBase->employee(selected)->rank()->id()-1));
+        leftPanel->changePTInfo();
+        descriptionField->setInfo();
+    }
+    else
+    {
+        test = new MessageWindow("Warning","You can't promote director or admin",true,false,this);
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+    }
+}
+
 void MainWindow::initShifts()
 {
     descPanelShift = this->width()/6;
@@ -505,7 +575,7 @@ void MainWindow::initShifts()
 
 void MainWindow::deleteEmployee()
 {
-    test = new MessageWindow("Warning","You Can't delete yourself",true,false,this);
+    test = new MessageWindow("Warning","You can't delete yourself",true,false,this);
 
     if(selected == lockScreen->getLogginedId())
     {
@@ -514,6 +584,20 @@ void MainWindow::deleteEmployee()
         return;
     }
 
-    dataBase->removeEmployee(selected);
-    leftPanel->updateProfilesList();
+    if(selected == -1)
+    {
+        test->setMainText("You haven't selected any user");
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+        return;
+    }
+
+    test->setMainText("Are you sure, delete " + dataBase->employee(selected)->name() + " ?");
+    test->setCancelButton(true);
+
+    test->show();
+    connect(test,&MessageWindow::okPressed,this,&MainWindow::deleteSlot);
+    connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+    connect(test,&MessageWindow::cnslPressed,test,&MessageWindow::close);
 }
+

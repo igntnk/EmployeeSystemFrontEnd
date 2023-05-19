@@ -36,6 +36,8 @@ private:
     QLineEdit* edit;
 
     QLabel* text;
+
+    void setVisibility();
 };
 
 #endif // WRITEPANEL_H

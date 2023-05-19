@@ -63,6 +63,8 @@ public slots:
 
     void updateProfilesList();
 
+    void changePTInfo();
+
 signals:
     void changedSelected(int number);
 };

@@ -6,10 +6,14 @@
 #include <QPixmap>
 #include <QPen>
 #include <QPainter>
+#include <QPainterPath>
+#include <QPushButton>
 #include <QGraphicsDropShadowEffect>
+#include <QDateTimeEdit>
 #include <vector>
 #include "database_files/employee.h"
 #include "database_files/database.h"
+#include "writepanel.h"
 
 class DescriptionField : public QLabel
 {
@@ -20,6 +24,7 @@ public:
     void resize(QMainWindow* changed);
 
     void setVisibility(bool);
+    void setInfo();
 
 private:
     bool isProfileSelected = false;
@@ -27,8 +32,6 @@ private:
     void doPainting(QPainter* drawer);
 
     void setDescription();
-
-    void setInfo();
     void setEmploymentDate();
 
     QString searchLongestWord(Employee* refer);
@@ -42,6 +45,7 @@ private:
     QLabel* profilePict;
     QLabel* chapters;
     QLabel* profileInfo;
+    QLabel* department;
     QLabel* chapter1;
     QLabel* taskDescription;
     QLabel* chapter2;
@@ -58,10 +62,25 @@ private:
     int selectedNum = -1;
     DataBase* referBase;
 
+    WritePanel* m_name;
+    WritePanel* m_surname;
+    QDateEdit* m_hiringDate;
+
+    QPushButton* cancel;
+    QPushButton* save;
+
 public slots:
 
     void setSelectedNum(int number);
     void changeDesc(int number);
+
+    void setEditMode();
+    void exitEditMode();
+
+    void saveChanges();
+
+signals:
+    void baseChanged();
 };
 
 #endif // DESCRIPTIONFIELD_H

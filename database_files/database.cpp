@@ -444,7 +444,7 @@ void DataBase::addRank(Rank *rank)
 
 void DataBase::removeRank(int number)
 {
-    delete m_ranks[number];
+
     m_ranks.erase(m_ranks.begin()+number);
 }
 

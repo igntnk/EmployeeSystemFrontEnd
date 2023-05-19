@@ -42,6 +42,9 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     profileInfo = new QLabel(this);
     profileInfo->hide();
 
+    department = new QLabel(this);
+    department->hide();
+
     chapter1 = new QLabel(this);
     chapter1->setFont(SFProDisplay);
     chapter1->setText("Task Decription");
@@ -68,6 +71,69 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     employmentDate->setStyleSheet("color: rgb(80,80,80);");
     employmentDate->hide();
 
+    m_name = new WritePanel(this);
+    m_surname = new WritePanel(this);
+    m_hiringDate = new QDateEdit(this);
+
+    m_name->setFont(SFProDisplay);
+    m_name->resize(250,SFProDislplayMetrics.height());
+    m_name->hide();
+    m_surname->setFont(SFProDisplay);
+    m_surname->resize(250,SFProDislplayMetrics.height());
+    m_surname->hide();
+
+    m_hiringDate->resize(200,50);
+    m_hiringDate->setFont(SFProDisplay);
+    m_hiringDate->setStyleSheet("QDateTimeEdit {"
+                                "padding-left: 5 px;"
+                                "background-color: rgb(20,20,20);"
+                                "color: rgb(120,120,120);"
+                                "border: 2px solid rgb(120,120,120);"
+                                "border-radius: 7px"
+                                "}"
+                                "QDateTimeEdit:up-button {"
+                                "width: 0px"
+                                "}"
+                                "QDateTimeEdit:down-button {"
+                                "width:0px"
+                                "}");
+    m_hiringDate->hide();
+
+    SFProDisplay.setPixelSize(15);
+
+    save = new QPushButton(this);
+    save->setStyleSheet("QPushButton {"
+                         "background-color: rgb(28, 28, 28);"
+                         "color: rgb(100,100,100);"
+                         "border: 2px solid rgb(100,100,100);"
+                         "border-radius: 7px"
+                         "}"
+                         "QPushButton:hover {"
+                         "background-color: rgb(20, 20, 20);"
+                         "color: rgb(80,80,80);"
+                         "}"
+                         "QPushButton:pressed {"
+                         "background-color: rgb(10,10,10);"
+                         "color: rgb(60,60,60);"
+                         "border: 1px solid rgb(40, 40, 40);"
+                         "}");
+    save->setFont(SFProDisplay);
+    save->setText("Save");
+    save->setGeometry(this->width()/2-105,this->height()-50,
+                       100,30);
+    save->hide();
+    connect(save,&QPushButton::clicked,this,&DescriptionField::saveChanges);
+
+    cancel = new QPushButton(this);
+    cancel->setStyleSheet(save->styleSheet());
+    cancel->setFont(SFProDisplay);
+    cancel->setText("Cancel");
+    cancel->setGeometry(this->width()/2+5,this->height()-50,
+                      100,30);
+    cancel->hide();
+    connect(cancel,&QPushButton::clicked,this,&DescriptionField::exitEditMode);
+
+    SFProDisplay.setPixelSize(30);
 }
 
 void DescriptionField::paintEvent(QPaintEvent* event)
@@ -80,8 +146,11 @@ void DescriptionField::paintEvent(QPaintEvent* event)
 
 void DescriptionField::doPainting(QPainter* drawer)
 {
+    drawer->setRenderHint(QPainter::Antialiasing);
+
     QPen myPen;
     QBrush myBrush;
+    QPainterPath myPath;
 
     myPen.setColor(QColor(10,10,10));
     myPen.setWidth(1);
@@ -98,11 +167,31 @@ void DescriptionField::doPainting(QPainter* drawer)
 
     if(isProfileSelected)
     {
+        myPen.setColor(QColor(50,50,50));
+        myPen.setWidth(2);
+        drawer->setPen(myPen);
+
         drawer->drawLine(chapter1->geometry().topRight().x()+lineShift,chapter1->geometry().topRight().y()+chapter1->height()/2+2,                 //Task description
                          this->width()-lineShift,chapter1->geometry().topRight().y()+chapter1->height()/2+2);
 
         drawer->drawLine(chapter2->geometry().topRight().x()+lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
                          this->width()-lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
+
+        myPath.moveTo(0,0);
+        myPath.addRoundedRect(QRect(department->geometry().topLeft().x()-5,
+                                    department->geometry().topLeft().y()+2,department->width()+10,department->height()),5,5);
+
+        myPen.setColor(QColor(200,200,200));
+        myPen.setWidth(1);
+
+        myBrush.setColor(QColor(20,20,20));
+        myBrush.setStyle(Qt::SolidPattern);
+
+        drawer->setBrush(myBrush);
+        drawer->setPen(myPen);
+        drawer->drawPath(myPath);
+
+        myPath.clear();
     }
 }
 
@@ -120,9 +209,12 @@ void DescriptionField::setSelectedNum(int number)
 {
     selectedNum = number;
     setVisibility(true);
+    setEmploymentDate();
     setInfo();
     setDescription();
-    setEmploymentDate();
+
+    m_name->setText(referBase->employee(selectedNum)->name());
+    m_surname->setText(referBase->employee(selectedNum)->surname());
 }
 
 void DescriptionField::changeDesc(int number)
@@ -135,6 +227,43 @@ void DescriptionField::changeDesc(int number)
                                  SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->task(number)->description()),SFProDislplayMetrics.height());
 }
 
+void DescriptionField::setEditMode()
+{
+    m_name->show();
+    m_surname->show();
+    m_hiringDate->show();
+    save->show();
+    cancel->show();
+}
+
+void DescriptionField::exitEditMode()
+{
+    m_name->hide();
+    m_surname->hide();
+    m_hiringDate->hide();
+    save->hide();
+    cancel->hide();
+}
+
+void DescriptionField::saveChanges()
+{
+    if(m_name->getText() != "")
+    {
+        referBase->employee(selectedNum)->setName(m_name->getText());
+    }
+    if(m_surname->getText()!="")
+    {
+        referBase->employee(selectedNum)->setSurname(m_surname->getText());
+    }
+    referBase->employee(selectedNum)->setHireDate(m_hiringDate->date());
+
+    exitEditMode();
+    setInfo();
+    setEmploymentDate();
+
+    emit baseChanged();
+}
+
 void DescriptionField::resize(QMainWindow* changed)
 {
     this->setGeometry(changed->width()/6,topBarHeight,changed->width()/3*2,changed->height()-topBarHeight*2);
@@ -142,6 +271,8 @@ void DescriptionField::resize(QMainWindow* changed)
     chapter1->move(pictureShift,chapter1Shift);
     chapter2->move(pictureShift,this->height()-this->height()/5);
     employmentDate->move(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20);
+    department->move(this->width()-400,profileInfo->geometry().center().y());
+    cancel->move(this->width()/2+5,this->height()-50);
 }
 
 void DescriptionField::setInfo()
@@ -162,6 +293,18 @@ void DescriptionField::setInfo()
                              chapters->geometry().topRight().y(),
                              SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->employee(selectedNum))),SFProDislplayMetrics.height()*3);
     profileInfo->setStyleSheet("color: rgb(130,130,130);");
+
+    department->setText("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name());
+    department->setFont(SFProDisplay);
+    department->setGeometry(this->width()-400,profileInfo->geometry().center().y(),
+                            SFProDislplayMetrics.horizontalAdvance("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name()),
+                            SFProDislplayMetrics.height());
+    department->setStyleSheet("color: rgb(130,130,130);");
+
+    m_name->move(profileInfo->geometry().topLeft().x(),profileInfo->geometry().topLeft().y());
+    m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomLeft().y()+2);
+    m_hiringDate->move(employmentDate->geometry().topLeft().x(),employmentDate->geometry().topLeft().y()-3);
+    m_hiringDate->setDate(referBase->employee(selectedNum)->hireDate());
 }
 
 void DescriptionField::setDescription()
@@ -218,6 +361,7 @@ void DescriptionField::setVisibility(bool choice)
         chapter1->show();
         chapter2->show();
         taskDescription->show();
+        department->show();
         employmentDate->show();
     }
     else
@@ -228,6 +372,7 @@ void DescriptionField::setVisibility(bool choice)
         chapter1->hide();
         chapter2->hide();
         taskDescription->hide();
+        department->hide();
         employmentDate->hide();
     }
     this->update();

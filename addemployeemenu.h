@@ -12,6 +12,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QPushButton>
 #include "writepanel.h"
+#include "messagewindow.h"
 #include "database_files/database.h"
 
 class AddEmployeeMenu : public QLabel
@@ -35,7 +36,7 @@ private:
 
     WritePanel* m_name;
     WritePanel* m_surname;
-    WritePanel* m_lastname;
+    QComboBox* m_document;
     QComboBox* m_rank;
     WritePanel* m_username;
     WritePanel* m_password;
@@ -43,6 +44,7 @@ private:
     QCheckBox* currentHiringDate;
 
     QPushButton* m_enter;
+    QPushButton* m_cancel;
 
     QLabel* picture;
 
@@ -50,12 +52,8 @@ private:
 
     void on_checkBox_stateChanged(int arg1);
     void addToBase();
-
-    void changeNameOp(const QString &text);
-    void changeSurnamedOp(const QString &text);
-    void changeLastNameOp(const QString &text);
-    void changeUsernameOp(const QString &text);
-    void changePasswordOp(const QString &text);
+    void hideMenu();
+    bool findSimilar();
 
     Employee* referEm;
 

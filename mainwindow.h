@@ -37,8 +37,6 @@ protected:
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 
-    void showAddEmMenu();
-
 private:
     MessageWindow* test;
     DataBase* dataBase;
@@ -87,6 +85,10 @@ private:
     AddEmployeeMenu* addMenu;
 
     void deleteEmployee();
+    void showAddEmMenu();
+    void editMenu();
+    void promoteEmployee();
+
 
 public slots:
 
@@ -95,6 +97,8 @@ public slots:
     void keyPressEvent(QKeyEvent *event);
 
     void setSelected(int number);
+    void deleteSlot();
+    void promoteSlot();
 };
 
 #endif // MAINWINDOW_H

@@ -30,17 +30,17 @@ LockScreen::LockScreen(DataBase* passwordRefer, QMainWindow* parent):
 
     username->move(picture->geometry().center().x()-username->width()/2,picture->geometry().bottomLeft().y()+30);
     username->setText("Username");
-    connect(username->getEditPanel(),&QLineEdit::textChanged,this,&LockScreen::changeUsernameOp);
+//    connect(username->getEditPanel(),&QLineEdit::textChanged,this,&LockScreen::changeUsernameOp);
     password->move(username->geometry().topLeft().x(),username->geometry().bottomLeft().y()+20);
     password->setPasswordType(true);
     password->setText("Password");
-    connect(password->getEditPanel(),&QLineEdit::textChanged,this,&LockScreen::changePasswordOp);
+//    connect(password->getEditPanel(),&QLineEdit::textChanged,this,&LockScreen::changePasswordOp);
 
     enter = new QPushButton(this);
     enter->setStyleSheet("QPushButton {"
                          "background-color: rgb(28, 28, 28);"
                          "color: rgb(100,100,100);"
-                         "border: 2px solid rgb(120,120,120);"
+                         "border: 2px solid rgb(100,100,100);"
                          "border-radius: 7px"
                          "}"
                          "QPushButton:hover {"
@@ -58,11 +58,33 @@ LockScreen::LockScreen(DataBase* passwordRefer, QMainWindow* parent):
                        100,30);
     connect(enter,&QPushButton::clicked,this,&LockScreen::checkPasswords);
 
+    exit = new QPushButton(this);
+    exit->setStyleSheet("QPushButton {"
+                        "background-color: rgb(28, 28, 28);"
+                        "color: rgb(100,100,100);"
+                        "border: 2px solid rgb(60,60,60);"
+                        "border-radius: 7px"
+                        "}"
+                        "QPushButton:hover {"
+                        "background-color: rgb(20, 20, 20);"
+                        "color: rgb(80,80,80);"
+                        "}"
+                        "QPushButton:pressed {"
+                        "background-color: rgb(10,10,10);"
+                        "color: rgb(60,60,60);"
+                        "border: 1px solid rgb(40, 40, 40);"
+                        "}");
+    exit->setFont(SFProDisplay);
+    exit->setText("Exit");
+    exit->setGeometry(password->geometry().center().x()-50,enter->geometry().bottomLeft().y()+10,
+                       100,30);
+    connect(exit,&QPushButton::clicked,parent,&QLabel::close);
+
     wrongPass = new QLabel(this);
     wrongPass->setText("Wrong password or username");
     wrongPass->setFont(SFProDisplay);
     wrongPass->setGeometry(enter->geometry().center().x()-SFProDislplayMetrics.horizontalAdvance("Wrong password or username")/2,
-                           enter->geometry().bottomLeft().y()+20,
+                           exit->geometry().bottomLeft().y()+20,
                            SFProDislplayMetrics.horizontalAdvance("Wrong password or username"),SFProDislplayMetrics.height());
     wrongPass->setStyleSheet("color: rgb(150,150,150)");
     wrongPass->hide();
@@ -113,29 +135,29 @@ void LockScreen::resizeEvent(QResizeEvent *event)
     enter->move(password->geometry().center().x()-50,password->geometry().bottomLeft().y()+20);
 }
 
-void LockScreen::changeUsernameOp(const QString &text)
-{
-    if(username->getText() == "")
-    {
-        username->showText();
-    }
-    else
-    {
-        username->hideText();
-    }
-}
+//void LockScreen::changeUsernameOp(const QString &text)
+//{
+//    if(username->getText() == "")
+//    {
+//        username->showText();
+//    }
+//    else
+//    {
+//        username->hideText();
+//    }
+//}
 
-void LockScreen::changePasswordOp(const QString &text)
-{
-    if(password->getText() == "")
-    {
-        password->showText();
-    }
-    else
-    {
-        password->hideText();
-    }
-}
+//void LockScreen::changePasswordOp(const QString &text)
+//{
+//    if(password->getText() == "")
+//    {
+//        password->showText();
+//    }
+//    else
+//    {
+//        password->hideText();
+//    }
+//}
 
 void LockScreen::checkPasswords()
 {

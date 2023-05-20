@@ -87,6 +87,7 @@ private:
     void deleteEmployee();
     void showAddEmMenu();
     void editMenu();
+    void addTaskMenu();
     void promoteEmployee();
 
 

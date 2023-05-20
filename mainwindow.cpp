@@ -188,16 +188,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(employeeTools[0],&QPushButton::clicked,this,&MainWindow::showAddEmMenu);
     connect(employeeTools[1],&QPushButton::clicked, this, &MainWindow::deleteEmployee);
     connect(employeeTools[2],&QPushButton::clicked,this,&MainWindow::editMenu);
+    connect(employeeTools[3],&QPushButton::clicked,this,&MainWindow::addTaskMenu);
     connect(employeeTools[4],&QPushButton::clicked, this, &MainWindow::promoteEmployee);
-
-    //////////Creating task panel//////////
-
-    employeeTasks = new QLabel(this);
-    employeeTasks->setText("Employee Tasks");
-    employeeTasks->setFont(SFProDisplay);
-    employeeTasks->setGeometry(this->width()-this->width()/6+12,58,
-                               SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
-    employeeTasks->setStyleSheet("color: rgb(200,200,200);");
 
     //////////Creating description panel//////////
 
@@ -502,6 +494,11 @@ void MainWindow::editMenu()
     }
 
     descriptionField->setEditMode();
+}
+
+void MainWindow::addTaskMenu()
+{
+    rightPanel->setAddTaskMode();
 }
 
 void MainWindow::promoteEmployee()

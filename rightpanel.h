@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <QMainWindow>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QPainterPath>
 #include <vector>
 #include "database_files/employee.h"
 #include "pttab.h"
@@ -25,14 +27,23 @@ private:
     DataBase* referBase;
 
     QRect parentSize;
+    bool addTaskMode = false;
+
+    QLabel* employeeTasks;
+    QFont SFProDisplay;
 
     void updateTaskPanel(int number);
     void mousePressEvent(QMouseEvent* event);
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 
+    void paintEvent(QPaintEvent *event);
+    void doPainting(QPainter* drawer);
+
 public slots:
     void updateSelectedEmployee(int number);
+
+    void setAddTaskMode();
 
 signals:
     void changedSelected(int number);

@@ -32,10 +32,10 @@ private:
     void checkScroller();
     void setDrag(QMouseEvent* event);
 
-    QFont SFProDisplay;
-
     DataBase* localBase;
     PTtab* referPT;
+
+    QFont SFProDisplay;
 
     QPushButton* inWork;
     QPushButton* inVacation;

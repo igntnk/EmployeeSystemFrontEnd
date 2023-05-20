@@ -170,6 +170,22 @@ void RightPanel::mousePressEvent(QMouseEvent* event)
 {
     if(isOnField(event->pos(),QRect(0,0,width(),this->height())))
     {
+        if(addTaskMode)
+        {
+            for(int c=0;c<addTaskPanels.size();c++)
+            {
+                if(isOnField(event->pos(),addTaskPanels[c]->geometry()))
+                {
+                    addTaskPanels[c]->setSelected(true);
+                }
+                else
+                {
+                    addTaskPanels[c]->setSelected(false);
+                }
+            }
+            return;
+        }
+
         for(int c=0;c<selectedEm->tasksAmount();c++)
         {
             if(isOnField(event->pos(),taskPanels[c]->geometry()))

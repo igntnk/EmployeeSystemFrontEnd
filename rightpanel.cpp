@@ -10,7 +10,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     parentSize = parent->geometry();
-    this->setGeometry(parent->width()-parent->width()/6,60,parent->width()/6,parent->height()-130);
+    this->setGeometry(parent->width()-parent->width()/6-2,60,parent->width()/6,parent->height()-100);
     this->setMouseTracking(true);
     selectedEm = refer->employee(number);
     referBase = refer;
@@ -22,12 +22,64 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
                                SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
     employeeTasks->setStyleSheet("color: rgb(200,200,200);");
 
-    for(int c=0;c<15;c++)
+    taskToAdd = new QLabel(this);
+    taskToAdd->setText("Task(s) to Add");
+    taskToAdd->setFont(SFProDisplay);
+    taskToAdd->hide();
+    taskToAdd->setStyleSheet("color: rgb(200,200,200);");
+}
+
+void RightPanel::resize()
+{
+    for(int c=0;c<taskPanels.size();c++)
     {
-        taskPanels.push_back(new PTtab("",0,this));
-        taskPanels[c]->hide();
+        taskPanels[c]->resizeByScroller(false, this->geometry());
+    }
+}
+
+void RightPanel::setAddingPanels()
+{
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    bool checker = false;
+    int panNum=0;
+    for(int c=0;c<addTaskPanels.size();c++)
+    {
+        delete addTaskPanels[c];
+        addTaskPanels.erase(addTaskPanels.begin()+c);
     }
 
+    for(int c =0;c<referBase->tasksAmount();c++)
+    {
+        for(int a = 0; a< selectedEm->tasksAmount();a++)
+        {
+            if(referBase->task(c)->id() == selectedEm->task(a)->id())
+            {
+                checker = true;
+                break;
+            }
+        }
+        if(checker)
+        {
+            checker = false;
+            continue;
+        }
+        addTaskPanels.push_back(new PTtab("",0,this));
+        QString taskName = referBase->task(c)->name();
+        if(taskName.length()>20)
+        {
+            taskName.truncate(20);
+            taskName += " ...";
+        }
+        addTaskPanels[panNum]->setPText(QString(taskName),1);
+        addTaskPanels[panNum]->move(0,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+40+80*panNum);
+        addTaskPanels[panNum]->show();
+        panNum++;
+    }
+
+    taskToAdd->setGeometry(12,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+15,
+                           SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
+    taskToAdd->show();
 }
 
 void RightPanel::paintEvent(QPaintEvent *event)
@@ -46,13 +98,19 @@ void RightPanel::doPainting(QPainter* drawer)
     QPen myPen;
     QPainterPath myPath;
 
+    drawer->drawLine(employeeTasks->width()+30,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2,    //Employee Task
+                     this->width()-20,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2);
+
 
     if(addTaskMode)
     {
-        myPath.addRoundedRect(QRect(QPoint(1,taskPanels[taskPanels.size()-1]->geometry().bottomLeft().y()+5)
-                              ,QPoint(this->width()-3,this->height()-2)),10,10);
-        myPen.setColor(QColor(10,10,10));
-        myBrush.setColor(QColor(70,70,70));
+        clear();
+        myPath.addRoundedRect(QRect(QPoint(1,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
+                              ,QPoint(this->width(),this->height()-11)),10,10);
+        myPen.setColor(QColor(28,28,28));
+        myPen.setWidth(2);
+        myBrush.setColor(QColor(30,30,30,230));
+        myBrush.setStyle(Qt::SolidPattern);
 
         drawer->setPen(myPen);
         drawer->setBrush(myBrush);
@@ -71,24 +129,31 @@ void RightPanel::updateSelectedEmployee(int refer)
 
     selectedEm = referBase->employee(refer);
     updateTaskPanel(refer);
+    if(addTaskMode){setAddingPanels();}
 }
 
 void RightPanel::setAddTaskMode()
 {
     addTaskMode = true;
+    setAddingPanels();
     this->update();
 }
 
 void RightPanel::updateTaskPanel(int number)
 {
-    for(int c=0;c<15;c++)
+    for(int c=0;c<taskPanels.size();c++)
     {
-        taskPanels[c]->hide();
+        delete taskPanels[c];
+        taskPanels.erase(taskPanels.begin()+c);
+    }
+
+    for(int c =0;c<selectedEm->tasksAmount();c++)
+    {
+        taskPanels.push_back(new PTtab("",0,this));
     }
 
     for(int c=0;c<selectedEm->tasksAmount();c++)
     {
-        taskPanels[c]->setPicture(0);
         QString taskName = selectedEm->task(c)->name();
         if(taskName.length()>20)
         {

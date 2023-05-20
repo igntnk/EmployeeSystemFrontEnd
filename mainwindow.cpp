@@ -20,14 +20,14 @@ void MainWindow::resizeWindow()
     initShifts();
 
     maxTrigger = true;
-    employeeTasks->move(this->width()-this->width()/6+12,58);
     descriptionField->resize(this);
     refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
     windowTitle->move(this->width()/2-120,15);
     lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
     leftPanel->setGeometry(5,50,this->width()/6,this->height()-101);
     leftPanel->resizePanel();
-    rightPanel->setGeometry(this->width()-this->width()/6,80,this->width()/6-12,this->height()-130);
+    rightPanel->setGeometry(this->width()-this->width()/6,60,this->width()/6,this->height()-130);
+    rightPanel->resize();
     addMenu->resize(this->geometry());
     for(int c=0;c<5;c++)
     {
@@ -298,9 +298,6 @@ void MainWindow::doPainting(QPainter* drawer)
     myBrush.setColor(QColor(0,0,0,0));
     drawer->setPen(myPen);
     drawer->setBrush(myBrush);
-
-    drawer->drawLine(this->width()/6*5+employeeTasks->width()+30,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2,    //Employee Task
-                     this->width()-20,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2);
 
     myPen.setColor(QColor(50,50,50));
     drawer->setPen(myPen);

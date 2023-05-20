@@ -19,10 +19,12 @@ class RightPanel : public QLabel
 public:
 
     RightPanel(DataBase* refer,int number, QMainWindow* parent = nullptr);
+    void resize();
 
 private:
     Employee* selectedEm;
     std::vector<PTtab*> taskPanels;
+    std::vector<PTtab*> addTaskPanels;
 
     DataBase* referBase;
 
@@ -30,7 +32,10 @@ private:
     bool addTaskMode = false;
 
     QLabel* employeeTasks;
+    QLabel* taskToAdd;
     QFont SFProDisplay;
+
+    void setAddingPanels();
 
     void updateTaskPanel(int number);
     void mousePressEvent(QMouseEvent* event);

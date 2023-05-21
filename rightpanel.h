@@ -46,6 +46,9 @@ private:
     QPushButton* cancelAddBtn;
 
     int addTaskId = -1;
+    double generalHeight = 0;
+    QRect scrollerRect;
+    bool scroller =false;
 
     void setAddingPanels();
 

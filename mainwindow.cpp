@@ -26,7 +26,7 @@ void MainWindow::resizeWindow()
     lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
     leftPanel->setGeometry(5,50,this->width()/6,this->height()-101);
     leftPanel->resizePanel();
-    rightPanel->setGeometry(this->width()-this->width()/6-2,60,this->width()/6,this->height()-100);
+    rightPanel->setGeometry(this->width()-this->width()/6-2,60,this->width()/6,this->height()-111);
     rightPanel->resize();
     addMenu->resize(this->geometry());
     for(int c=0;c<5;c++)

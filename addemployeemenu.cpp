@@ -109,7 +109,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
                           "border-radius: 7px;"
                           "}");
 
-    for(int c=0;c<localBase->tasksAmount();c++)
+    for(int c=0;c<localBase->documentsAmount();c++)
     {
         m_document->addItem(QString(localBase->document(c)->name() + " (" + localBase->document(c)->code()) + ")");
     }

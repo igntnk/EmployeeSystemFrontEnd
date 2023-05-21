@@ -7,20 +7,10 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
 
-    shadowSave = new QGraphicsDropShadowEffect(this);
-    shadowSave->setBlurRadius(30);
-    shadowSave->setOffset(0,0);
-    shadowSave->setColor(QColor(0,0,0,200));
-
-    shadowCancel = new QGraphicsDropShadowEffect(this);
-    shadowCancel->setBlurRadius(30);
-    shadowCancel->setOffset(0,0);
-    shadowCancel->setColor(QColor(0,0,0,200));
-
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     parentSize = parent->geometry();
-    this->setGeometry(parent->width()-parent->width()/6-2,60,parent->width()/6,parent->height()-100);
+    this->setGeometry(parent->width()-parent->width()/6-2,60,parent->width()/6,parent->height()-111);
     this->setMouseTracking(true);
     selectedEm = refer->employee(number);
     referBase = refer;
@@ -38,39 +28,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     taskToAdd->hide();
     taskToAdd->setStyleSheet("color: rgb(200,200,200);");
 
-    addTaskBtn = new QPushButton(this);
-    addTaskBtn->setStyleSheet("QPushButton {"
-                        "background-color: rgb(28, 28, 28);"
-                        "color: rgb(100,100,100);"
-                        "border: 2px solid rgb(100,100,100);"
-                        "border-radius: 7px"
-                        "}"
-                        "QPushButton:hover {"
-                        "background-color: rgb(20, 20, 20);"
-                        "color: rgb(80,80,80);"
-                        "}"
-                        "QPushButton:pressed {"
-                        "background-color: rgb(10,10,10);"
-                        "color: rgb(60,60,60);"
-                        "border: 1px solid rgb(40, 40, 40);"
-                        "}");
-    addTaskBtn->setFont(SFProDisplay);
-    addTaskBtn->setText("Add");
-    addTaskBtn->setGeometry(this->width()/2-105,this->height()-50,
-                      100,30);
-    addTaskBtn->setGraphicsEffect(shadowSave);
-    addTaskBtn->hide();
-    connect(addTaskBtn,&QPushButton::clicked,this,&RightPanel::addEmployeeTask);
-
-    cancelAddBtn = new QPushButton(this);
-    cancelAddBtn->setStyleSheet(addTaskBtn->styleSheet());
-    cancelAddBtn->setFont(SFProDisplay);
-    cancelAddBtn->setText("Cancel");
-    cancelAddBtn->setGeometry(this->width()/2+5,this->height()-50,
-                            100,30);
-    cancelAddBtn->setGraphicsEffect(shadowCancel);
-    cancelAddBtn->hide();
-    connect(cancelAddBtn,&QPushButton::clicked,this,&RightPanel::hideAddTaskMode);
+    generalHeight += taskToAdd->height();
 
 }
 
@@ -80,6 +38,28 @@ void RightPanel::resize()
     {
         taskPanels[c]->resizeByScroller(false, this->geometry());
     }
+    for(int c=0;c<addTaskPanels.size();c++)
+    {
+        addTaskPanels[c]->resizeByScroller(scroller, this->geometry());
+    }
+
+    addTaskBtn->move(this->width()/2-105,this->height()-50);
+    cancelAddBtn->move(this->width()/2+5,this->height()-50);
+
+    double panelHeight = this->height()-employeeTasks->geometry().bottomLeft().y()-selectedEm->tasksAmount()*taskPanels[0]->height()-4;
+    double differenceKoef = panelHeight/generalHeight;
+
+    scrollerRect = QRect(this->width()-20,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+20,
+                         10,(panelHeight-30)*differenceKoef);
+
+    if(panelHeight > generalHeight)
+    {
+        scroller = false;
+    }
+    else
+    {
+        scroller = true;
+    }
 }
 
 void RightPanel::setAddingPanels()
@@ -87,12 +67,20 @@ void RightPanel::setAddingPanels()
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     bool checker = false;
+    bool skeeper=false;
     int panNum=0;
     for(int c=0;c<addTaskPanels.size();)
     {
+        generalHeight -= addTaskPanels[c]->height();
         delete addTaskPanels[c];
         addTaskPanels.erase(addTaskPanels.begin()+c);
         taskId.erase(taskId.begin()+c);
+        if(!skeeper)
+        {
+            delete addTaskBtn;
+            delete cancelAddBtn;
+            skeeper = true;
+        }
     }
 
     for(int c =0;c<referBase->tasksAmount();c++)
@@ -111,6 +99,7 @@ void RightPanel::setAddingPanels()
             continue;
         }
         addTaskPanels.push_back(new PTtab("",0,this));
+        generalHeight += addTaskPanels[0]->height();
         taskId.push_back(c);
         QString taskName = referBase->task(c)->name();
         if(taskName.length()>20)
@@ -124,12 +113,71 @@ void RightPanel::setAddingPanels()
         panNum++;
     }
 
+    shadowSave = new QGraphicsDropShadowEffect(this);
+    shadowSave->setBlurRadius(30);
+    shadowSave->setOffset(0,0);
+    shadowSave->setColor(QColor(0,0,0,200));
+
+    shadowCancel = new QGraphicsDropShadowEffect(this);
+    shadowCancel->setBlurRadius(30);
+    shadowCancel->setOffset(0,0);
+    shadowCancel->setColor(QColor(0,0,0,200));
+
+    addTaskBtn = new QPushButton(this);
+    addTaskBtn->setStyleSheet("QPushButton {"
+                              "background-color: rgb(28, 28, 28);"
+                              "color: rgb(100,100,100);"
+                              "border: 2px solid rgb(100,100,100);"
+                              "border-radius: 7px"
+                              "}"
+                              "QPushButton:hover {"
+                              "background-color: rgb(20, 20, 20);"
+                              "color: rgb(80,80,80);"
+                              "}"
+                              "QPushButton:pressed {"
+                              "background-color: rgb(10,10,10);"
+                              "color: rgb(60,60,60);"
+                              "border: 1px solid rgb(40, 40, 40);"
+                              "}");
+    addTaskBtn->setFont(SFProDisplay);
+    addTaskBtn->setText("Add");
+    addTaskBtn->setGeometry(this->width()/2-105,this->height()-50,
+                            100,30);
+    addTaskBtn->setGraphicsEffect(shadowSave);
+    addTaskBtn->hide();
+    connect(addTaskBtn,&QPushButton::clicked,this,&RightPanel::addEmployeeTask);
+
+    cancelAddBtn = new QPushButton(this);
+    cancelAddBtn->setStyleSheet(addTaskBtn->styleSheet());
+    cancelAddBtn->setFont(SFProDisplay);
+    cancelAddBtn->setText("Cancel");
+    cancelAddBtn->setGeometry(this->width()/2+5,this->height()-50,
+                              100,30);
+    cancelAddBtn->setGraphicsEffect(shadowCancel);
+    cancelAddBtn->hide();
+    connect(cancelAddBtn,&QPushButton::clicked,this,&RightPanel::hideAddTaskMode);
+
     taskToAdd->setGeometry(12,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+15,
                            SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
     taskToAdd->show();
 
     addTaskBtn->show();
     cancelAddBtn->show();
+
+    double panelHeight = this->height()-employeeTasks->geometry().bottomLeft().y()-selectedEm->tasksAmount()*taskPanels[0]->height()-4;
+    double differenceKoef = panelHeight/generalHeight;
+
+    if(generalHeight > panelHeight)
+    {
+        scroller = true;
+        scrollerRect = QRect(this->width()-20,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+20,
+                             10,(panelHeight-30)*differenceKoef);
+        for(int c =0;c<addTaskPanels.size();c++)
+        {
+            addTaskPanels[c]->resizeByScroller(scroller,this->geometry());
+        }
+    }
+
 }
 
 void RightPanel::paintEvent(QPaintEvent *event)
@@ -156,7 +204,7 @@ void RightPanel::doPainting(QPainter* drawer)
     {
         clear();
         myPath.addRoundedRect(QRect(QPoint(1,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
-                              ,QPoint(this->width(),this->height()-11)),10,10);
+                              ,QPoint(this->width(),this->height())),10,10);
         myPen.setColor(QColor(28,28,28));
         myPen.setWidth(2);
         myBrush.setColor(QColor(30,30,30,230));
@@ -167,6 +215,18 @@ void RightPanel::doPainting(QPainter* drawer)
         drawer->drawPath(myPath);
 
         myPath.clear();
+    }
+
+    if(scroller)
+    {
+        myPen.setColor(QColor(10,10,10));
+        myBrush.setColor(QColor(10,10,10));
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+
+        myPath.addRoundedRect(scrollerRect,5,5);
+
+        drawer->drawPath(myPath);
     }
 }
 

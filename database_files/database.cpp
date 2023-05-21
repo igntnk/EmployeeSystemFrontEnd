@@ -31,9 +31,63 @@ DataBase::DataBase()
 
     referTask = new Task();
     referTask->setId(tasksAmount());
-    referTask->setName("Create Coursework Text");
-    referTask->setDescription("Create text about coursework programm");
-    referTask->setDeadline(QDate(2023,5,12));
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2000,2,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);

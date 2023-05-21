@@ -13,17 +13,27 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    shadow = new QGraphicsDropShadowEffect(this);
-    shadow->setBlurRadius(30);
-    shadow->setOffset(0,0);
-    shadow->setColor(QColor(0,0,0,200));
+    shadowPict = new QGraphicsDropShadowEffect(this);
+    shadowPict->setBlurRadius(30);
+    shadowPict->setOffset(0,0);
+    shadowPict->setColor(QColor(0,0,0,200));
+
+    shadowSave = new QGraphicsDropShadowEffect(this);
+    shadowSave->setBlurRadius(30);
+    shadowSave->setOffset(0,0);
+    shadowSave->setColor(QColor(0,0,0,200));
+
+    shadowCancel = new QGraphicsDropShadowEffect(this);
+    shadowCancel->setBlurRadius(30);
+    shadowCancel->setOffset(0,0);
+    shadowCancel->setColor(QColor(0,0,0,200));
 
     profilePix.load(":icons/profile_icon.png");
     profilePict = new QLabel(this);
     profilePict->setScaledContents(true);
     profilePict->setGeometry(pictureShift,pictureShift,pictureSideSize,pictureSideSize);
     profilePict->setPixmap(profilePix);
-    profilePict->setGraphicsEffect(shadow);
+    profilePict->setGraphicsEffect(shadowPict);
     profilePict->hide();
 
     SFProDisplay.setPixelSize(30);
@@ -70,6 +80,14 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     employmentDate = new QLabel(this);
     employmentDate->setStyleSheet("color: rgb(80,80,80);");
     employmentDate->hide();
+
+    deadLineDate = new QLabel(this);
+    deadLineDate->setStyleSheet("color: rgb(100,100,100);");
+    deadLineDate->hide();
+
+    startLineDate = new QLabel(this);
+    startLineDate->setStyleSheet("color: rgb(100,100,100);");
+    startLineDate->hide();
 
     m_name = new WritePanel(this);
     m_surname = new WritePanel(this);
@@ -121,6 +139,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     save->setText("Save");
     save->setGeometry(this->width()/2-105,this->height()-50,
                        100,30);
+    save->setGraphicsEffect(shadowSave);
     save->hide();
     connect(save,&QPushButton::clicked,this,&DescriptionField::saveChanges);
 
@@ -130,6 +149,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     cancel->setText("Cancel");
     cancel->setGeometry(this->width()/2+5,this->height()-50,
                       100,30);
+    cancel->setGraphicsEffect(shadowCancel);
     cancel->hide();
     connect(cancel,&QPushButton::clicked,this,&DescriptionField::exitEditMode);
 
@@ -225,6 +245,18 @@ void DescriptionField::changeDesc(int number)
     taskDescription->setText(referBase->employee(selectedNum)->task(number)->description());
     taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
                                  SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->task(number)->description()),SFProDislplayMetrics.height());
+
+    deadLineDate->setText("Dead Line: " + referBase->employee(selectedNum)->task(number)->deadline().toString());
+    deadLineDate->setFont(SFProDisplay);
+    deadLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Dead Line: " + referBase->employee(selectedNum)->task(number)->deadline().toString()),
+                         SFProDislplayMetrics.height());
+    deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
+
+    startLineDate->setText("Start Line: " + referBase->employee(selectedNum)->task(number)->startline().toString());
+    startLineDate->setFont(SFProDisplay);
+    startLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Start Line: " + referBase->employee(selectedNum)->task(number)->startline().toString()),
+                          SFProDislplayMetrics.height());
+    startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
 }
 
 void DescriptionField::setEditMode()
@@ -288,6 +320,10 @@ void DescriptionField::resize(QMainWindow* changed)
     employmentDate->move(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20);
     department->move(this->width()-400,profileInfo->geometry().center().y());
     cancel->move(this->width()/2+5,this->height()-50);
+    save->move(this->width()/2-105,this->height()-50);
+    deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
+    startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
+    m_hiringDate->move(employmentDate->geometry().topLeft().x(),employmentDate->geometry().topLeft().y()-3);
 }
 
 void DescriptionField::setInfo()
@@ -336,6 +372,19 @@ void DescriptionField::setDescription()
     taskDescription->setFont(SFProDisplay);
     taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
                                  SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->task(0)->description()),SFProDislplayMetrics.height());
+
+    deadLineDate->setText("Dead Line: " + referBase->employee(selectedNum)->task(0)->deadline().toString());
+    deadLineDate->setFont(SFProDisplay);
+    deadLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Dead Line: " + referBase->employee(selectedNum)->task(0)->deadline().toString()),
+                         SFProDislplayMetrics.height());
+    deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
+
+    startLineDate->setText("Start Line: " + referBase->employee(selectedNum)->task(0)->startline().toString());
+    startLineDate->setFont(SFProDisplay);
+    startLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Start Line: " + referBase->employee(selectedNum)->task(0)->startline().toString()),
+                          SFProDislplayMetrics.height());
+
+    startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
 }
 
 void DescriptionField::setEmploymentDate()
@@ -378,6 +427,8 @@ void DescriptionField::setVisibility(bool choice)
         taskDescription->show();
         department->show();
         employmentDate->show();
+        startLineDate->show();
+        deadLineDate->show();
     }
     else
     {
@@ -389,6 +440,8 @@ void DescriptionField::setVisibility(bool choice)
         taskDescription->hide();
         department->hide();
         employmentDate->hide();
+        startLineDate->hide();
+        deadLineDate->hide();
     }
     this->update();
 }

@@ -40,7 +40,10 @@ private:
     void initShifts();
 
     QFont SFProDisplay;
-    QGraphicsDropShadowEffect* shadow;
+    QGraphicsDropShadowEffect* shadowPict;
+    QGraphicsDropShadowEffect* shadowSave;
+    QGraphicsDropShadowEffect* shadowCancel;
+
 
     QPixmap profilePix;
     QLabel* profilePict;
@@ -49,6 +52,8 @@ private:
     QLabel* department;
     QLabel* chapter1;
     QLabel* taskDescription;
+    QLabel* startLineDate;
+    QLabel* deadLineDate;
     QLabel* chapter2;
     QLabel* employmentDate;
 

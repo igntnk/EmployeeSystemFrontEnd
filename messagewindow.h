@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 #include <QMessageBox>
+#include <QGraphicsDropShadowEffect>
 
 class MessageWindow : public QDialog
 {

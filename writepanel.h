@@ -10,12 +10,15 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QFontMetrics>
+#include <QGraphicsDropShadowEffect>
 
 
 class WritePanel : public QLabel
 {
 public:
     WritePanel(QLabel* parent = nullptr);
+
+    QGraphicsDropShadowEffect* shadow;
 
     QString getText();
     void setPasswordType(bool);

@@ -7,6 +7,16 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
 
+    shadowSave = new QGraphicsDropShadowEffect(this);
+    shadowSave->setBlurRadius(30);
+    shadowSave->setOffset(0,0);
+    shadowSave->setColor(QColor(0,0,0,200));
+
+    shadowCancel = new QGraphicsDropShadowEffect(this);
+    shadowCancel->setBlurRadius(30);
+    shadowCancel->setOffset(0,0);
+    shadowCancel->setColor(QColor(0,0,0,200));
+
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     parentSize = parent->geometry();
@@ -27,6 +37,41 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     taskToAdd->setFont(SFProDisplay);
     taskToAdd->hide();
     taskToAdd->setStyleSheet("color: rgb(200,200,200);");
+
+    addTaskBtn = new QPushButton(this);
+    addTaskBtn->setStyleSheet("QPushButton {"
+                        "background-color: rgb(28, 28, 28);"
+                        "color: rgb(100,100,100);"
+                        "border: 2px solid rgb(100,100,100);"
+                        "border-radius: 7px"
+                        "}"
+                        "QPushButton:hover {"
+                        "background-color: rgb(20, 20, 20);"
+                        "color: rgb(80,80,80);"
+                        "}"
+                        "QPushButton:pressed {"
+                        "background-color: rgb(10,10,10);"
+                        "color: rgb(60,60,60);"
+                        "border: 1px solid rgb(40, 40, 40);"
+                        "}");
+    addTaskBtn->setFont(SFProDisplay);
+    addTaskBtn->setText("Add");
+    addTaskBtn->setGeometry(this->width()/2-105,this->height()-50,
+                      100,30);
+    addTaskBtn->setGraphicsEffect(shadowSave);
+    addTaskBtn->hide();
+    connect(addTaskBtn,&QPushButton::clicked,this,&RightPanel::addEmployeeTask);
+
+    cancelAddBtn = new QPushButton(this);
+    cancelAddBtn->setStyleSheet(addTaskBtn->styleSheet());
+    cancelAddBtn->setFont(SFProDisplay);
+    cancelAddBtn->setText("Cancel");
+    cancelAddBtn->setGeometry(this->width()/2+5,this->height()-50,
+                            100,30);
+    cancelAddBtn->setGraphicsEffect(shadowCancel);
+    cancelAddBtn->hide();
+    connect(cancelAddBtn,&QPushButton::clicked,this,&RightPanel::hideAddTaskMode);
+
 }
 
 void RightPanel::resize()
@@ -43,10 +88,11 @@ void RightPanel::setAddingPanels()
 
     bool checker = false;
     int panNum=0;
-    for(int c=0;c<addTaskPanels.size();c++)
+    for(int c=0;c<addTaskPanels.size();)
     {
         delete addTaskPanels[c];
         addTaskPanels.erase(addTaskPanels.begin()+c);
+        taskId.erase(taskId.begin()+c);
     }
 
     for(int c =0;c<referBase->tasksAmount();c++)
@@ -65,6 +111,7 @@ void RightPanel::setAddingPanels()
             continue;
         }
         addTaskPanels.push_back(new PTtab("",0,this));
+        taskId.push_back(c);
         QString taskName = referBase->task(c)->name();
         if(taskName.length()>20)
         {
@@ -80,6 +127,9 @@ void RightPanel::setAddingPanels()
     taskToAdd->setGeometry(12,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+15,
                            SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
     taskToAdd->show();
+
+    addTaskBtn->show();
+    cancelAddBtn->show();
 }
 
 void RightPanel::paintEvent(QPaintEvent *event)
@@ -127,8 +177,10 @@ void RightPanel::updateSelectedEmployee(int refer)
         return;
     }
 
+    showTaskPanels();
     selectedEm = referBase->employee(refer);
-    updateTaskPanel(refer);
+    updateTaskPanel();
+    taskPanels[0]->setSelected(true);
     if(addTaskMode){setAddingPanels();}
 }
 
@@ -139,9 +191,50 @@ void RightPanel::setAddTaskMode()
     this->update();
 }
 
-void RightPanel::updateTaskPanel(int number)
+void RightPanel::hideAddTaskMode()
+{
+    addTaskMode = false;
+
+    for(int c=0;c<addTaskPanels.size();)
+    {
+        delete addTaskPanels[c];
+        addTaskPanels.erase(addTaskPanels.begin()+c);
+        taskId.erase(taskId.begin()+c);
+    }
+
+    addTaskBtn->hide();
+    taskToAdd->hide();
+    cancelAddBtn->hide();
+    this->update();
+}
+
+void RightPanel::hideTaskPanels()
 {
     for(int c=0;c<taskPanels.size();c++)
+    {
+        taskPanels[c]->hide();
+    }
+}
+
+void RightPanel::showTaskPanels()
+{
+    for(int c=0;c<taskPanels.size();c++)
+    {
+        taskPanels[c]->show();
+    }
+}
+
+void RightPanel::addEmployeeTask()
+{
+    selectedEm->addTask(referBase->task(addTaskId));
+    hideAddTaskMode();
+    updateTaskPanel();
+    addTaskId = -1;
+}
+
+void RightPanel::updateTaskPanel()
+{
+    for(int c=0;c<taskPanels.size();)
     {
         delete taskPanels[c];
         taskPanels.erase(taskPanels.begin()+c);
@@ -177,6 +270,7 @@ void RightPanel::mousePressEvent(QMouseEvent* event)
                 if(isOnField(event->pos(),addTaskPanels[c]->geometry()))
                 {
                     addTaskPanels[c]->setSelected(true);
+                    addTaskId = taskId[c];
                 }
                 else
                 {

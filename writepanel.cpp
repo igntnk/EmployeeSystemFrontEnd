@@ -3,12 +3,18 @@
 WritePanel::WritePanel(QLabel* parent):
     QLabel(parent)
 {
+    shadow = new QGraphicsDropShadowEffect(this);
+    shadow->setBlurRadius(30);
+    shadow->setOffset(0,0);
+    shadow->setColor(QColor(0,0,0,200));
+
     SFProDisplay = QFont("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     this->setGeometry(0,0,200,40);
+    this->setGraphicsEffect(shadow);
 
     edit = new QLineEdit(this);
     edit->setGeometry(8,5,this->width()-10,this->height()-10);

@@ -7,6 +7,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPushButton>
+#include <QGraphicsDropShadowEffect>
 #include <vector>
 #include "database_files/employee.h"
 #include "pttab.h"
@@ -20,13 +22,18 @@ public:
 
     RightPanel(DataBase* refer,int number, QMainWindow* parent = nullptr);
     void resize();
+    void updateTaskPanel();
 
 private:
-    Employee* selectedEm;
     std::vector<PTtab*> taskPanels;
     std::vector<PTtab*> addTaskPanels;
+    std::vector<int> taskId;
+
+    QGraphicsDropShadowEffect* shadowSave;
+    QGraphicsDropShadowEffect* shadowCancel;
 
     DataBase* referBase;
+    Employee* selectedEm;
 
     QRect parentSize;
     bool addTaskMode = false;
@@ -35,9 +42,13 @@ private:
     QLabel* taskToAdd;
     QFont SFProDisplay;
 
+    QPushButton* addTaskBtn;
+    QPushButton* cancelAddBtn;
+
+    int addTaskId = -1;
+
     void setAddingPanels();
 
-    void updateTaskPanel(int number);
     void mousePressEvent(QMouseEvent* event);
 
     bool isOnField(const QPointF& point, const QRectF& rect);
@@ -49,6 +60,11 @@ public slots:
     void updateSelectedEmployee(int number);
 
     void setAddTaskMode();
+    void hideAddTaskMode();
+    void hideTaskPanels();
+    void showTaskPanels();
+
+    void addEmployeeTask();
 
 signals:
     void changedSelected(int number);

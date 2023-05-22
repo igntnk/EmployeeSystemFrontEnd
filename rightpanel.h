@@ -42,17 +42,25 @@ private:
     QLabel* taskToAdd;
     QFont SFProDisplay;
 
+    QRect addTaskRect;
     QPushButton* addTaskBtn;
     QPushButton* cancelAddBtn;
 
     int addTaskId = -1;
     double generalHeight = 0;
     QRect scrollerRect;
+    QRect currentAddRect;
     bool scroller =false;
+    bool scrollDrag = false;
+    QPoint pressPoint;
+    int currentScrollerY;
+    int scrollShift = 0;
 
     void setAddingPanels();
 
     void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 

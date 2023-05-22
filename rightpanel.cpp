@@ -10,7 +10,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     parentSize = parent->geometry();
-    this->setGeometry(parent->width()-parent->width()/6-2,60,parent->width()/6,parent->height()-111);
+    this->setGeometry(parent->width()-parent->width()/6-2,50,parent->width()/6,parent->height()-101);
     this->setMouseTracking(true);
     selectedEm = refer->employee(number);
     referBase = refer;
@@ -18,7 +18,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     employeeTasks = new QLabel(this);
     employeeTasks->setText("Employee Tasks");
     employeeTasks->setFont(SFProDisplay);
-    employeeTasks->setGeometry(12,0,
+    employeeTasks->setGeometry(12,10,
                                SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
     employeeTasks->setStyleSheet("color: rgb(200,200,200);");
 
@@ -28,29 +28,30 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     taskToAdd->hide();
     taskToAdd->setStyleSheet("color: rgb(200,200,200);");
 
-    generalHeight += taskToAdd->height();
+    generalHeight += taskToAdd->height()+80;
 
 }
 
 void RightPanel::resize()
 {
+    double panelHeight;
+    double differenceKoef;
+
     for(int c=0;c<taskPanels.size();c++)
     {
         taskPanels[c]->resizeByScroller(false, this->geometry());
+        panelHeight = this->height()-employeeTasks->geometry().bottomLeft().y()-selectedEm->tasksAmount()*taskPanels[0]->height()-4;
+        differenceKoef = panelHeight/generalHeight;
+
+        scrollerRect = QRect(this->width()-20,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+20,
+                             10,(panelHeight-30)*differenceKoef);
+        addTaskBtn->move(this->width()/2-105,this->height()-50);
+        cancelAddBtn->move(this->width()/2+5,this->height()-50);
     }
     for(int c=0;c<addTaskPanels.size();c++)
     {
         addTaskPanels[c]->resizeByScroller(scroller, this->geometry());
     }
-
-    addTaskBtn->move(this->width()/2-105,this->height()-50);
-    cancelAddBtn->move(this->width()/2+5,this->height()-50);
-
-    double panelHeight = this->height()-employeeTasks->geometry().bottomLeft().y()-selectedEm->tasksAmount()*taskPanels[0]->height()-4;
-    double differenceKoef = panelHeight/generalHeight;
-
-    scrollerRect = QRect(this->width()-20,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+20,
-                         10,(panelHeight-30)*differenceKoef);
 
     if(panelHeight > generalHeight)
     {
@@ -60,11 +61,21 @@ void RightPanel::resize()
     {
         scroller = true;
     }
+
+    addTaskRect = QRect(QPoint(1,employeeTasks->height()+10+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
+                        ,QPoint(this->width(),this->height()));
 }
 
 void RightPanel::setAddingPanels()
 {
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    addTaskRect = QRect(QPoint(1,employeeTasks->height()+10+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
+                        ,QPoint(this->width(),this->height()));
+
+    taskToAdd->setGeometry(12,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+25,
+                           SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
+    taskToAdd->show();
 
     bool checker = false;
     bool skeeper=false;
@@ -108,7 +119,7 @@ void RightPanel::setAddingPanels()
             taskName += " ...";
         }
         addTaskPanels[panNum]->setPText(QString(taskName),1);
-        addTaskPanels[panNum]->move(0,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+40+80*panNum);
+        addTaskPanels[panNum]->move(0,taskToAdd->geometry().bottomLeft().y() + panNum*80);
         addTaskPanels[panNum]->show();
         panNum++;
     }
@@ -157,10 +168,6 @@ void RightPanel::setAddingPanels()
     cancelAddBtn->hide();
     connect(cancelAddBtn,&QPushButton::clicked,this,&RightPanel::hideAddTaskMode);
 
-    taskToAdd->setGeometry(12,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+15,
-                           SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
-    taskToAdd->show();
-
     addTaskBtn->show();
     cancelAddBtn->show();
 
@@ -170,7 +177,7 @@ void RightPanel::setAddingPanels()
     if(generalHeight > panelHeight)
     {
         scroller = true;
-        scrollerRect = QRect(this->width()-20,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+20,
+        scrollerRect = QRect(this->width()-20,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+taskToAdd->height(),
                              10,(panelHeight-30)*differenceKoef);
         for(int c =0;c<addTaskPanels.size();c++)
         {
@@ -203,11 +210,10 @@ void RightPanel::doPainting(QPainter* drawer)
     if(addTaskMode)
     {
         clear();
-        myPath.addRoundedRect(QRect(QPoint(1,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
-                              ,QPoint(this->width(),this->height())),10,10);
+        myPath.addRoundedRect(addTaskRect,10,10);
         myPen.setColor(QColor(28,28,28));
         myPen.setWidth(2);
-        myBrush.setColor(QColor(30,30,30,230));
+        myBrush.setColor(QColor(30,30,30));
         myBrush.setStyle(Qt::SolidPattern);
 
         drawer->setPen(myPen);
@@ -254,9 +260,12 @@ void RightPanel::setAddTaskMode()
 void RightPanel::hideAddTaskMode()
 {
     addTaskMode = false;
+    scroller = false;
+    scrollShift = 0;
 
     for(int c=0;c<addTaskPanels.size();)
     {
+        generalHeight -= addTaskPanels[c]->height();
         delete addTaskPanels[c];
         addTaskPanels.erase(addTaskPanels.begin()+c);
         taskId.erase(taskId.begin()+c);
@@ -265,6 +274,17 @@ void RightPanel::hideAddTaskMode()
     addTaskBtn->hide();
     taskToAdd->hide();
     cancelAddBtn->hide();
+
+    employeeTasks->move(12,10);
+
+    for(int c=0;c<taskPanels.size();c++)
+    {
+
+        taskPanels[c]->move(0,employeeTasks->geometry().bottomLeft().y()+80*c);
+    }
+
+    taskToAdd->move(12,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+15);
+
     this->update();
 }
 
@@ -321,6 +341,18 @@ void RightPanel::updateTaskPanel()
 
 void RightPanel::mousePressEvent(QMouseEvent* event)
 {
+    pressPoint = event->pos();
+    currentScrollerY = scrollerRect.topLeft().y();
+
+    currentAddRect = addTaskRect;
+
+    if(isOnField(event->pos(),scrollerRect))
+    {
+        scrollDrag = true;
+    }
+
+    this->update();
+
     if(isOnField(event->pos(),QRect(0,0,width(),this->height())))
     {
         if(addTaskMode)
@@ -355,7 +387,63 @@ void RightPanel::mousePressEvent(QMouseEvent* event)
             taskPanels[c]->update();
         }
     }
-    this->update();
+}
+
+void RightPanel::mouseMoveEvent(QMouseEvent *event)
+{
+    if(isOnField(event->pos(),scrollerRect))
+    {
+        this->setCursor(Qt::PointingHandCursor);
+    }
+    else
+    {
+        this->setCursor(Qt::ArrowCursor);
+    }
+
+    if(scrollDrag)
+    {
+        double panelHeight = this->height()-employeeTasks->height()-selectedEm->tasksAmount()*taskPanels[0]->height();
+        double differenceKoef = panelHeight/generalHeight;
+
+        QRect deader =scrollerRect;
+
+        scrollerRect = QRect(this->width()-20,event->pos().y()-pressPoint.y()+currentScrollerY
+                             ,10,(panelHeight-30)*differenceKoef);
+
+        if(scrollerRect.topLeft().y()<employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+taskToAdd->height()
+            or scrollerRect.bottomLeft().y()>this->height()-15)
+        {
+            scrollerRect = deader;
+        }
+
+        scrollShift = (employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+taskToAdd->height() - scrollerRect.topLeft().y())/differenceKoef;
+
+        employeeTasks->move(12,scrollShift+10);
+
+        for(int c=0;c<taskPanels.size();c++)
+        {
+            taskPanels[c]->move(0,employeeTasks->geometry().bottomLeft().y()+80*c);
+        }
+
+        taskToAdd->move(12,taskPanels[taskPanels.size()-1]->geometry().bottomLeft().y()+15);
+
+        for(int c =0;c<addTaskPanels.size();c++)
+        {
+           addTaskPanels[c]->move(0,taskToAdd->geometry().bottomLeft().y()+5+80*c);
+        }
+
+
+        addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10),QPoint(currentAddRect.width(),currentAddRect.bottomRight().y()));
+
+        qDebug() << addTaskRect.topLeft().y();
+
+        this->update();
+    }
+}
+
+void RightPanel::mouseReleaseEvent(QMouseEvent *event)
+{
+    scrollDrag = false;
 }
 
 bool RightPanel::isOnField(const QPointF &point, const QRectF &rect)

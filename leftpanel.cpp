@@ -242,6 +242,15 @@ void LeftPanel::mousePressEvent(QMouseEvent* event)
 
 void LeftPanel::mouseMoveEvent(QMouseEvent* event)
 {
+    if(isOnField(event->pos(),refer))
+    {
+        this->setCursor(Qt::PointingHandCursor);
+    }
+    else
+    {
+        this->setCursor(Qt::ArrowCursor);
+    }
+
     if(drag)
     {
         QRect deader =refer;

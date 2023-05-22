@@ -7,6 +7,7 @@
 #include <QFontMetrics>
 #include <QFont>
 #include <QMouseEvent>
+#include <QGraphicsDropShadowEffect>
 #include <iostream>
 
 class PTtab:public QLabel
@@ -29,6 +30,8 @@ public:
 private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
+
+    QGraphicsDropShadowEffect* shadow;
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 

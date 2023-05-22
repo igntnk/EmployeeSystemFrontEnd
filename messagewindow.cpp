@@ -5,89 +5,13 @@ MessageWindow::MessageWindow(QString textTitle,QString textMain,
                              bool ok, bool cancel,QMainWindow* parent):
     QDialog(parent)
 {
-    SFProDisplay = QFont("SF Pro Display", 13);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::Bold);
-    QFontMetrics SFProDisplayMetrics(SFProDisplay);
+    initStart(textTitle,textMain,ok,cancel);
+}
 
-    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    this->resize(300,170);
-    this->setAttribute(Qt::WA_TranslucentBackground );
-    this->setMouseTracking(true);
-    this->setModal(true);
-
-
-    titleText = new QLabel(this);
-    mainText = new QLabel(this);
-    titleText->setFont(SFProDisplay);
-    mainText->setFont(SFProDisplay);
-    titleText->setText(textTitle);
-    mainText->setText(textMain);
-    titleText->setGeometry(0,0,SFProDisplayMetrics.horizontalAdvance(textTitle),SFProDisplayMetrics.height());
-    mainText->setGeometry(0,0,SFProDisplayMetrics.horizontalAdvance(textMain),SFProDisplayMetrics.height());
-    titleText->move(this->geometry().center().x()-titleText->width()/2,this->geometry().topLeft().y()+11);
-    mainText->move(this->geometry().center().x()-mainText->width()/2,this->height()-this->height()/1.8);
-    titleText->setStyleSheet("color: rgb(100,100,100);");
-    mainText->setStyleSheet("color: rgb(120,120,120);");
-
-    okBtn = new QPushButton(this);
-    okBtn->setStyleSheet("QPushButton {"
-                         "background-color: rgb(28, 28, 28);"
-                         "color: rgb(100,100,100);"
-                         "border: 2px solid rgb(120,120,120);"
-                         "border-radius: 7px"
-                         "}"
-                         "QPushButton:hover {"
-                         "background-color: rgb(20, 20, 20);"
-                         "color: rgb(80,80,80);"
-                         "}"
-                         "QPushButton:pressed {"
-                         "background-color: rgb(10,10,10);"
-                         "color: rgb(60,60,60);"
-                         "border: 1px solid rgb(40, 40, 40);"
-                         "}");
-    okBtn->setFont(SFProDisplay);
-    okBtn->setText("Ok");
-    okBtn->hide();
-    okBtn->setGeometry(this->geometry().center().x()-50,this->height()-this->height()/4,
-                       100,30);
-
-    cnslBtn = new QPushButton(this);
-    cnslBtn->setStyleSheet("QPushButton {"
-                         "background-color: rgb(28, 28, 28);"
-                         "color: rgb(100,100,100);"
-                         "border: 2px solid rgb(120,120,120);"
-                         "border-radius: 7px"
-                         "}"
-                         "QPushButton:hover {"
-                         "background-color: rgb(20, 20, 20);"
-                         "color: rgb(80,80,80);"
-                         "}"
-                         "QPushButton:pressed {"
-                         "background-color: rgb(10,10,10);"
-                         "color: rgb(60,60,60);"
-                         "border: 1px solid rgb(40, 40, 40);"
-                         "}");
-    cnslBtn->setFont(SFProDisplay);
-    cnslBtn->setText("Cancel");
-    cnslBtn->hide();
-
-    if(ok)
-    {
-        okBtn->show();
-        connect(okBtn,&QPushButton::clicked,this,&MessageWindow::signalOk);
-    }
-
-    if(cancel)
-    {
-        okBtn->setGeometry(this->geometry().center().x()+5,this->height()-this->height()/4,
-                           100,30);
-        cnslBtn->setGeometry(this->geometry().center().x()-105,this->height()-this->height()/4,
-                             100,30);
-        cnslBtn->show();
-        connect(cnslBtn, &QPushButton::clicked,this,&MessageWindow::signalCancel);
-    }
-
+MessageWindow::MessageWindow(QString textTitle, QString textMain, bool ok, bool cancel, QLabel *parent):
+    QDialog(parent)
+{
+    initStart(textTitle,textMain,ok,cancel);
 }
 
 void MessageWindow::setMainText(QString text)
@@ -218,17 +142,104 @@ void MessageWindow::signalCancel()
     emit cnslPressed(0);
 }
 
+void MessageWindow::initStart(QString textTitle, QString textMain, bool ok, bool cancel)
+{
+    SFProDisplay = QFont("SF Pro Display", 13);
+    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
+    SFProDisplay.setWeight(QFont::Bold);
+    QFontMetrics SFProDisplayMetrics(SFProDisplay);
+
+    this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    this->resize(300,170);
+    this->setAttribute(Qt::WA_TranslucentBackground );
+    this->setMouseTracking(true);
+    this->setModal(true);
+
+
+    titleText = new QLabel(this);
+    mainText = new QLabel(this);
+    titleText->setFont(SFProDisplay);
+    mainText->setFont(SFProDisplay);
+    titleText->setText(textTitle);
+    mainText->setText(textMain);
+    titleText->setGeometry(0,0,SFProDisplayMetrics.horizontalAdvance(textTitle),SFProDisplayMetrics.height());
+    mainText->setGeometry(0,0,SFProDisplayMetrics.horizontalAdvance(textMain),SFProDisplayMetrics.height());
+    titleText->move(this->geometry().center().x()-titleText->width()/2,this->geometry().topLeft().y()+11);
+    mainText->move(this->geometry().center().x()-mainText->width()/2,this->height()-this->height()/1.8);
+    titleText->setStyleSheet("color: rgb(100,100,100);");
+    mainText->setStyleSheet("color: rgb(120,120,120);");
+
+    okBtn = new QPushButton(this);
+    okBtn->setStyleSheet("QPushButton {"
+                         "background-color: rgb(28, 28, 28);"
+                         "color: rgb(100,100,100);"
+                         "border: 2px solid rgb(120,120,120);"
+                         "border-radius: 7px"
+                         "}"
+                         "QPushButton:hover {"
+                         "background-color: rgb(20, 20, 20);"
+                         "color: rgb(80,80,80);"
+                         "}"
+                         "QPushButton:pressed {"
+                         "background-color: rgb(10,10,10);"
+                         "color: rgb(60,60,60);"
+                         "border: 1px solid rgb(40, 40, 40);"
+                         "}");
+    okBtn->setFont(SFProDisplay);
+    okBtn->setText("Ok");
+    okBtn->hide();
+    okBtn->setGeometry(this->geometry().center().x()-50,this->height()-this->height()/4,
+                       100,30);
+
+    cnslBtn = new QPushButton(this);
+    cnslBtn->setStyleSheet("QPushButton {"
+                           "background-color: rgb(28, 28, 28);"
+                           "color: rgb(100,100,100);"
+                           "border: 2px solid rgb(120,120,120);"
+                           "border-radius: 7px"
+                           "}"
+                           "QPushButton:hover {"
+                           "background-color: rgb(20, 20, 20);"
+                           "color: rgb(80,80,80);"
+                           "}"
+                           "QPushButton:pressed {"
+                           "background-color: rgb(10,10,10);"
+                           "color: rgb(60,60,60);"
+                           "border: 1px solid rgb(40, 40, 40);"
+                           "}");
+    cnslBtn->setFont(SFProDisplay);
+    cnslBtn->setText("Cancel");
+    cnslBtn->hide();
+
+    if(ok)
+    {
+        okBtn->show();
+        connect(okBtn,&QPushButton::clicked,this,&MessageWindow::signalOk);
+    }
+
+    if(cancel)
+    {
+        okBtn->setGeometry(this->geometry().center().x()+5,this->height()-this->height()/4,
+                           100,30);
+        cnslBtn->setGeometry(this->geometry().center().x()-105,this->height()-this->height()/4,
+                             100,30);
+        cnslBtn->show();
+        connect(cnslBtn, &QPushButton::clicked,this,&MessageWindow::signalCancel);
+    }
+}
+
 void MessageWindow::mousePressEvent(QMouseEvent* event)
 {
     pressPoint = event->pos();
-    isClicked = true;
+    if(isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-10,40))))
+    {
+        isClicked = true;
+    }
 }
 
 void MessageWindow::mouseMoveEvent(QMouseEvent* event)
 {
-    if(isClicked &&
-        event->modifiers() == Qt::NoModifier &&
-        isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-10,40))))
+    if(isClicked && event->modifiers() == Qt::NoModifier)
     {
         this->move(event->globalPosition().x()-pressPoint.x(),event->globalPosition().y()-pressPoint.y());
     }

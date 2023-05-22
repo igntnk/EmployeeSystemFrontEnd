@@ -276,18 +276,25 @@ void MainWindow::doPainting(QPainter* drawer)
     //////////Creating employeers control panel//////////
 
     myPath.addRoundedRect(QRect(QPoint(1,this->height()-50),QPoint(this->width()-3,this->height()-2)),10,10);
+
+    QLinearGradient gradient;
+    gradient.setStart(0,this->height());
+    gradient.setFinalStop(0,this->height()-50);
+    gradient.setColorAt(0, QColor(40,40,40));
+    gradient.setColorAt(1, QColor(48,48,48));
     myPen.setColor(QColor(10,10,10));
     myBrush.setColor(QColor(70,70,70));
 
     drawer->setPen(myPen);
-    drawer->setBrush(myBrush);
+    drawer->setBrush(gradient);
     drawer->drawPath(myPath);
 
     myPath.clear();
 
+
     drawer->drawRect(QRect(QPoint(1,this->height()-50),QPoint(this->width()-3,this->height()-30)));
 
-    myPen.setColor(QColor(70,70,70));
+    myPen.setColor(QColor(70,70,70,0));
     drawer->setPen(myPen);
     drawer->drawRect(QRect(QPoint(2,this->height()-45),QPoint(this->width()-4,this->height()-20)));
 
@@ -495,6 +502,15 @@ void MainWindow::editMenu()
 
 void MainWindow::addTaskMenu()
 {
+    test = new MessageWindow("Warning","You haven't selected any user",true,false,this);
+
+    if(selected == -1)
+    {
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+        return;
+    }
+
     rightPanel->setAddTaskMode();
 }
 

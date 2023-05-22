@@ -11,6 +11,11 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
     this->setGeometry(0,80,parent->width(),80);
     this->setMouseTracking(true);
 
+    shadow = new QGraphicsDropShadowEffect(this);
+    shadow->setBlurRadius(30);
+    shadow->setOffset(0,0);
+    shadow->setColor(QColor(0,0,0,60));
+
     infoText = new QLabel(this);
     infoText->setText(infoString);
     infoText->setStyleSheet("color: rgb(200,200,200);");
@@ -19,6 +24,7 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
     picture->setGeometry(10,10,60,60);
     picture->setScaledContents(true);
     picture->setMouseTracking(true);
+    picture->setGraphicsEffect(shadow);
 
     if(choice)
     {

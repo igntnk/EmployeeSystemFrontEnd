@@ -279,7 +279,7 @@ void DescriptionField::exitEditMode()
 
 void DescriptionField::saveChanges()
 {
-    MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false);
+    MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false,this);
     connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
 
     if(m_name->getText().length() < 2 and m_name->getText() != "")

@@ -13,6 +13,7 @@
 #include "database_files/employee.h"
 #include "pttab.h"
 #include "database_files/database.h"
+#include "messagewindow.h"
 
 class RightPanel : public QLabel
 {

@@ -234,7 +234,7 @@ void AddEmployeeMenu::on_checkBox_stateChanged(int arg1)
 
 void AddEmployeeMenu::addToBase()
 {
-    MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false);
+    MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false,this);
     connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
     referEm = new Employee();
     referEm->setId(localBase->employeesAmount());

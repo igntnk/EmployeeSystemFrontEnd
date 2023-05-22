@@ -62,16 +62,14 @@ void RightPanel::resize()
         scroller = true;
     }
 
-    addTaskRect = QRect(QPoint(1,employeeTasks->height()+10+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
+    addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10)
                         ,QPoint(this->width(),this->height()));
+
 }
 
 void RightPanel::setAddingPanels()
 {
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
-
-    addTaskRect = QRect(QPoint(1,employeeTasks->height()+10+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
-                        ,QPoint(this->width(),this->height()));
 
     taskToAdd->setGeometry(12,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+25,
                            SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
@@ -185,6 +183,9 @@ void RightPanel::setAddingPanels()
         }
     }
 
+    addTaskRect = QRect(QPoint(1,employeeTasks->height()+10+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
+                        ,QPoint(this->width(),this->height()));
+
 }
 
 void RightPanel::paintEvent(QPaintEvent *event)
@@ -285,6 +286,8 @@ void RightPanel::hideAddTaskMode()
 
     taskToAdd->move(12,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+15);
 
+    addTaskId = -1;
+
     this->update();
 }
 
@@ -306,6 +309,14 @@ void RightPanel::showTaskPanels()
 
 void RightPanel::addEmployeeTask()
 {
+    MessageWindow* warning = new MessageWindow("Warning","You haven't selected task",true,false,this);
+
+    if(addTaskId == -1)
+    {
+        warning->show();
+        connect(warning,&MessageWindow::okPressed,warning,&MessageWindow::close);
+        return;
+    }
     selectedEm->addTask(referBase->task(addTaskId));
     hideAddTaskMode();
     updateTaskPanel();
@@ -434,8 +445,6 @@ void RightPanel::mouseMoveEvent(QMouseEvent *event)
 
 
         addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10),QPoint(currentAddRect.width(),currentAddRect.bottomRight().y()));
-
-        qDebug() << addTaskRect.topLeft().y();
 
         this->update();
     }

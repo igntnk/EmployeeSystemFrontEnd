@@ -19,6 +19,9 @@ public:
     MessageWindow(QString textTitle="unknown message",QString textMain = "There is no nothing",
                   bool ok=false, bool cancel=false,QMainWindow* parent = nullptr);
 
+    MessageWindow(QString textTitle="unknown message",QString textMain = "There is no nothing",
+                  bool ok=false, bool cancel=false,QLabel* parent = nullptr);
+
     void setMainText(QString text);
     void setTitleText(QString text);
 
@@ -51,6 +54,8 @@ private:
 
     bool isClicked = false;
     QPoint pressPoint;
+
+    void initStart(QString,QString,bool,bool);
 
 signals:
     void okPressed(int);

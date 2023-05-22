@@ -117,6 +117,12 @@ QLineEdit* WritePanel::getEditPanel()
     return edit;
 }
 
+void WritePanel::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    edit->setGeometry(8,5,this->width()-10,this->height()-10);
+}
+
 void WritePanel::hideText()
 {
     text->hide();

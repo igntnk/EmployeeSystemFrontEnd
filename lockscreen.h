@@ -24,8 +24,6 @@ private:
     void doPainting(QPainter* drawer);
 
     void resizeEvent(QResizeEvent *event);
-//    void changeUsernameOp(const QString &text);
-//    void changePasswordOp(const QString &text);
 
     QGraphicsDropShadowEffect* shadow;
 

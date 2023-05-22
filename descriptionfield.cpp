@@ -153,6 +153,14 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     cancel->hide();
     connect(cancel,&QPushButton::clicked,this,&DescriptionField::exitEditMode);
 
+    vacStart = new QLabel(this);
+    vacEnd = new QLabel(this);
+
+    vacStart->setStyleSheet("color: rgb(120,120,120);");
+    vacEnd->setStyleSheet("color: rgb(120,120,120);");
+    vacStart->hide();
+    vacEnd->hide();
+
     SFProDisplay.setPixelSize(30);
 }
 
@@ -212,7 +220,16 @@ void DescriptionField::doPainting(QPainter* drawer)
         drawer->drawPath(myPath);
 
         myPath.clear();
+
+        if(isInVac)
+        {
+            vacRect = QRect(QPoint(vacEnd->geometry().topLeft().x()-5,vacEnd->geometry().topLeft().y()-5),
+                            QPoint(vacStart->geometry().bottomRight().x()+5,vacStart->geometry().bottomRight().y()+5));
+            myPath.addRoundedRect(vacRect,5,5);
+            drawer->drawPath(myPath);
+        }
     }
+
 }
 
 void DescriptionField::initShifts()
@@ -232,6 +249,39 @@ void DescriptionField::setSelectedNum(int number)
     setEmploymentDate();
     setInfo();
     setDescription();
+
+    SFProDisplay.setPixelSize(18);
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    vacStart->setFont(SFProDisplay);
+    vacEnd->setFont(SFProDisplay);
+
+    for(int a=0;a<referBase->vacationsAmount();a++)
+    {
+        if(referBase->employee(selectedNum)->id() == referBase->vacation(a)->employee()->id() and
+            referBase->vacation(a)->endDate() > QDate::currentDate())
+        {
+            isInVac = true;
+            vacStart->setText("Vacation Start Date: " + referBase->vacation(a)->beginDate().toString());
+            vacEnd->setText("Vacation End Date: " + referBase->vacation(a)->endDate().toString());
+
+            vacStart->resize(SFProDislplayMetrics.horizontalAdvance("Vacation Start Date: " + QString(referBase->vacation(a)->beginDate().toString())),
+                                                                    SFProDislplayMetrics.height());
+            vacEnd->resize(SFProDislplayMetrics.horizontalAdvance("Vacation End Date: " + QString(referBase->vacation(a)->endDate().toString())),
+                                                                  SFProDislplayMetrics.height());
+
+            vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
+            vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
+
+            vacStart->show();
+            vacEnd->show();
+            break;
+        }
+
+        isInVac = false;
+        vacStart->hide();
+        vacEnd->hide();
+    }
 
     m_name->setText(referBase->employee(selectedNum)->name());
     m_surname->setText(referBase->employee(selectedNum)->surname());
@@ -324,6 +374,8 @@ void DescriptionField::resize(QMainWindow* changed)
     deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
     startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
     m_hiringDate->move(employmentDate->geometry().topLeft().x(),employmentDate->geometry().topLeft().y()-3);
+    vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
+    vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
 }
 
 void DescriptionField::setInfo()

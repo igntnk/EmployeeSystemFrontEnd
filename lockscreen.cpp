@@ -30,11 +30,9 @@ LockScreen::LockScreen(DataBase* passwordRefer, QMainWindow* parent):
 
     username->move(picture->geometry().center().x()-username->width()/2,picture->geometry().bottomLeft().y()+30);
     username->setText("Username");
-//    connect(username->getEditPanel(),&QLineEdit::textChanged,this,&LockScreen::changeUsernameOp);
     password->move(username->geometry().topLeft().x(),username->geometry().bottomLeft().y()+20);
     password->setPasswordType(true);
     password->setText("Password");
-//    connect(password->getEditPanel(),&QLineEdit::textChanged,this,&LockScreen::changePasswordOp);
 
     enter = new QPushButton(this);
     enter->setStyleSheet("QPushButton {"

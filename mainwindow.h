@@ -19,6 +19,7 @@
 #include "leftpanel.h"
 #include "rightpanel.h"
 #include "addemployeemenu.h"
+#include "addtaskmenu.h"
 #include "messagewindow.h"
 
 class MainWindow : public QMainWindow
@@ -83,12 +84,13 @@ private:
     int descPanelShift;
     int selected = -1;
 
-    AddEmployeeMenu* addMenu;
+    AddEmployeeMenu* addEmMenu;
+    AddTaskMenu* addTaskMenu;
 
     void deleteEmployee();
     void showAddEmMenu();
     void editMenu();
-    void addTaskMenu();
+    void showAddTaskMenu();
     void promoteEmployee();
 
 

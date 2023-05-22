@@ -34,7 +34,7 @@ private:
     QGraphicsDropShadowEffect* shadowCancel;
 
     DataBase* referBase;
-    Employee* selectedEm;
+    Employee* selectedEm = new Employee();
 
     QRect parentSize;
     bool addTaskMode = false;
@@ -42,6 +42,8 @@ private:
     QLabel* employeeTasks;
     QLabel* taskToAdd;
     QFont SFProDisplay;
+
+    QPushButton* addTaskToEmployee;
 
     QRect addTaskRect;
     QPushButton* addTaskBtn;

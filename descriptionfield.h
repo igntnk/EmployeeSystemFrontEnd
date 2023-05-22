@@ -68,6 +68,12 @@ private:
     int selectedNum = -1;
     DataBase* referBase;
 
+    bool isInVac = false;
+
+    QLabel* vacStart;
+    QLabel* vacEnd;
+    QRect vacRect;
+
     WritePanel* m_name;
     WritePanel* m_surname;
     QDateEdit* m_hiringDate;

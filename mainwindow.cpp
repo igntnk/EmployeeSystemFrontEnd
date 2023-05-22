@@ -28,7 +28,8 @@ void MainWindow::resizeWindow()
     leftPanel->resizePanel();
     rightPanel->setGeometry(this->width()-this->width()/6-2,50,this->width()/6,this->height()-101);
     rightPanel->resize();
-    addMenu->resize(this->geometry());
+    addEmMenu->resize(this->geometry());
+    addTaskMenu->resize(this->geometry());
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -188,7 +189,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(employeeTools[0],&QPushButton::clicked,this,&MainWindow::showAddEmMenu);
     connect(employeeTools[1],&QPushButton::clicked, this, &MainWindow::deleteEmployee);
     connect(employeeTools[2],&QPushButton::clicked,this,&MainWindow::editMenu);
-    connect(employeeTools[3],&QPushButton::clicked,this,&MainWindow::addTaskMenu);
+    connect(employeeTools[3],&QPushButton::clicked,this,&MainWindow::showAddTaskMenu);
     connect(employeeTools[4],&QPushButton::clicked, this, &MainWindow::promoteEmployee);
 
     //////////Creating description panel//////////
@@ -211,8 +212,10 @@ MainWindow::MainWindow(QWidget *parent)
     lockScreen = new LockScreen(dataBase, this);
     lockScreen->setMouseTracking(true);
 
-    addMenu = new AddEmployeeMenu(dataBase,this);
-    connect(addMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
+    addEmMenu = new AddEmployeeMenu(dataBase,this);
+    connect(addEmMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
+
+    addTaskMenu = new AddTaskMenu(dataBase,this);
 
 }
 
@@ -482,7 +485,7 @@ bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
 
 void MainWindow::showAddEmMenu()
 {
-    addMenu->show();
+    addEmMenu->show();
 }
 
 void MainWindow::editMenu()
@@ -500,18 +503,9 @@ void MainWindow::editMenu()
     descriptionField->setEditMode();
 }
 
-void MainWindow::addTaskMenu()
+void MainWindow::showAddTaskMenu()
 {
-    test = new MessageWindow("Warning","You haven't selected any user",true,false,this);
-
-    if(selected == -1)
-    {
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
-        return;
-    }
-
-    rightPanel->setAddTaskMode();
+    addTaskMenu->show();
 }
 
 void MainWindow::promoteEmployee()

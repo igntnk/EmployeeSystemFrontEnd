@@ -12,7 +12,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     parentSize = parent->geometry();
     this->setGeometry(parent->width()-parent->width()/6-2,50,parent->width()/6,parent->height()-101);
     this->setMouseTracking(true);
-    selectedEm = refer->employee(number);
+    selectedEm->setId(-1);
     referBase = refer;
 
     employeeTasks = new QLabel(this);
@@ -27,6 +27,29 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     taskToAdd->setFont(SFProDisplay);
     taskToAdd->hide();
     taskToAdd->setStyleSheet("color: rgb(200,200,200);");
+
+    addTaskToEmployee = new QPushButton(this);
+    addTaskToEmployee->setStyleSheet("QPushButton {"
+                              "background-color: rgb(28, 28, 28);"
+                              "color: rgb(100,100,100);"
+                              "border: 2px solid rgb(100,100,100);"
+                              "border-radius: 7px"
+                              "}"
+                              "QPushButton:hover {"
+                              "background-color: rgb(20, 20, 20);"
+                              "color: rgb(80,80,80);"
+                              "}"
+                              "QPushButton:pressed {"
+                              "background-color: rgb(10,10,10);"
+                              "color: rgb(60,60,60);"
+                              "border: 1px solid rgb(40, 40, 40);"
+                              "}");
+    addTaskToEmployee->setText("Add Task to Employee");
+    addTaskToEmployee->setFont(SFProDisplay);
+    addTaskToEmployee->resize(200,30);
+    addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
+
+    connect(addTaskToEmployee,&QPushButton::clicked,this,&RightPanel::setAddTaskMode);
 
     generalHeight += taskToAdd->height()+80;
 
@@ -45,12 +68,12 @@ void RightPanel::resize()
 
         scrollerRect = QRect(this->width()-20,employeeTasks->geometry().bottomLeft().y()+selectedEm->tasksAmount()*taskPanels[0]->height()+20,
                              10,(panelHeight-30)*differenceKoef);
-        addTaskBtn->move(this->width()/2-105,this->height()-50);
-        cancelAddBtn->move(this->width()/2+5,this->height()-50);
     }
     for(int c=0;c<addTaskPanels.size();c++)
     {
         addTaskPanels[c]->resizeByScroller(scroller, this->geometry());
+        addTaskBtn->move(this->width()/2-105,this->height()-50);
+        cancelAddBtn->move(this->width()/2+5,this->height()-50);
     }
 
     if(panelHeight > generalHeight)
@@ -65,11 +88,31 @@ void RightPanel::resize()
     addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10)
                         ,QPoint(this->width(),this->height()));
 
+    addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
+
 }
 
 void RightPanel::setAddingPanels()
 {
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    MessageWindow* test = new MessageWindow("Warning","You haven't selected any user",true,false,this);
+
+    if(selectedEm->id() == -1)
+    {
+        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        test->show();
+        return;
+    }
+
+    delete test;
+
+    if(selectedEm->id() == -1)
+    {
+        delete selectedEm;
+    }
+
+    addTaskToEmployee->hide();
 
     taskToAdd->setGeometry(12,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+25,
                            SFProDislplayMetrics.horizontalAdvance("Task(s) to Add"),SFProDislplayMetrics.height());
@@ -287,6 +330,8 @@ void RightPanel::hideAddTaskMode()
     taskToAdd->move(12,employeeTasks->height()+selectedEm->tasksAmount()*taskPanels[0]->height()+15);
 
     addTaskId = -1;
+
+    addTaskToEmployee->show();
 
     this->update();
 }

@@ -6,6 +6,7 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QEvent>
+#include <QResizeEvent>
 #include <QMainWindow>
 #include <QPainter>
 #include <QPainterPath>
@@ -27,6 +28,10 @@ public:
     void showText();
 
     QLineEdit* getEditPanel();
+
+protected:
+
+    void resizeEvent(QResizeEvent* event);
 
 private:
     QFont SFProDisplay;

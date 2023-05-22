@@ -42,6 +42,8 @@ add_executable(EmployeeSystemFrontend
          rightpanel.cpp
          addemployeemenu.h
          addemployeemenu.cpp
+         addtaskmenu.h
+         addtaskmenu.cpp
          database_files/document.h
          database_files/document.cpp
          database_files/payment.h

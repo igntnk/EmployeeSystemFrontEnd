@@ -65,6 +65,8 @@ public slots:
 
     void changePTInfo();
 
+    void updateBySearch(const QString &text);
+
 signals:
     void changedSelected(int number);
 };

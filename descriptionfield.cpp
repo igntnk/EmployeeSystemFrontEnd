@@ -349,7 +349,7 @@ void DescriptionField::resize(QMainWindow* changed)
     chapter1->move(pictureShift,chapter1Shift);
     chapter2->move(pictureShift,this->height()-this->height()/5);
     employmentDate->move(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20);
-    department->move(this->width()-400,profileInfo->geometry().center().y());
+    department->move(this->width()/1.6,profileInfo->geometry().center().y());
     cancel->move(this->width()/2+5,this->height()-50);
     save->move(this->width()/2-105,this->height()-50);
     deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
@@ -381,7 +381,7 @@ void DescriptionField::setInfo()
 
     department->setText("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name());
     department->setFont(SFProDisplay);
-    department->setGeometry(this->width()-400,profileInfo->geometry().center().y(),
+    department->setGeometry(this->width()/1.6,profileInfo->geometry().center().y(),
                             SFProDislplayMetrics.horizontalAdvance("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name()),
                             SFProDislplayMetrics.height());
     department->setStyleSheet("color: rgb(130,130,130);");

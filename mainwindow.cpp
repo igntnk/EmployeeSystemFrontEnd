@@ -35,6 +35,7 @@ void MainWindow::resizeWindow()
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
     }
+    searchPanel->resizeEvent(this->geometry());
 }
 
 void MainWindow::hideWindow()
@@ -210,6 +211,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     //////////Creating lock screen//////////
 
+    searchPanel = new SearchByName(this);
+    searchPanel->move(10,this->height()-90);
+    connect(searchPanel,&SearchByName::textChanged,leftPanel,&LeftPanel::updateBySearch);
+
     lockScreen = new LockScreen(dataBase, this);
     lockScreen->setMouseTracking(true);
 
@@ -217,7 +222,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(addEmMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
 
     addTaskMenu = new AddTaskMenu(dataBase,this);
-    connect(addTaskMenu,&AddTaskMenu::baseChanged,rightPanel,&RightPanel::setAddingPanels);
 
     addVacationMenu = new AddVacationMenu(dataBase,this);
     connect(descriptionField,&DescriptionField::vacBtnPressed,addVacationMenu,&AddVacationMenu::showMenu);
@@ -330,12 +334,6 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
-    if(isClicked &&
-        event->modifiers() == Qt::NoModifier &&
-        isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-10,50))))
-    {
-        this->move(event->globalPosition().x()-pressPoint.x(),event->globalPosition().y()-pressPoint.y());
-    }
 
     if(isOnField(event->pos(),QRect(0,this->height()-10,10,10)) or (mouseResize and whichSide == 8))// BOTTOM LEFT
     {
@@ -346,8 +344,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
 
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,currentTopLeft.y()),
+            QRect deader = neadedRect;
+            neadedRect = QRect(QPoint(event->globalPosition().x()-5,currentTopLeft.y()),
                                      QPoint(currentBottomRigth.x(),event->globalPosition().y()-5));
+
+            if(neadedRect.width()< this->minimumWidth() )
+            {
+                neadedRect = QRect(QPoint(deader.topLeft().x(),currentTopLeft.y()),
+                                   QPoint(currentBottomRigth.x(),event->globalPosition().y()-5));;
+            }
+
             this->setGeometry(neadedRect);
             resizeWindow();
             return;
@@ -362,7 +368,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
+            neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
                                      QPoint(event->globalPosition().x()-5,event->globalPosition().y()-5));
 
             this->setGeometry(neadedRect);
@@ -379,8 +385,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),event->globalPosition().y()-5),
+
+            QRect deader = neadedRect;
+            neadedRect = QRect(QPoint(currentTopLeft.x(),event->globalPosition().y()-5),
                                      QPoint(event->globalPosition().x()-5,currentBottomRigth.y()));
+
+            if(neadedRect.height()< this->minimumHeight() )
+            {
+                neadedRect = QRect(QPoint(currentTopLeft.x(),deader.topLeft().y()),
+                                   QPoint(event->globalPosition().x()-5,currentBottomRigth.y()));;
+            }
             this->setGeometry(neadedRect);
             resizeWindow();
             return;
@@ -395,8 +409,25 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,event->globalPosition().y()-5),
+
+            QRect deader = neadedRect;
+            neadedRect = QRect(QPoint(event->globalPosition().x()-5,event->globalPosition().y()-5),
                                      QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            if(neadedRect.width()< this->minimumWidth() and neadedRect.height()< this->minimumHeight())
+            {
+                neadedRect = QRect(QPoint(deader.topLeft().x(),deader.topLeft().y()),
+                                   QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            }
+            else if(neadedRect.width()< this->minimumWidth() )
+            {
+                neadedRect = QRect(QPoint(deader.topLeft().x(),event->globalPosition().y()-5),
+                                   QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            }
+            else if(neadedRect.height()< this->minimumHeight())
+            {
+                neadedRect = QRect(QPoint(event->globalPosition().x()-5,deader.topLeft().y()),
+                                   QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            }
             this->setGeometry(neadedRect);
             resizeWindow();
             return;
@@ -411,8 +442,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(event->globalPosition().x()-5,currentTopLeft.y()),
+
+            QRect deader = neadedRect;
+            neadedRect = QRect(QPoint(event->globalPosition().x()-5,currentTopLeft.y()),
                                      QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+
+            if(neadedRect.width()< this->minimumWidth() )
+            {
+                neadedRect = QRect(QPoint(deader.topLeft().x(),currentTopLeft.y()),
+                      QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            }
             this->setGeometry(neadedRect);
             resizeWindow();
             return;
@@ -427,8 +466,14 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),event->globalPosition().y()-5),
+
+            QRect deader = neadedRect;
+            neadedRect = QRect(QPoint(currentTopLeft.x(),event->globalPosition().y()-5),
                                      QPoint(currentBottomRigth.x(),currentBottomRigth.y()));
+            if(neadedRect.height()< this->minimumHeight() )
+            {
+                neadedRect = deader;
+            }
             this->setGeometry(neadedRect);
             resizeWindow();
             return;
@@ -443,7 +488,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
+            neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
                                      QPoint(event->globalPosition().x()-5,currentBottomRigth.y()));
             this->setGeometry(neadedRect);
             resizeWindow();
@@ -459,12 +504,19 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         {
             this->setCursor(Qt::ClosedHandCursor);
             mouseResize = true;
-            QRect neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
+            neadedRect = QRect(QPoint(currentTopLeft.x(),currentTopLeft.y()),
                                      QPoint(currentBottomRigth.x(),event->globalPosition().y()));
             this->setGeometry(neadedRect);
             resizeWindow();
             return;
         }
+    }
+
+    if(isClicked &&
+        event->modifiers() == Qt::NoModifier &&
+        isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-10,50))))
+    {
+        this->move(event->globalPosition().x()-pressPoint.x(),event->globalPosition().y()-pressPoint.y());
     }
 
 

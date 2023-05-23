@@ -388,6 +388,112 @@ void LeftPanel::changePTInfo()
     }
 }
 
+void LeftPanel::updateBySearch(const QString &text)
+{
+    inWork->move(12,10);
+
+    for(int c=0;c<profilePanelsInWork.size();)
+    {
+        generalHeight -= profilePanelsInWork[0]->height();
+        delete profilePanelsInWork[c];
+        profilePanelsInWork.erase(profilePanelsInWork.begin());
+    }
+
+    for(int c=0;c<profilePanelsInVacation.size();)
+    {
+        generalHeight -= profilePanelsInVacation[0]->height();
+        delete profilePanelsInVacation[c];
+        profilePanelsInVacation.erase(profilePanelsInVacation.begin());
+    }
+
+    inWorkNum.clear();
+    inVacNum.clear();
+
+    int d=-1;
+    bool contVac =false;
+    for(auto c:localBase->employees())
+    {
+        QString comparer = c->name();
+        comparer.chop(c->name().length()-text.length());
+        if(!text.startsWith(comparer))
+        {
+            continue;
+        }
+
+        contVac = false;
+        for(int a=0;a<localBase->vacationsAmount();a++)
+        {
+            if(c->id() == localBase->vacation(a)->employee()->id() and
+                localBase->vacation(a)->endDate() > QDate::currentDate())
+            {
+                contVac=true;
+            }
+        }
+        if(contVac){continue;}
+        d++;
+        PTtab* refer = new PTtab(QString(c->name()+"\n"+
+                                         c->surname()+"\n"+
+                                         c->rank()->name()),1,this);
+        profilePanelsInWork.push_back(refer);
+        profilePanelsInWork[d]->move(0,40+80*d);
+        if(inWorkClicked)
+        {
+            profilePanelsInWork[d]->show();
+        }
+        inWorkNum.push_back(c->id());
+        generalHeight += profilePanelsInWork[d]->height();
+    }
+
+    inWork->move(12,10);
+
+    if(profilePanelsInWork.size())
+    {
+        inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
+    }
+    else
+    {
+        inVacation->move(14,10 + inWork->geometry().bottomLeft().y()+10);
+    }
+
+    d=-1;
+    for(auto c: localBase->employees())
+    {
+        QString comparer = c->name();
+        comparer.chop(c->name().length()-text.length());
+        if(!text.startsWith(comparer))
+        {
+            continue;
+        }
+
+        contVac = true;
+        for(int a=0;a<localBase->vacationsAmount();a++)
+        {
+
+            if(c->id() == localBase->vacation(a)->employee()->id() and
+                localBase->vacation(a)->endDate() > QDate::currentDate())
+            {
+                contVac=false;
+                d++;
+            }
+        }
+        if(contVac){continue;}
+        PTtab* refer = new PTtab(QString(c->name()+"\n"+
+                                         c->surname()+"\n"+
+                                         c->rank()->name()),1,this);
+        profilePanelsInVacation.push_back(refer);
+        profilePanelsInVacation[d]->move(0,10+inVacation->geometry().bottomRight().y()+80*d+scrollShift);
+        if(inVacationClicked)
+        {
+            profilePanelsInVacation[d]->show();
+        }
+        inVacNum.push_back(c->id());
+        generalHeight += profilePanelsInVacation[d]->height();
+    }
+
+    this->update();
+
+}
+
 void LeftPanel::inWorkPressed()
 {
     if(inWorkClicked){

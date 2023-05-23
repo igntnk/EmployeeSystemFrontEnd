@@ -22,6 +22,7 @@
 #include "addtaskmenu.h"
 #include "messagewindow.h"
 #include "addvacationmenu.h"
+#include "searchbyname.h"
 
 class MainWindow : public QMainWindow
 
@@ -75,6 +76,7 @@ private:
     QPointF globalPressPoint;
     QPointF currentTopLeft;
     QPointF currentBottomRigth;
+    QRect neadedRect;
     int whichSide;
     bool isClicked =false;
 
@@ -88,6 +90,8 @@ private:
     AddEmployeeMenu* addEmMenu;
     AddTaskMenu* addTaskMenu;
     AddVacationMenu* addVacationMenu;
+
+    SearchByName* searchPanel;
 
     void deleteEmployee();
     void showAddEmMenu();

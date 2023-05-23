@@ -48,6 +48,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     addTaskToEmployee->setFont(SFProDisplay);
     addTaskToEmployee->resize(200,30);
     addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
+    addTaskToEmployee->hide();
 
     addTaskBtn = new QPushButton(this);
     cancelAddBtn = new QPushButton(this);
@@ -297,6 +298,7 @@ void RightPanel::updateSelectedEmployee(int refer)
     selectedEm = referBase->employee(refer);
     updateTaskPanel();
     taskPanels[0]->setSelected(true);
+    addTaskToEmployee->show();
     if(addTaskMode){setAddingPanels();}
 }
 

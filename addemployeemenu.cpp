@@ -3,18 +3,27 @@
 AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
     QLabel(parent),localBase(refer)
 {
-    SFProDisplay = QFont("SF Pro Display", 13);
+    SFProDisplay = QFont("SF Pro Display", 22);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
+
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
+    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
+    this->setMouseTracking(true);
+    this->hide();
+
+    chapter = new QLabel(this);
+    chapter->setFont(SFProDisplay);
+    chapter->setText("Creating Employee");
+    chapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Employee"),SFProDislplayMetrics.height());
+
+    SFProDisplay.setPixelSize(13);
 
     shadow = new QGraphicsDropShadowEffect(this);
     shadow->setBlurRadius(30);
     shadow->setOffset(0,0);
     shadow->setColor(QColor(0,0,0,200));
-
-    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
-    this->setMouseTracking(true);
-    this->hide();
 
     QPixmap pixmap;
     pixmap.load(":icons/profile_icon.png");
@@ -27,7 +36,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
     m_name = new WritePanel(this);
     m_surname = new WritePanel(this);
     m_document = new QComboBox(this);
-    m_rank = new QComboBox(this);
+    m_task = new QComboBox(this);
     m_username = new WritePanel(this);
     m_password = new WritePanel(this);
     m_hiringDate = new QDateTimeEdit(this);
@@ -45,6 +54,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
     m_password->setFont(SFProDisplay);
 
     m_name->move(parent->width()/2-m_name->width()/2,parent->height()/4);
+    chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-70);
     m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomRight().y()+panelsShift);
     m_username->move(m_name->geometry().bottomLeft().x(),m_surname->geometry().bottomRight().y()+panelsShift);
     m_password->move(m_name->geometry().bottomLeft().x(),m_username->geometry().bottomRight().y()+panelsShift);
@@ -83,22 +93,18 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
 
     connect(currentHiringDate,&QCheckBox::stateChanged,this,&AddEmployeeMenu::on_checkBox_stateChanged);
 
-    m_rank->setGeometry(m_name->geometry().bottomLeft().x(),m_hiringDate->geometry().bottomRight().y()+panelsShift,
+    m_task->setGeometry(m_name->geometry().bottomLeft().x(),m_hiringDate->geometry().bottomRight().y()+panelsShift,
                         200,40);
-    m_rank->setFont(SFProDisplay);
-    m_rank->setStyleSheet("QComboBox {"
+    m_task->setFont(SFProDisplay);
+    m_task->setStyleSheet("QComboBox {"
                                 "padding-left: 5 px;"
                                 "background-color: rgb(20,20,20);"
                                 "color: rgb(120,120,120);"
                                 "border: 2px solid rgb(120,120,120);"
                                 "border-radius: 7px;"
                                 "}");
-    for(int c=0;c<localBase->tasksAmount();c++)
-    {
-        m_rank->addItem(localBase->task(c)->name());
-    }
 
-    m_document->setGeometry(m_name->geometry().bottomLeft().x(),m_rank->geometry().bottomRight().y()+panelsShift,
+    m_document->setGeometry(m_name->geometry().bottomLeft().x(),m_task->geometry().bottomRight().y()+panelsShift,
                             200,40);
     m_document->setFont(SFProDisplay);
     m_document->setStyleSheet("QComboBox {"
@@ -131,7 +137,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
                          "}");
     m_enter->setFont(SFProDisplay);
     m_enter->setText("Enter");
-    m_enter->setGeometry(m_rank->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20,
+    m_enter->setGeometry(m_task->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20,
                        100,30);
     m_cancel->setStyleSheet("QPushButton {"
                            "background-color: rgb(28, 28, 28);"
@@ -171,17 +177,28 @@ void AddEmployeeMenu::resize(QRect parent)
 {
     this->setGeometry(1,50,parent.width()-3,parent.height()-52);
     m_name->move(parent.width()/2-m_name->width()/2,parent.height()/4);
+    chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-70);
     m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomRight().y()+panelsShift);
     m_username->move(m_name->geometry().bottomLeft().x(),m_surname->geometry().bottomRight().y()+panelsShift);
     m_password->move(m_name->geometry().bottomLeft().x(),m_username->geometry().bottomRight().y()+panelsShift);
     m_hiringDate->move(m_name->geometry().bottomLeft().x(),m_password->geometry().bottomRight().y()+panelsShift);
     currentHiringDate->move(m_hiringDate->geometry().bottomRight().x()+panelsShift,m_password->geometry().bottomRight().y()+panelsShift+3);
-    m_rank->move(m_name->geometry().bottomLeft().x(),m_hiringDate->geometry().bottomRight().y()+panelsShift);
-    m_document->move(m_name->geometry().bottomLeft().x(),m_rank->geometry().bottomRight().y()+panelsShift);
-    m_enter->move(m_rank->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20);
+    m_task->move(m_name->geometry().bottomLeft().x(),m_hiringDate->geometry().bottomRight().y()+panelsShift);
+    m_document->move(m_name->geometry().bottomLeft().x(),m_task->geometry().bottomRight().y()+panelsShift);
+    m_enter->move(m_task->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20);
     m_cancel->move(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10);
 
     picture->move(parent.width()/2-350,parent.height()/2-130);
+}
+
+void AddEmployeeMenu::showMenu()
+{
+    for(int c=0;c<localBase->tasksAmount();c++)
+    {
+        m_task->addItem(localBase->task(c)->name());
+    }
+
+    this->show();
 }
 
 void AddEmployeeMenu::paintEvent(QPaintEvent *event)
@@ -237,7 +254,7 @@ void AddEmployeeMenu::addToBase()
     MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false,this);
     connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
     referEm = new Employee();
-    referEm->setId(localBase->employeesAmount());
+    referEm->setId((localBase->employees().back()-1)->id()+1);
 
     if(m_name->getText().length() < 2)
     {
@@ -259,7 +276,7 @@ void AddEmployeeMenu::addToBase()
 
     referEm->setName(m_name->getText());
     referEm->setSurname(m_surname->getText());
-    referEm->addTask(localBase->task(m_rank->currentText()));
+    referEm->addTask(localBase->task(m_task->currentText()));
     referEm->setRank(localBase->rank(localBase->ranksAmount()-1));
     referEm->addDocument(localBase->document(m_document->currentText()));
 
@@ -273,6 +290,7 @@ void AddEmployeeMenu::addToBase()
 void AddEmployeeMenu::hideMenu()
 {
     setDefault();
+    m_task->clear();
     this->hide();
 }
 
@@ -280,9 +298,9 @@ bool AddEmployeeMenu::findSimilar()
 {
     bool isSame;
     isSame = false;
-    for(int c=0;c<localBase->employeesAmount();c++)
+    for(auto c:localBase->employees())
     {
-        if(localBase->employee(c)->username() == m_username->getText())
+        if(c->username() == m_username->getText())
         {
             isSame = true;
         }

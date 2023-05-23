@@ -21,6 +21,7 @@
 #include "addemployeemenu.h"
 #include "addtaskmenu.h"
 #include "messagewindow.h"
+#include "addvacationmenu.h"
 
 class MainWindow : public QMainWindow
 
@@ -86,6 +87,7 @@ private:
 
     AddEmployeeMenu* addEmMenu;
     AddTaskMenu* addTaskMenu;
+    AddVacationMenu* addVacationMenu;
 
     void deleteEmployee();
     void showAddEmMenu();

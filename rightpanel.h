@@ -24,6 +24,7 @@ public:
     RightPanel(DataBase* refer,int number, QMainWindow* parent = nullptr);
     void resize();
     void updateTaskPanel();
+    void setAddingPanels();
 
 private:
     std::vector<PTtab*> taskPanels;
@@ -58,8 +59,6 @@ private:
     QPoint pressPoint;
     int currentScrollerY;
     int scrollShift = 0;
-
-    void setAddingPanels();
 
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);

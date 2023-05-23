@@ -49,6 +49,11 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     addTaskToEmployee->resize(200,30);
     addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
 
+    addTaskBtn = new QPushButton(this);
+    cancelAddBtn = new QPushButton(this);
+    addTaskBtn->hide();
+    cancelAddBtn->hide();
+
     connect(addTaskToEmployee,&QPushButton::clicked,this,&RightPanel::setAddTaskMode);
 
     generalHeight += taskToAdd->height()+80;
@@ -129,11 +134,12 @@ void RightPanel::setAddingPanels()
         taskId.erase(taskId.begin()+c);
         if(!skeeper)
         {
-            delete addTaskBtn;
-            delete cancelAddBtn;
             skeeper = true;
         }
     }
+
+    delete addTaskBtn;
+    delete cancelAddBtn;
 
     for(int c =0;c<referBase->tasksAmount();c++)
     {
@@ -306,6 +312,7 @@ void RightPanel::hideAddTaskMode()
     addTaskMode = false;
     scroller = false;
     scrollShift = 0;
+
 
     for(int c=0;c<addTaskPanels.size();)
     {

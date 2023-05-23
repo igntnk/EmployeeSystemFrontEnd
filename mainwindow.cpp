@@ -30,6 +30,7 @@ void MainWindow::resizeWindow()
     rightPanel->resize();
     addEmMenu->resize(this->geometry());
     addTaskMenu->resize(this->geometry());
+    addVacationMenu->resize(this->geometry());
     for(int c=0;c<5;c++)
     {
         employeeTools[c]->move(this->width()/2-512.5+205*c,this->height()-45);
@@ -216,7 +217,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(addEmMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
 
     addTaskMenu = new AddTaskMenu(dataBase,this);
+    connect(addTaskMenu,&AddTaskMenu::baseChanged,rightPanel,&RightPanel::setAddingPanels);
 
+    addVacationMenu = new AddVacationMenu(dataBase,this);
+    connect(descriptionField,&DescriptionField::vacBtnPressed,addVacationMenu,&AddVacationMenu::showMenu);
+    connect(addVacationMenu,&AddVacationMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
+    connect(addVacationMenu,&AddVacationMenu::baseChanged,descriptionField,&DescriptionField::setDescription);
 }
 
 MainWindow::~MainWindow()
@@ -485,7 +491,7 @@ bool MainWindow::isOnField(const QPointF& point, const QRectF& rect)
 
 void MainWindow::showAddEmMenu()
 {
-    addEmMenu->show();
+    addEmMenu->showMenu();
 }
 
 void MainWindow::editMenu()

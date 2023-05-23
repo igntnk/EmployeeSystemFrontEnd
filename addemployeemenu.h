@@ -24,6 +24,7 @@ public:
 
     void setDefault();
     void resize(QRect parent);
+    void showMenu();
 
 private:
     QFont SFProDisplay;
@@ -38,7 +39,7 @@ private:
     WritePanel* m_name;
     WritePanel* m_surname;
     QComboBox* m_document;
-    QComboBox* m_rank;
+    QComboBox* m_task;
     WritePanel* m_username;
     WritePanel* m_password;
     QDateTimeEdit* m_hiringDate;
@@ -48,6 +49,7 @@ private:
     QPushButton* m_cancel;
 
     QLabel* picture;
+    QLabel* chapter;
 
     int panelsShift =10;
 

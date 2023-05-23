@@ -26,13 +26,13 @@ public:
 
     void setVisibility(bool);
     void setInfo();
+    void setDescription();
 
 private:
     bool isProfileSelected = false;
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
-    void setDescription();
     void setEmploymentDate();
 
     QString searchLongestWord(Employee* refer);
@@ -40,9 +40,7 @@ private:
     void initShifts();
 
     QFont SFProDisplay;
-    QGraphicsDropShadowEffect* shadowPict;
-    QGraphicsDropShadowEffect* shadowSave;
-    QGraphicsDropShadowEffect* shadowCancel;
+    std::vector<QGraphicsDropShadowEffect*> shadows;
 
 
     QPixmap profilePix;
@@ -81,6 +79,8 @@ private:
     QPushButton* cancel;
     QPushButton* save;
 
+    QPushButton* addVacationBtn;
+
 public slots:
 
     void setSelectedNum(int number);
@@ -93,6 +93,7 @@ public slots:
 
 signals:
     void baseChanged();
+    void vacBtnPressed();
 };
 
 #endif // DESCRIPTIONFIELD_H

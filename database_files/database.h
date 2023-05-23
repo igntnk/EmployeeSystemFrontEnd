@@ -27,6 +27,7 @@ public:
     int employeesAmount();
     Employee* employee(int number);
     Employee* employee(QString name);
+    std::vector<Employee*> employees();
     void addEmployee(Employee* employee);
     void removeEmployee(int number);
     void changeEmployee(Employee* employee, int number);

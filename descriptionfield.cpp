@@ -13,27 +13,20 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    shadowPict = new QGraphicsDropShadowEffect(this);
-    shadowPict->setBlurRadius(30);
-    shadowPict->setOffset(0,0);
-    shadowPict->setColor(QColor(0,0,0,200));
-
-    shadowSave = new QGraphicsDropShadowEffect(this);
-    shadowSave->setBlurRadius(30);
-    shadowSave->setOffset(0,0);
-    shadowSave->setColor(QColor(0,0,0,200));
-
-    shadowCancel = new QGraphicsDropShadowEffect(this);
-    shadowCancel->setBlurRadius(30);
-    shadowCancel->setOffset(0,0);
-    shadowCancel->setColor(QColor(0,0,0,200));
-
+    for(int c=0;c<4;c++)
+    {
+        shadows.push_back(new QGraphicsDropShadowEffect(this));
+        shadows[c] = new QGraphicsDropShadowEffect(this);
+        shadows[c]->setBlurRadius(30);
+        shadows[c]->setOffset(0,0);
+        shadows[c]->setColor(QColor(0,0,0,200));
+    }
     profilePix.load(":icons/profile_icon.png");
     profilePict = new QLabel(this);
     profilePict->setScaledContents(true);
     profilePict->setGeometry(pictureShift,pictureShift,pictureSideSize,pictureSideSize);
     profilePict->setPixmap(profilePix);
-    profilePict->setGraphicsEffect(shadowPict);
+    profilePict->setGraphicsEffect(shadows[0]);
     profilePict->hide();
 
     SFProDisplay.setPixelSize(30);
@@ -139,7 +132,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     save->setText("Save");
     save->setGeometry(this->width()/2-105,this->height()-50,
                        100,30);
-    save->setGraphicsEffect(shadowSave);
+    save->setGraphicsEffect(shadows[1]);
     save->hide();
     connect(save,&QPushButton::clicked,this,&DescriptionField::saveChanges);
 
@@ -149,7 +142,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     cancel->setText("Cancel");
     cancel->setGeometry(this->width()/2+5,this->height()-50,
                       100,30);
-    cancel->setGraphicsEffect(shadowCancel);
+    cancel->setGraphicsEffect(shadows[2]);
     cancel->hide();
     connect(cancel,&QPushButton::clicked,this,&DescriptionField::exitEditMode);
 
@@ -160,6 +153,30 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     vacEnd->setStyleSheet("color: rgb(120,120,120);");
     vacStart->hide();
     vacEnd->hide();
+
+    addVacationBtn = new QPushButton(this);
+    addVacationBtn->setStyleSheet("QPushButton {"
+                                  "background-color: rgb(28, 28, 28);"
+                                  "color: rgb(100,100,100);"
+                                  "border: 2px solid rgb(80,80,80);"
+                                  "border-radius: 7px"
+                                  "}"
+                                  "QPushButton:hover {"
+                                  "background-color: rgb(20, 20, 20);"
+                                  "color: rgb(80,80,80);"
+                                  "}"
+                                  "QPushButton:pressed {"
+                                  "background-color: rgb(10,10,10);"
+                                  "color: rgb(60,60,60);"
+                                  "border: 1px solid rgb(40, 40, 40);"
+                                  "}");
+    addVacationBtn->setFont(SFProDisplay);
+    addVacationBtn->setText("Create Vacation");
+    addVacationBtn->resize(200,40);
+    addVacationBtn->move(this->width()/2-addVacationBtn->width()/2,20);
+    addVacationBtn->setGraphicsEffect(shadows[3]);
+    addVacationBtn->hide();
+    connect(addVacationBtn,&QPushButton::clicked,this,&DescriptionField::vacBtnPressed);
 
     SFProDisplay.setPixelSize(30);
 }
@@ -249,42 +266,6 @@ void DescriptionField::setSelectedNum(int number)
     setEmploymentDate();
     setInfo();
     setDescription();
-
-    SFProDisplay.setPixelSize(18);
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
-
-    vacStart->setFont(SFProDisplay);
-    vacEnd->setFont(SFProDisplay);
-
-    for(int a=0;a<referBase->vacationsAmount();a++)
-    {
-        if(referBase->employee(selectedNum)->id() == referBase->vacation(a)->employee()->id() and
-            referBase->vacation(a)->endDate() > QDate::currentDate())
-        {
-            isInVac = true;
-            vacStart->setText("Vacation Start Date: " + referBase->vacation(a)->beginDate().toString());
-            vacEnd->setText("Vacation End Date: " + referBase->vacation(a)->endDate().toString());
-
-            vacStart->resize(SFProDislplayMetrics.horizontalAdvance("Vacation Start Date: " + QString(referBase->vacation(a)->beginDate().toString())),
-                                                                    SFProDislplayMetrics.height());
-            vacEnd->resize(SFProDislplayMetrics.horizontalAdvance("Vacation End Date: " + QString(referBase->vacation(a)->endDate().toString())),
-                                                                  SFProDislplayMetrics.height());
-
-            vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
-            vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
-
-            vacStart->show();
-            vacEnd->show();
-            break;
-        }
-
-        isInVac = false;
-        vacStart->hide();
-        vacEnd->hide();
-    }
-
-    m_name->setText(referBase->employee(selectedNum)->name());
-    m_surname->setText(referBase->employee(selectedNum)->surname());
 }
 
 void DescriptionField::changeDesc(int number)
@@ -376,6 +357,7 @@ void DescriptionField::resize(QMainWindow* changed)
     m_hiringDate->move(employmentDate->geometry().topLeft().x(),employmentDate->geometry().topLeft().y()-3);
     vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
     vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
+    addVacationBtn->move(this->width()/2-addVacationBtn->width()/2,20);
 }
 
 void DescriptionField::setInfo()
@@ -437,6 +419,41 @@ void DescriptionField::setDescription()
                           SFProDislplayMetrics.height());
 
     startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
+
+    vacStart->setFont(SFProDisplay);
+    vacEnd->setFont(SFProDisplay);
+
+    for(int a=0;a<referBase->vacationsAmount();a++)
+    {
+        if(referBase->employee(selectedNum)->id() == referBase->vacation(a)->employee()->id() and
+            referBase->vacation(a)->endDate() > QDate::currentDate())
+        {
+            isInVac = true;
+            vacStart->setText("Vacation Start Date: " + referBase->vacation(a)->beginDate().toString());
+            vacEnd->setText("Vacation End Date: " + referBase->vacation(a)->endDate().toString());
+
+            vacStart->resize(SFProDislplayMetrics.horizontalAdvance("Vacation Start Date: " + QString(referBase->vacation(a)->beginDate().toString())),
+                             SFProDislplayMetrics.height());
+            vacEnd->resize(SFProDislplayMetrics.horizontalAdvance("Vacation End Date: " + QString(referBase->vacation(a)->endDate().toString())),
+                           SFProDislplayMetrics.height());
+
+            vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
+            vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
+
+            vacStart->show();
+            vacEnd->show();
+            break;
+        }
+
+        isInVac = false;
+        vacStart->hide();
+        vacEnd->hide();
+    }
+
+    m_name->setText(referBase->employee(selectedNum)->name());
+    m_surname->setText(referBase->employee(selectedNum)->surname());
+
+    addVacationBtn->show();
 }
 
 void DescriptionField::setEmploymentDate()
@@ -481,6 +498,7 @@ void DescriptionField::setVisibility(bool choice)
         employmentDate->show();
         startLineDate->show();
         deadLineDate->show();
+        addVacationBtn->show();
     }
     else
     {
@@ -494,6 +512,9 @@ void DescriptionField::setVisibility(bool choice)
         employmentDate->hide();
         startLineDate->hide();
         deadLineDate->hide();
+        addVacationBtn->hide();
+        vacStart->hide();
+        vacEnd->hide();
     }
     this->update();
 }

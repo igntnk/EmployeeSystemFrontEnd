@@ -280,67 +280,85 @@ bool LeftPanel::isOnField(const QPointF& point, const QRectF& rect)
 void LeftPanel::updateProfilesList()
 {
     scrollShift = 0;
-    inWork->move(12,10+scrollShift);
+    inWork->move(12,10);
 
-    Employee* refEm = localBase->employee(localBase->employeesAmount()-1);
-    referPT = new PTtab(QString(refEm->name()+"\n"+
-                                     refEm->surname()+"\n"+
-                                     refEm->rank()->name()),1,this);
-
-    if(localBase->employeesAmount() > profilePanelsInVacation.size()+profilePanelsInWork.size())
+    for(int c=0;c<profilePanelsInWork.size();)
     {
-        profilePanelsInWork.push_back(referPT);
-        for(int c=0;c<profilePanelsInWork.size();c++)
-        {
-            profilePanelsInWork[c]->move(0,40+80*c);
-        }
-        profilePanelsInWork[profilePanelsInWork.size()-1]->show();
-        inWorkNum.push_back(refEm->id());
-        generalHeight += profilePanelsInWork[0]->height();
+        generalHeight -= profilePanelsInWork[0]->height();
+        delete profilePanelsInWork[c];
+        profilePanelsInWork.erase(profilePanelsInWork.begin());
     }
 
-    if(localBase->employeesAmount() < profilePanelsInVacation.size()+profilePanelsInWork.size())
+    for(int c=0;c<profilePanelsInVacation.size();)
     {
-        for(int c=0;c<inWorkNum.size();c++)
+        generalHeight -= profilePanelsInVacation[0]->height();
+        delete profilePanelsInVacation[c];
+        profilePanelsInVacation.erase(profilePanelsInVacation.begin());
+    }
+
+    inWorkNum.clear();
+    inVacNum.clear();
+
+    int d=-1;
+    bool contVac =false;
+    for(auto c:localBase->employees())
+    {
+        contVac = false;
+        for(int a=0;a<localBase->vacationsAmount();a++)
         {
-            if(inWorkNum[c] == selectedNum)
+            if(c->id() == localBase->vacation(a)->employee()->id() and
+                localBase->vacation(a)->endDate() > QDate::currentDate())
             {
-                inWorkNum.erase(inWorkNum.begin()+c);
-                delete profilePanelsInWork[c];
-                generalHeight -= profilePanelsInWork[0]->height();
-                profilePanelsInWork.erase(profilePanelsInWork.begin()+c);
+                contVac=true;
             }
         }
-        for(int c=0;c<inVacNum.size();c++)
+        if(contVac){continue;}
+        d++;
+        PTtab* refer = new PTtab(QString(c->name()+"\n"+
+                                         c->surname()+"\n"+
+                                         c->rank()->name()),1,this);
+        profilePanelsInWork.push_back(refer);
+        profilePanelsInWork[d]->move(0,40+80*d);
+        if(inWorkClicked)
         {
-            if(inVacNum[c] == selectedNum)
+            profilePanelsInWork[d]->show();
+        }
+        inWorkNum.push_back(c->id());
+        generalHeight += profilePanelsInWork[d]->height();
+    }
+
+    inWork->move(12,10);
+
+
+    d=-1;
+    for(auto c: localBase->employees())
+    {
+        contVac = true;
+        for(int a=0;a<localBase->vacationsAmount();a++)
+        {
+            if(c->id() == localBase->vacation(a)->employee()->id() and
+                localBase->vacation(a)->endDate() > QDate::currentDate())
             {
-                inVacNum.erase(inVacNum.begin()+c);
-                delete profilePanelsInVacation[c];
-                generalHeight -= profilePanelsInVacation[0]->height();
-                profilePanelsInVacation.erase(profilePanelsInVacation.begin()+c);
+                contVac=false;
+                d++;
             }
         }
-        for(int a =0;a<inVacNum.size();a++){if(inVacNum[a]>selectedNum){--inVacNum[a];}}
-        for(int a =0;a<inWorkNum.size();a++){if(inWorkNum[a]>selectedNum){--inWorkNum[a];}}
-
-        for(int c=0;c<profilePanelsInWork.size();c++)
+        if(contVac){continue;}
+        PTtab* refer = new PTtab(QString(c->name()+"\n"+
+                                         c->surname()+"\n"+
+                                         c->rank()->name()),1,this);
+        profilePanelsInVacation.push_back(refer);
+        profilePanelsInVacation[d]->move(0,10+inVacation->geometry().bottomRight().y()+80*d+scrollShift);
+        if(inVacationClicked)
         {
-            profilePanelsInWork[c]->move(0,40+80*c);
+            profilePanelsInVacation[d]->show();
         }
-
-        for(int c=0;c<profilePanelsInVacation.size();c++)
-        {
-            profilePanelsInVacation[c]->move(0,40+80*c);
-        }
+        inVacNum.push_back(c->id());
+        generalHeight += profilePanelsInVacation[d]->height();
     }
 
-    inVacation->move(12,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
+    inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
 
-    for(int c=0;c<profilePanelsInVacation.size();c++)
-    {
-        profilePanelsInVacation[c]->move(0,10+inVacation->geometry().bottomRight().y()+80*c+scrollShift);
-    }
     this->update();
 
     checkScroller();

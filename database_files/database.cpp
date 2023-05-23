@@ -386,9 +386,16 @@ int DataBase::employeesAmount()
     return m_employeers.size();
 }
 
-Employee *DataBase::employee(int number)
+Employee *DataBase::employee(int id)
 {
-    return m_employeers[number];
+    for(int c=0;c<m_employeers.size();c++)
+    {
+        if(m_employeers[c]->id() == id)
+        {
+            return m_employeers[c];
+        }
+    }
+    return nullptr;
 }
 
 Employee *DataBase::employee(QString name)
@@ -403,6 +410,11 @@ Employee *DataBase::employee(QString name)
     return nullptr;
 }
 
+std::vector<Employee *> DataBase::employees()
+{
+    return m_employeers;
+}
+
 void DataBase::addEmployee(Employee *employee)
 {
     m_employeers.push_back(employee);
@@ -410,8 +422,24 @@ void DataBase::addEmployee(Employee *employee)
 
 void DataBase::removeEmployee(int number)
 {
-    delete m_employeers[number];
-    m_employeers.erase(m_employeers.begin()+number);
+    int pos = -1;
+    for(int c = 0;c<employeesAmount();c++)
+    {
+        if(m_employeers[c]->id() == number)
+        {
+            pos = c;
+            for(int a =0;a<vacationsAmount();a++)
+            {
+                if(m_vacations[a]->employee()->id() == m_employeers[c]->id())
+                {
+                    delete m_vacations[a];
+                    m_vacations.erase(m_vacations.begin()+a);
+                }
+            }
+        }
+    }
+    delete this->employee(number);
+    m_employeers.erase(m_employeers.begin()+pos);
 }
 
 void DataBase::changeEmployee(Employee *employee, int number)

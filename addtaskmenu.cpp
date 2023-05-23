@@ -131,6 +131,7 @@ void AddTaskMenu::resize(QRect parent)
     chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-50);
 }
 
+
 void AddTaskMenu::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -204,7 +205,7 @@ void AddTaskMenu::addToBase()
     MessageWindow* wrongInfo = new MessageWindow("Wrong Information","You've entered too short name",true,false,this);
     connect(wrongInfo,&MessageWindow::okPressed,wrongInfo,&MessageWindow::close);
     referEm = new Task();
-    referEm->setId(localBase->tasksAmount());
+    referEm->setId(localBase->task(localBase->tasksAmount()-1)->id()+1);
 
     if(m_name->getText().length() < 2)
     {
@@ -230,6 +231,7 @@ void AddTaskMenu::addToBase()
     referEm->setDeadline(m_deadline->date());
 
     localBase->addTask(referEm);
+    emit baseChanged();
     setDefault();
     delete wrongInfo;
     this->hide();

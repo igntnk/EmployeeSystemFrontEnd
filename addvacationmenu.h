@@ -1,21 +1,25 @@
 
-#ifndef ADDTASKMENU_H
-#define ADDTASKMENU_H
+#ifndef ADDVACATIONMENU_H
+#define ADDVACATIONMENU_H
 
 #include <QLabel>
-#include <QDateTimeEdit>
+#include <QMainWindow>
+#include <QLabel>
+#include <QPainter>
+#include <QPainterPath>
+#include <QComboBox>
 #include <QCheckBox>
+#include <QDateTimeEdit>
+#include <QGraphicsDropShadowEffect>
 #include <QPushButton>
-#include "writepanel.h"
 #include "database_files/database.h"
-#include "messagewindow.h"
 
 
-class AddTaskMenu : public QLabel
+class AddVacationMenu : public QLabel
 {
     Q_OBJECT
 public:
-    AddTaskMenu(DataBase* dataBase,QMainWindow* parent=nullptr);
+    AddVacationMenu(DataBase* refer,QMainWindow* parent = nullptr);
 
     void setDefault();
     void resize(QRect parent);
@@ -28,28 +32,29 @@ private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
-    QLabel* chapter;
-
-    WritePanel* m_name;
-    WritePanel* m_description;
-    QDateTimeEdit* m_startline;
-    QDateTimeEdit* m_deadline;
+    QComboBox* m_employee;
+    QDateTimeEdit* m_beginDate;
+    QDateTimeEdit* m_endDate;
     QCheckBox* currentDate;
 
     QPushButton* m_enter;
     QPushButton* m_cancel;
+
+    QLabel* addVacationChapter;
 
     int panelsShift =10;
 
     void on_checkBox_stateChanged(int arg1);
     void addToBase();
     void hideMenu();
-    bool findSimilar();
 
-    Task* referEm;
+    Vacation* referVac = new Vacation();
+
+public slots:
+    void showMenu();
 
 signals:
     void baseChanged();
 };
 
-#endif // ADDTASKMENU_H
+#endif // ADDVACATIONMENU_H

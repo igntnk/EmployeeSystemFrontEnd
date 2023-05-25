@@ -413,8 +413,22 @@ void LeftPanel::updateBySearch(const QString &text)
     bool contVac =false;
     for(auto c:localBase->employees())
     {
-        QString comparer = c->name();
-        comparer.chop(c->name().length()-text.length());
+        QString comparer;
+        switch(sortType)
+        {
+        case 0:
+            comparer = c->name();
+            comparer.chop(c->name().length()-text.length());
+            break;
+        case 1:
+            comparer = c->surname();
+            comparer.chop(c->surname().length()-text.length());
+            break;
+        case 2:
+            comparer = c->rank()->name();
+            comparer.chop(c->rank()->name().length()-text.length());
+            break;
+        }
         if(!text.startsWith(comparer))
         {
             continue;
@@ -452,14 +466,28 @@ void LeftPanel::updateBySearch(const QString &text)
     }
     else
     {
-        inVacation->move(14,10 + inWork->geometry().bottomLeft().y()+10);
+        inVacation->move(14,10 + inWork->geometry().bottomLeft().y());
     }
 
     d=-1;
     for(auto c: localBase->employees())
     {
-        QString comparer = c->name();
-        comparer.chop(c->name().length()-text.length());
+        QString comparer;
+        switch(sortType)
+        {
+        case 0:
+            comparer = c->name();
+            comparer.chop(c->name().length()-text.length());
+            break;
+        case 1:
+            comparer = c->surname();
+            comparer.chop(c->surname().length()-text.length());
+            break;
+        case 2:
+            comparer = c->rank()->name();
+            comparer.chop(c->rank()->name().length()-text.length());
+            break;
+        }
         if(!text.startsWith(comparer))
         {
             continue;
@@ -494,6 +522,11 @@ void LeftPanel::updateBySearch(const QString &text)
 
 }
 
+void LeftPanel::getSortType(int type)
+{
+    sortType = type;
+}
+
 void LeftPanel::inWorkPressed()
 {
     if(inWorkClicked){
@@ -512,8 +545,8 @@ void LeftPanel::inWorkPressed()
         {
             profilePanelsInWork[c]->show();
             generalHeight +=profilePanelsInWork[c]->height();
+            inVacation->move(inWork->geometry().topLeft().x(),10 + profilePanelsInWork[c]->geometry().bottomLeft().y()+scrollShift);
         }
-        inVacation->move(inWork->geometry().topLeft().x(),10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
     }
 
     for(int c=0;c<profilePanelsInVacation.size();c++)
@@ -586,15 +619,14 @@ void LeftPanel::checkScroller()
         for(int c=0;c<profilePanelsInWork.size();c++)
         {
             profilePanelsInWork[c]->move(0,40+80*c+scrollShift);
-        }
-
-        if(inWorkClicked)
-        {
-            inVacation->move(inWork->geometry().topLeft().x(),10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift);
-        }
-        else
-        {
-            inVacation->move(inWork->geometry().topLeft().x(),10+inWork->geometry().bottomLeft().y());
+            if(inWorkClicked)
+            {
+                inVacation->move(inWork->geometry().topLeft().x(),10 + profilePanelsInWork[c]->geometry().bottomLeft().y()+scrollShift);
+            }
+            else
+            {
+                inVacation->move(inWork->geometry().topLeft().x(),10+inWork->geometry().bottomLeft().y());
+            }
         }
 
         for(int c=0;c<profilePanelsInVacation.size();c++)

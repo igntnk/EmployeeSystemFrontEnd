@@ -48,6 +48,8 @@ add_executable(EmployeeSystemFrontend
          addvacationmenu.cpp
          searchbyname.h
          searchbyname.cpp
+         choicetext.h
+         choicetext.cpp
          database_files/document.h
          database_files/document.cpp
          database_files/payment.h

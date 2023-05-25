@@ -6,15 +6,16 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QPainterPath>
-#include <QGraphicsDropShadowEffect>
 #include <QMouseEvent>
 #include <QLineEdit>
+#include <vector>
+#include "choicetext.h"
 
-class SearchByName : public QLabel
+class SearchByPar : public QLabel
 {
     Q_OBJECT
 public:
-    SearchByName(QMainWindow* parent = nullptr);
+    SearchByPar(QMainWindow* parent = nullptr);
 
     void resizeEvent(QRect refer);
 
@@ -29,16 +30,25 @@ private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
-    QGraphicsDropShadowEffect* shadow;
     QFont SFProDisplay;
 
     bool searchPressed = false;
     QLineEdit* searchText;
+    bool settingsPressed = false;
 
     QLabel* searchTextShower;
 
+    std::vector<ChoiceText*> choicePanel;
+    void replaceChoicePanels();
+    void showChoicePanel();
+    void hideChoicePanel();
+    int sortType= 0;
+    QLabel* sortText;
+
 signals:
     void textChanged(const QString &text);
+    void changeSize(bool opened);
+    void sortTypeChanged(int type);
 };
 
 #endif // SEARCHBYNAME_H

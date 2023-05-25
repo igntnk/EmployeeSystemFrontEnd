@@ -56,6 +56,7 @@ private:
     int currentScrollerY;
 
     int selectedNum = -1;
+    int sortType = 0;
 
 public slots:
     void inWorkPressed();
@@ -66,6 +67,7 @@ public slots:
     void changePTInfo();
 
     void updateBySearch(const QString &text);
+    void getSortType(int type);
 
 signals:
     void changedSelected(int number);

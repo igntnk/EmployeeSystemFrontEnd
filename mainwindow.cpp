@@ -211,9 +211,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //////////Creating lock screen//////////
 
-    searchPanel = new SearchByName(this);
+    searchPanel = new SearchByPar(this);
     searchPanel->move(10,this->height()-90);
-    connect(searchPanel,&SearchByName::textChanged,leftPanel,&LeftPanel::updateBySearch);
+    connect(searchPanel,&SearchByPar::textChanged,leftPanel,&LeftPanel::updateBySearch);
+    connect(searchPanel,&SearchByPar::changeSize,this,&MainWindow::resizeByFilter);
+    connect(searchPanel,&SearchByPar::sortTypeChanged,leftPanel,&LeftPanel::getSortType);
 
     lockScreen = new LockScreen(dataBase, this);
     lockScreen->setMouseTracking(true);
@@ -630,6 +632,18 @@ void MainWindow::promoteSlot()
         test = new MessageWindow("Warning","You can't promote director or admin",true,false,this);
         connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
         test->show();
+    }
+}
+
+void MainWindow::resizeByFilter(bool opened)
+{
+    if(opened)
+    {
+        searchPanel->setGeometry(10,this->height()-150,this->width()/6-20,90);
+    }
+    else
+    {
+        searchPanel->setGeometry(10,this->height()-90,this->width()/6-20,30);
     }
 }
 

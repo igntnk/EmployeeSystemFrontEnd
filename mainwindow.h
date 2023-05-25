@@ -91,7 +91,7 @@ private:
     AddTaskMenu* addTaskMenu;
     AddVacationMenu* addVacationMenu;
 
-    SearchByName* searchPanel;
+    SearchByPar* searchPanel;
 
     void deleteEmployee();
     void showAddEmMenu();
@@ -109,6 +109,8 @@ public slots:
     void setSelected(int number);
     void deleteSlot();
     void promoteSlot();
+
+    void resizeByFilter(bool opened);
 };
 
 #endif // MAINWINDOW_H

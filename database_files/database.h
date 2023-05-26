@@ -35,6 +35,7 @@ public:
     int tasksAmount();
     Task* task(int number);
     Task* task(QString name);
+    std::vector<Task*> tasks();
     void addTask(Task* task);
     void removeTask(int number);
     void changeTask(Task* task, int number);

@@ -48,7 +48,7 @@ private:
     LockScreen* lockScreen;
 
     QFont SFProDisplay;
-    QGraphicsDropShadowEffect* shadow;
+    std::vector<QGraphicsDropShadowEffect*> shadows;
 
     DescriptionField* descriptionField;
 
@@ -63,6 +63,8 @@ private:
     QLabel* employeeTasks;
 
     LeftPanel* leftPanel;
+    QPushButton* myProfile;
+    QLabel* myProfileText;
     std::vector<PTtab*> taskPanels();
 
     RightPanel* rightPanel;
@@ -109,6 +111,7 @@ public slots:
     void setSelected(int number);
     void deleteSlot();
     void promoteSlot();
+    void myProfileSelected();
 
     void resizeByFilter(bool opened);
 };

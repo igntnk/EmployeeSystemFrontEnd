@@ -265,7 +265,6 @@ void DescriptionField::setSelectedNum(int number)
     setVisibility(true);
     setEmploymentDate();
     setInfo();
-    setDescription();
 }
 
 void DescriptionField::changeDesc(int number)
@@ -273,6 +272,7 @@ void DescriptionField::changeDesc(int number)
     SFProDisplay.setPixelSize(18);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
+    taskDescription->setFont(SFProDisplay);
     taskDescription->setText(referBase->employee(selectedNum)->task(number)->description());
     taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
                                  SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->task(number)->description()),SFProDislplayMetrics.height());

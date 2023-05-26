@@ -17,6 +17,7 @@ public:
     void resizePanel();
 
     int getSelectedPanelNum();
+    void setSelected(int number);
 
 protected:
     void mousePressEvent(QMouseEvent* event);

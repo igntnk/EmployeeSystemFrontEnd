@@ -6,7 +6,7 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Create DataBase");
     referTask->setDescription("Create data base using PostgreSQL and Qt");
-    referTask->setDeadline(QDate(2023,5,22));
+    referTask->setDeadline(QDate(2023,8,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -15,7 +15,7 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Create OpenGl cube");
     referTask->setDescription("Create textured cube model using OpenGl 1998 year version");
-    referTask->setDeadline(QDate(2023,6,12));
+    referTask->setDeadline(QDate(2023,12,12));
     referTask->setStartline(QDate(2021,5,12));
 
     m_tasks.push_back(referTask);
@@ -31,9 +31,9 @@ DataBase::DataBase()
 
     referTask = new Task();
     referTask->setId(tasksAmount());
-    referTask->setName("Trash");
-    referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setName("Task to check the line");
+    referTask->setDescription("Task to checke working of the date line");
+    referTask->setDeadline(QDate(2024,2,12));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -42,7 +42,7 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Trash");
     referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setDeadline(QDate(2023,9,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -51,7 +51,7 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Trash");
     referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -60,7 +60,7 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Trash");
     referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -69,7 +69,25 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Trash");
     referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setDeadline(QDate(2032,2,22));
+    referTask->setStartline(QDate(2000,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Trash");
+    referTask->setDescription("trash task to make a size");
+    referTask->setDeadline(QDate(2024,2,22));
+    referTask->setStartline(QDate(2023,1,12));
+
+    m_tasks.push_back(referTask);
+
+    referTask = new Task();
+    referTask->setId(tasksAmount());
+    referTask->setName("Task to check lost task");
+    referTask->setDescription("This task should be red colored");
+    referTask->setDeadline(QDate(2023,4,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -78,16 +96,7 @@ DataBase::DataBase()
     referTask->setId(tasksAmount());
     referTask->setName("Trash");
     referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
-    referTask->setStartline(QDate(2023,1,12));
-
-    m_tasks.push_back(referTask);
-
-    referTask = new Task();
-    referTask->setId(tasksAmount());
-    referTask->setName("Trash");
-    referTask->setDescription("trash task to make a size");
-    referTask->setDeadline(QDate(2000,2,22));
+    referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
 
     m_tasks.push_back(referTask);
@@ -473,6 +482,11 @@ Task *DataBase::task(QString name)
         }
     }
     return nullptr;
+}
+
+std::vector<Task *> DataBase::tasks()
+{
+    return m_tasks;
 }
 
 void DataBase::addTask(Task *task)

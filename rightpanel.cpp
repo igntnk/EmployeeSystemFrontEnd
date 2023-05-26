@@ -52,12 +52,16 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
 
     addTaskBtn = new QPushButton(this);
     cancelAddBtn = new QPushButton(this);
+    deadSoon = new QPushButton(this);
     addTaskBtn->hide();
     cancelAddBtn->hide();
+    deadSoon->hide();
+
 
     connect(addTaskToEmployee,&QPushButton::clicked,this,&RightPanel::setAddTaskMode);
 
     generalHeight += taskToAdd->height()+80;
+
 
 }
 
@@ -80,6 +84,7 @@ void RightPanel::resize()
         addTaskPanels[c]->resizeByScroller(scroller, this->geometry());
         addTaskBtn->move(this->width()/2-105,this->height()-50);
         cancelAddBtn->move(this->width()/2+5,this->height()-50);
+        deadSoon->move(this->width()/2+5,taskToAdd->geometry().topRight().y());
     }
 
     if(panelHeight > generalHeight)
@@ -106,17 +111,10 @@ void RightPanel::setAddingPanels()
 
     if(selectedEm->id() == -1)
     {
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
-        return;
+        delete selectedEm;
     }
 
     delete test;
-
-    if(selectedEm->id() == -1)
-    {
-        delete selectedEm;
-    }
 
     addTaskToEmployee->hide();
 
@@ -141,6 +139,7 @@ void RightPanel::setAddingPanels()
 
     delete addTaskBtn;
     delete cancelAddBtn;
+    delete deadSoon;
 
     for(int c =0;c<referBase->tasksAmount();c++)
     {
@@ -166,7 +165,23 @@ void RightPanel::setAddingPanels()
             taskName.truncate(20);
             taskName += " ...";
         }
-        addTaskPanels[panNum]->setPText(QString(taskName),1);
+
+        float taskLength = referBase->task(c)->startline().daysTo(referBase->task(c)->deadline());
+        float daysToEnd = QDate::currentDate().daysTo(referBase->task(c)->deadline());
+        if(daysToEnd > 0)
+        {
+            float percentage = 1-(daysToEnd/taskLength);
+            addTaskPanels[panNum]->setDateLine(percentage);
+        }
+        else
+        {
+            addTaskPanels[panNum]->setDateLine(0);
+            addTaskPanels[panNum]->setUndone(true);
+        }
+
+        taskName = taskName +  '\n' + "Deadline: " + referBase->task(c)->deadline().toString();
+        addTaskPanels[panNum]->setPText(QString(taskName),2);
+        addTaskPanels[panNum]->setDeadLine(referBase->task(c)->deadline());
         addTaskPanels[panNum]->move(0,taskToAdd->geometry().bottomLeft().y() + panNum*80);
         addTaskPanels[panNum]->show();
         panNum++;
@@ -218,6 +233,15 @@ void RightPanel::setAddingPanels()
 
     addTaskBtn->show();
     cancelAddBtn->show();
+
+    deadSoon = new QPushButton(this);
+    deadSoon->setFont(SFProDisplay);
+    deadSoon->setText("Soon Dead");
+    deadSoon->setGeometry(this->width()/2+5,taskToAdd->geometry().topRight().y(),
+                              100,20);
+    deadSoon->setStyleSheet(addTaskBtn->styleSheet());
+    deadSoon->show();
+    connect(deadSoon,&QPushButton::clicked,this,&RightPanel::sortTasks);
 
     double panelHeight = this->height()-employeeTasks->geometry().bottomLeft().y()-selectedEm->tasksAmount()*taskPanels[0]->height()-4;
     double differenceKoef = panelHeight/generalHeight;
@@ -327,6 +351,7 @@ void RightPanel::hideAddTaskMode()
     addTaskBtn->hide();
     taskToAdd->hide();
     cancelAddBtn->hide();
+    deadSoon->hide();
 
     employeeTasks->move(12,10);
 
@@ -363,10 +388,10 @@ void RightPanel::showTaskPanels()
 
 void RightPanel::addEmployeeTask()
 {
-    MessageWindow* warning = new MessageWindow("Warning","You haven't selected task",true,false,this);
 
     if(addTaskId == -1)
     {
+        MessageWindow* warning = new MessageWindow("Warning","You haven't selected task",true,false,this);
         warning->show();
         connect(warning,&MessageWindow::okPressed,warning,&MessageWindow::close);
         return;
@@ -377,6 +402,33 @@ void RightPanel::addEmployeeTask()
     addTaskId = -1;
 }
 
+void RightPanel::sortTasks()
+{
+    for(int c =0;c<addTaskPanels.size();c++)
+    {
+        static int deader;
+        for(int a =c+1;a<addTaskPanels.size();a++)
+        {
+            float daysToEndC = QDate::currentDate().daysTo(addTaskPanels[c]->deadLine());
+            float daysToEndA = QDate::currentDate().daysTo(addTaskPanels[a]->deadLine());
+            if(daysToEndA < daysToEndC)
+            {
+                deader = a;
+            }
+        }
+        if(deader == -1){continue;}
+        std::swap(addTaskPanels[deader],addTaskPanels[c]);
+        std::swap(taskId[deader],taskId[c]);
+        deader = -1;
+        c--;
+    }
+
+    for(int c =0;c<addTaskPanels.size();c++)
+    {
+        addTaskPanels[c]->move(0,taskToAdd->geometry().bottomLeft().y()+5+80*c);
+    }
+}
+
 void RightPanel::updateTaskPanel()
 {
     for(int c=0;c<taskPanels.size();)
@@ -384,24 +436,67 @@ void RightPanel::updateTaskPanel()
         delete taskPanels[c];
         taskPanels.erase(taskPanels.begin()+c);
     }
+    taskIdAdded.clear();
 
-    for(int c =0;c<selectedEm->tasksAmount();c++)
+    for(auto task:selectedEm->tasks())
     {
-        taskPanels.push_back(new PTtab("",0,this));
-    }
-
-    for(int c=0;c<selectedEm->tasksAmount();c++)
-    {
-        QString taskName = selectedEm->task(c)->name();
+        QString taskName = task->name();
         if(taskName.length()>20)
         {
             taskName.truncate(20);
             taskName += " ...";
         }
-        taskPanels[c]->setPText(QString(taskName),1);
+        taskName = taskName +'\n' + "Deadline: " + task->deadline().toString();
+        taskPanels.push_back(new PTtab(taskName,0,this));
+        taskIdAdded.push_back(task->id());
+        (taskPanels.back())->setDeadLine(task->deadline());
+        float taskLength = task->startline().daysTo(task->deadline());
+        float daysToEnd = QDate::currentDate().daysTo(task->deadline());
+        if(daysToEnd > 0)
+        {
+            float percentage = 1-(daysToEnd/taskLength);
+            (taskPanels.back())->setDateLine(percentage);
+        }
+        else
+        {
+            (taskPanels.back())->setDateLine(0);
+            (taskPanels.back())->setUndone(true);
+        }
+    }
+
+    for(int c =0;c<taskPanels.size();c++)
+    {
+        static int deader;
+        for(int a =c+1;a<taskPanels.size();a++)
+        {
+            float daysToEndC = QDate::currentDate().daysTo(taskPanels[c]->deadLine());
+            float daysToEndA = QDate::currentDate().daysTo(taskPanels[a]->deadLine());
+            if(daysToEndA < daysToEndC)
+            {
+                deader = a;
+            }
+        }
+        if(deader == -1){continue;}
+        std::swap(taskPanels[deader],taskPanels[c]);
+        std::swap(taskIdAdded[deader],taskIdAdded[c]);
+        deader = -1;
+        c--;
+    }
+
+    for(int c=0;c<taskPanels.size();c++)
+    {
         taskPanels[c]->move(0,employeeTasks->geometry().bottomLeft().y()+80*c);
         taskPanels[c]->show();
     }
+
+    for(int c =0;c<taskIdAdded.size();c++)
+    {
+        if(selectedEm->task(taskIdAdded[c])->id() == taskIdAdded[0])
+        {
+            emit changedSelected(taskIdAdded[c]);
+        }
+    }
+
 }
 
 void RightPanel::mousePressEvent(QMouseEvent* event)
@@ -442,8 +537,7 @@ void RightPanel::mousePressEvent(QMouseEvent* event)
             if(isOnField(event->pos(),taskPanels[c]->geometry()))
             {
                 taskPanels[c]->setSelected(true);
-                emit changedSelected(c);
-
+                emit changedSelected(taskIdAdded[c]);
             }
             else
             {
@@ -501,6 +595,8 @@ void RightPanel::mouseMoveEvent(QMouseEvent *event)
         addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10),QPoint(currentAddRect.width(),currentAddRect.bottomRight().y()));
 
         this->update();
+
+        deadSoon->move(this->width()/2+5,taskToAdd->geometry().topRight().y());
     }
 }
 

@@ -50,7 +50,7 @@ SearchByPar::SearchByPar(QMainWindow* parent):
 void SearchByPar::resizeEvent(QRect refer)
 {
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
-    if(searchPressed)
+    if(searchPressed or (!searchPressed and !settingsPressed))
     {
         this->resize(refer.width()/6-20,30);
         this->move(10,refer.height()-90);
@@ -88,7 +88,6 @@ void SearchByPar::mousePressEvent(QMouseEvent *event)
         searchText->show();
         searchTextShower->hide();
         sortText->hide();
-        this->update();
         searchText->setFocus();
     }
     else if(isOnField(event->position(),QRect(this->width()-30,1,28,28)))
@@ -101,9 +100,9 @@ void SearchByPar::mousePressEvent(QMouseEvent *event)
         replaceChoicePanels();
         showChoicePanel();
         sortText->hide();
-        this->update();
-        this->setFocus();
     }
+    this->update();
+    this->setFocus();
 }
 
 void SearchByPar::mouseMoveEvent(QMouseEvent *event)

@@ -697,4 +697,28 @@ int LeftPanel::getSelectedPanelNum()
     return selectedNum;
 }
 
+void LeftPanel::setSelected(int number)
+{
+    selectedNum = number;
+    for(int c=0;c<inWorkNum.size();c++)
+    {
+        profilePanelsInWork[c]->setSelected(false);
+        if(selectedNum == inWorkNum[c])
+        {
+            profilePanelsInWork[c]->setSelected(true);
+        }
+    }
+
+    for(int c=0;c<inVacNum.size();c++)
+    {
+        profilePanelsInVacation[c]->setSelected(false);
+        if(selectedNum == inVacNum[c])
+        {
+            profilePanelsInVacation[c]->setSelected(true);
+        }
+    }
+
+    this->update();
+}
+
 

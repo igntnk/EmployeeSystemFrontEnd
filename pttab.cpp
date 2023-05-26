@@ -39,6 +39,7 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
         picture->setPixmap(pixmap);
         infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*2)/2,
                               SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*2);
+        ifTaskPanel = true;
     }
 
 }
@@ -74,6 +75,32 @@ void PTtab::doPainting(QPainter* drawer)
 
         drawer->drawRect(1,1,this->width()-2,this->height()-2);
     }
+
+    if(ifTaskPanel and !lostTask)
+    {
+        myPen.setColor(QColor(152+(220-152)*pow(percentLine,2), 251-(251-20)*pow(percentLine,2), 152-(152-60)*pow(percentLine,2)));
+        myPen.setWidth(3);
+        drawer->setPen(myPen);
+        drawer->drawLine(20,77,(this->width()-20)*percentLine,77);
+    }
+    else if(ifTaskPanel and lostTask)
+    {
+        myBrush.setColor(QColor(220, 20, 60,40));
+        myPen.setColor(QColor(255,255,255,0));
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+        drawer->drawRect(0,0,this->width(),this->height());
+    }
+}
+
+QDate PTtab::deadLine() const
+{
+    return m_deadLine;
+}
+
+void PTtab::setDeadLine(QDate newDeadLine)
+{
+    m_deadLine = newDeadLine;
 }
 
 
@@ -93,6 +120,7 @@ void PTtab::setPicture(int choice)
         infoText->setText(infoString);
         infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*2)/2,
                               SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*2);
+        ifTaskPanel = true;
     }
 }
 
@@ -129,4 +157,14 @@ void PTtab::resizeByScroller(bool choice , QRect globalRect)
 
     }
 
+}
+
+void PTtab::setDateLine(float percentage)
+{
+    percentLine = percentage;
+}
+
+void PTtab::setUndone(bool choice)
+{
+    lostTask = choice;
 }

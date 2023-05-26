@@ -29,6 +29,7 @@ public:
 private:
     std::vector<PTtab*> taskPanels;
     std::vector<PTtab*> addTaskPanels;
+    std::vector<int> taskIdAdded;
     std::vector<int> taskId;
 
     QGraphicsDropShadowEffect* shadowSave;
@@ -49,6 +50,8 @@ private:
     QRect addTaskRect;
     QPushButton* addTaskBtn;
     QPushButton* cancelAddBtn;
+
+    QPushButton* deadSoon;
 
     int addTaskId = -1;
     double generalHeight = 0;
@@ -78,6 +81,8 @@ public slots:
     void showTaskPanels();
 
     void addEmployeeTask();
+
+    void sortTasks();
 
 signals:
     void changedSelected(int number);

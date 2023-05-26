@@ -18,6 +18,7 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
     chapter->setFont(SFProDisplay);
     chapter->setText("Creating Task");
     chapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Task"),SFProDislplayMetrics.height());
+    chapter->setStyleSheet("color: rgb(200,200,200);");
 
     SFProDisplay.setPixelSize(13);
 

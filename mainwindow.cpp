@@ -23,6 +23,9 @@ void MainWindow::resizeWindow()
     descriptionField->resize(this);
     refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
     windowTitle->move(this->width()/2-120,15);
+    myProfile->move(10,this->height()-40);
+    myProfileText->move(myProfile->geometry().topRight().x()+10,
+                        myProfile->geometry().topRight().y()+(myProfile->height()/2-myProfileText->height()/2));
     lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
     leftPanel->setGeometry(5,50,this->width()/6,this->height()-101);
     leftPanel->resizePanel();
@@ -57,10 +60,14 @@ MainWindow::MainWindow(QWidget *parent)
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    shadow = new QGraphicsDropShadowEffect(this);
-    shadow->setBlurRadius(30);
-    shadow->setOffset(0,0);
-    shadow->setColor(QColor(0,0,0,200));
+    for(int c=0;c<1;c++)
+    {
+        shadows.push_back(new QGraphicsDropShadowEffect(this));
+        shadows[c]->setBlurRadius(30);
+        shadows[c]->setOffset(0,0);
+        shadows[c]->setColor(QColor(0,0,0,200));
+    }
+
 
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     this->resize(QSize(1800,800));
@@ -73,6 +80,34 @@ MainWindow::MainWindow(QWidget *parent)
     leftPanel = new LeftPanel(dataBase,this);
     leftPanel->setMouseTracking(true);
     connect(leftPanel,&LeftPanel::changedSelected,this,&MainWindow::setSelected);
+
+    myProfile = new QPushButton(this);
+    myProfile->setGeometry(10,this->height()-40,30,30);
+    myProfile->setStyleSheet("QPushButton {"
+                             "border: 2px solid rgb(100,100,100);"
+                             "border-radius: 10px;"
+                             "background-color: rgb(40,40,40);"
+                             "}"
+                             "QPushButton:hover {"
+                             "background-color: rgb(20, 20, 20);"
+                             "color: rgb(80,80,80);"
+                             "}"
+                             "QPushButton:pressed {"
+                             "background-color: rgb(10,10,10);"
+                             "color: rgb(60,60,60);"
+                             "border: 1px solid rgb(40, 40, 40);"
+                             "}");
+    myProfile->setIcon(QIcon(QPixmap(":icons/profile_icon.png")));
+    myProfile->setIconSize(QSize(20,20));
+    connect(myProfile,&QPushButton::clicked,this,&MainWindow::myProfileSelected);
+
+    myProfileText = new QLabel(this);
+    myProfileText->setFont(SFProDisplay);
+    myProfileText->setText("My Profile");
+    myProfileText->setStyleSheet("color: rgb(150,150,150);");
+    myProfileText->resize(SFProDislplayMetrics.horizontalAdvance("My Profile"),SFProDislplayMetrics.height());
+    myProfileText->move(myProfile->geometry().topRight().x()+10,
+                        myProfile->geometry().topRight().y()+(myProfile->height()/2-myProfileText->height()/2));
 
     refreshButton = new QPushButton(this);
     refreshButton->setStyleSheet("QPushButton {"
@@ -608,6 +643,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::setSelected(int number)
 {
     selected = number;
+    leftPanel->setSelected(selected);
 }
 
 void MainWindow::deleteSlot()
@@ -633,6 +669,12 @@ void MainWindow::promoteSlot()
         connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
         test->show();
     }
+}
+
+void MainWindow::myProfileSelected()
+{
+    selected = lockScreen->getLogginedId();
+    emit leftPanel->changedSelected(selected);
 }
 
 void MainWindow::resizeByFilter(bool opened)

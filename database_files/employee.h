@@ -39,6 +39,7 @@ public:
     QDate hireDate();
     QDate* fireDate();
     Task* task(int);
+    std::vector<Task*> tasks();
     int tasksAmount();
     Rank* rank();
     Document* document(int);

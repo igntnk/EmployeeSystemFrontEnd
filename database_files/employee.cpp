@@ -33,7 +33,22 @@ QString Employee::username(){return m_username;}
 QString Employee::password(){return m_password;}
 QDate Employee::hireDate(){return m_hire_date;}
 QDate* Employee::fireDate(){return m_fire_date;}
-Task* Employee::task(int number){return m_task[number];}
+Task* Employee::task(int number)
+{
+    for(int c=0;c<m_task.size();c++)
+    {
+        if(m_task[c]->id() == number)
+        {
+            return m_task[c];
+        }
+    }
+    return nullptr;
+}
+
+std::vector<Task *> Employee::tasks()
+{
+    return m_task;
+}
 int Employee::tasksAmount(){return m_task.size();}
 Rank* Employee::rank(){return m_rank;}
 Document* Employee::document(int number){return m_document[number];}

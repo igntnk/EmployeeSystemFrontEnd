@@ -17,6 +17,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
     chapter->setFont(SFProDisplay);
     chapter->setText("Creating Employee");
     chapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Employee"),SFProDislplayMetrics.height());
+    chapter->setStyleSheet("color: rgb(200,200,200);");
 
     SFProDisplay.setPixelSize(13);
 

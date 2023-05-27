@@ -100,6 +100,11 @@ void RightPanel::resize()
                         ,QPoint(this->width(),this->height()));
 
     addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
+    updateTaskPanel();
+    if(addTaskMode)
+    {
+       setAddingPanels();
+    }
 
 }
 
@@ -141,11 +146,11 @@ void RightPanel::setAddingPanels()
     delete cancelAddBtn;
     delete deadSoon;
 
-    for(int c =0;c<referBase->tasksAmount();c++)
+    for(auto refTask:referBase->tasks())
     {
-        for(int a = 0; a< selectedEm->tasksAmount();a++)
+        for(auto emTask:selectedEm->tasks())
         {
-            if(referBase->task(c)->id() == selectedEm->task(a)->id())
+            if(refTask->id() == emTask->id())
             {
                 checker = true;
                 break;
@@ -158,16 +163,23 @@ void RightPanel::setAddingPanels()
         }
         addTaskPanels.push_back(new PTtab("",0,this));
         generalHeight += addTaskPanels[0]->height();
-        taskId.push_back(c);
-        QString taskName = referBase->task(c)->name();
-        if(taskName.length()>20)
+        taskId.push_back(refTask->id());
+        QString taskText = refTask->name();
+        if(taskText.length()>this->width()/16)
         {
-            taskName.truncate(20);
-            taskName += " ...";
+            taskText.truncate(this->width()/16);
+            taskText += " ...";
         }
+        QString taskDead = "Deadline: " + refTask->deadline().toString();
+        if(taskDead.length()>this->width()/16)
+        {
+            taskDead.truncate(this->width()/16);
+            taskDead += " ...";
+        }
+        taskText = taskText +'\n' + taskDead;
 
-        float taskLength = referBase->task(c)->startline().daysTo(referBase->task(c)->deadline());
-        float daysToEnd = QDate::currentDate().daysTo(referBase->task(c)->deadline());
+        float taskLength = refTask->startline().daysTo(refTask->deadline());
+        float daysToEnd = QDate::currentDate().daysTo(refTask->deadline());
         if(daysToEnd > 0)
         {
             float percentage = 1-(daysToEnd/taskLength);
@@ -179,9 +191,9 @@ void RightPanel::setAddingPanels()
             addTaskPanels[panNum]->setUndone(true);
         }
 
-        taskName = taskName +  '\n' + "Deadline: " + referBase->task(c)->deadline().toString();
-        addTaskPanels[panNum]->setPText(QString(taskName),2);
-        addTaskPanels[panNum]->setDeadLine(referBase->task(c)->deadline());
+        taskText = taskText +'\n' + taskDead;
+        addTaskPanels[panNum]->setPText(QString(taskText),2);
+        addTaskPanels[panNum]->setDeadLine(refTask->deadline());
         addTaskPanels[panNum]->move(0,taskToAdd->geometry().bottomLeft().y() + panNum*80);
         addTaskPanels[panNum]->show();
         panNum++;
@@ -440,14 +452,27 @@ void RightPanel::updateTaskPanel()
 
     for(auto task:selectedEm->tasks())
     {
-        QString taskName = task->name();
-        if(taskName.length()>20)
+        QString taskText = task->name();
+        if(taskText.length()>this->width()/14)
         {
-            taskName.truncate(20);
-            taskName += " ...";
+            taskText.truncate(this->width()/14);
+            taskText += " ...";
         }
-        taskName = taskName +'\n' + "Deadline: " + task->deadline().toString();
-        taskPanels.push_back(new PTtab(taskName,0,this));
+        QString taskDead = "Deadline: " + task->deadline().toString();
+        if(taskDead.length()>this->width()/14)
+        {
+            taskDead.truncate(this->width()/14);
+            taskDead += " ...";
+        }
+        QString taskResp = "Responce: " + referBase->employee(task->responce_id())->name() + " " +
+            referBase->employee(task->responce_id())->surname();
+        if(taskResp.length()>this->width()/14)
+        {
+            taskResp.truncate(this->width()/14);
+            taskResp += " ...";
+        }
+        taskText = taskText +'\n' + taskDead + '\n' + taskResp;
+        taskPanels.push_back(new PTtab(taskText,0,this));
         taskIdAdded.push_back(task->id());
         (taskPanels.back())->setDeadLine(task->deadline());
         float taskLength = task->startline().daysTo(task->deadline());

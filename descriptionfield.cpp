@@ -82,6 +82,10 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     startLineDate->setStyleSheet("color: rgb(100,100,100);");
     startLineDate->hide();
 
+    responceEmployee = new QLabel(this);
+    responceEmployee->setStyleSheet("color: rgb(100,100,100);");
+    responceEmployee->hide();
+
     m_name = new WritePanel(this);
     m_surname = new WritePanel(this);
     m_hiringDate = new QDateEdit(this);
@@ -288,6 +292,14 @@ void DescriptionField::changeDesc(int number)
     startLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Start Line: " + referBase->employee(selectedNum)->task(number)->startline().toString()),
                           SFProDislplayMetrics.height());
     startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
+
+    responceEmployee->setText("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->task(number)->responce_id())->name()+
+                              " " + referBase->employee(referBase->employee(selectedNum)->task(number)->responce_id())->surname());
+    responceEmployee->setFont(SFProDisplay);
+    responceEmployee->resize(SFProDislplayMetrics.horizontalAdvance("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->task(number)->responce_id())->name()+
+                                                                    " " + referBase->employee(referBase->employee(selectedNum)->task(number)->responce_id())->surname()),
+                             SFProDislplayMetrics.height());
+    responceEmployee->move(deadLineDate->geometry().topRight().x()+50,deadLineDate->geometry().topRight().y());
 }
 
 void DescriptionField::setEditMode()
@@ -420,6 +432,14 @@ void DescriptionField::setDescription()
 
     startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
 
+    responceEmployee->setText("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->name()+
+                              " " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->surname());
+    responceEmployee->setFont(SFProDisplay);
+    responceEmployee->resize(SFProDislplayMetrics.horizontalAdvance("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->name()+
+                                                                    " " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->surname()),
+                          SFProDislplayMetrics.height());
+    responceEmployee->move(deadLineDate->geometry().topRight().x()+50,deadLineDate->geometry().topRight().y());
+
     vacStart->setFont(SFProDisplay);
     vacEnd->setFont(SFProDisplay);
 
@@ -499,6 +519,7 @@ void DescriptionField::setVisibility(bool choice)
         startLineDate->show();
         deadLineDate->show();
         addVacationBtn->show();
+        responceEmployee->show();
     }
     else
     {
@@ -515,6 +536,7 @@ void DescriptionField::setVisibility(bool choice)
         addVacationBtn->hide();
         vacStart->hide();
         vacEnd->hide();
+        responceEmployee->hide();
     }
     this->update();
 }

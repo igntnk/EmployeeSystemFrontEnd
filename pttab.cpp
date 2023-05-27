@@ -37,8 +37,8 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
     {
         pixmap.load(":icons/devices_icon.png");
         picture->setPixmap(pixmap);
-        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*2)/2,
-                              SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*2);
+        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*3)/2,
+                              SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*3);
         ifTaskPanel = true;
     }
 
@@ -118,8 +118,8 @@ void PTtab::setPicture(int choice)
         pixmap.load(":icons/devices_icon.png");
         infoString = "Unknown Task\nUnknown Task Responsible;";
         infoText->setText(infoString);
-        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*2)/2,
-                              SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*2);
+        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*3)/2,
+                              SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*3);
         ifTaskPanel = true;
     }
 }

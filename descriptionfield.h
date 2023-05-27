@@ -52,6 +52,7 @@ private:
     QLabel* taskDescription;
     QLabel* startLineDate;
     QLabel* deadLineDate;
+    QLabel* responceEmployee;
     QLabel* chapter2;
     QLabel* employmentDate;
 

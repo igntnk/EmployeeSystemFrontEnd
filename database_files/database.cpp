@@ -8,6 +8,8 @@ DataBase::DataBase()
     referTask->setDescription("Create data base using PostgreSQL and Qt");
     referTask->setDeadline(QDate(2023,8,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(1);
+    referTask->setCompleteStage(3);
 
     m_tasks.push_back(referTask);
 
@@ -17,6 +19,8 @@ DataBase::DataBase()
     referTask->setDescription("Create textured cube model using OpenGl 1998 year version");
     referTask->setDeadline(QDate(2023,12,12));
     referTask->setStartline(QDate(2021,5,12));
+    referTask->setResponceId(2);
+    referTask->setCompleteStage(1);
 
     m_tasks.push_back(referTask);
 
@@ -26,6 +30,8 @@ DataBase::DataBase()
     referTask->setDescription("Create simple video with data base programm using After Effects");
     referTask->setDeadline(QDate(2023,5,12));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(1);
+    referTask->setCompleteStage(2);
 
     m_tasks.push_back(referTask);
 
@@ -35,6 +41,8 @@ DataBase::DataBase()
     referTask->setDescription("Task to checke working of the date line");
     referTask->setDeadline(QDate(2024,2,12));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(3);
+    referTask->setCompleteStage(0);
 
     m_tasks.push_back(referTask);
 
@@ -44,6 +52,8 @@ DataBase::DataBase()
     referTask->setDescription("trash task to make a size");
     referTask->setDeadline(QDate(2023,9,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(3);
+    referTask->setCompleteStage(1);
 
     m_tasks.push_back(referTask);
 
@@ -53,6 +63,8 @@ DataBase::DataBase()
     referTask->setDescription("trash task to make a size");
     referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(0);
+    referTask->setCompleteStage(3);
 
     m_tasks.push_back(referTask);
 
@@ -62,6 +74,8 @@ DataBase::DataBase()
     referTask->setDescription("trash task to make a size");
     referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(0);
+    referTask->setCompleteStage(3);
 
     m_tasks.push_back(referTask);
 
@@ -71,6 +85,8 @@ DataBase::DataBase()
     referTask->setDescription("trash task to make a size");
     referTask->setDeadline(QDate(2032,2,22));
     referTask->setStartline(QDate(2000,1,12));
+    referTask->setResponceId(3);
+    referTask->setCompleteStage(1);
 
     m_tasks.push_back(referTask);
 
@@ -80,6 +96,8 @@ DataBase::DataBase()
     referTask->setDescription("trash task to make a size");
     referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(3);
+    referTask->setCompleteStage(3);
 
     m_tasks.push_back(referTask);
 
@@ -89,6 +107,8 @@ DataBase::DataBase()
     referTask->setDescription("This task should be red colored");
     referTask->setDeadline(QDate(2023,4,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(2);
+    referTask->setCompleteStage(1);
 
     m_tasks.push_back(referTask);
 
@@ -98,6 +118,8 @@ DataBase::DataBase()
     referTask->setDescription("trash task to make a size");
     referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
+    referTask->setResponceId(0);
+    referTask->setCompleteStage(3);
 
     m_tasks.push_back(referTask);
 
@@ -469,7 +491,14 @@ int DataBase::tasksAmount()
 
 Task *DataBase::task(int number)
 {
-    return m_tasks[number];
+    for(int c=0;c<m_tasks.size();c++)
+    {
+        if(m_tasks[c]->id() == number)
+        {
+            return m_tasks[c];
+        }
+    }
+    return nullptr;
 }
 
 Task *DataBase::task(QString name)

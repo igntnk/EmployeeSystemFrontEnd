@@ -10,7 +10,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
     parentSize = parent->geometry();
-    this->setGeometry(parent->width()-parent->width()/6-2,50,parent->width()/6,parent->height()-101);
+    this->setGeometry(parent->width()-parent->width()/6-2,50,parent->width()/6-5,parent->height()-101);
     this->setMouseTracking(true);
     selectedEm->setId(-1);
     referBase = refer;
@@ -98,6 +98,18 @@ void RightPanel::resize()
 
     addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10)
                         ,QPoint(this->width(),this->height()));
+
+    employeeTasks->move(12,10);
+    for(int c =0;c < addTaskPanels.size();c++)
+    {
+        addTaskPanels[c]->move(0,taskToAdd->geometry().bottomLeft().y() + c*80);
+    }
+
+    for(int c=0;c<taskPanels.size();c++)
+    {
+
+        taskPanels[c]->move(0,employeeTasks->geometry().bottomLeft().y()+80*c);
+    }
 
     addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
     updateTaskPanel();

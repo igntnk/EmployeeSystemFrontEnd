@@ -385,7 +385,9 @@ void DescriptionField::setInfo()
     profileInfo->setStyleSheet("color: rgb(130,130,130);");
 
     m_name->move(profileInfo->geometry().topLeft().x(),profileInfo->geometry().topLeft().y());
+    m_name->setText(referBase->employee(selectedNum)->name());
     m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomLeft().y()+2);
+    m_surname->setText(referBase->employee(selectedNum)->surname());
     m_hiringDate->move(employmentDate->geometry().topLeft().x(),employmentDate->geometry().topLeft().y()-3);
     m_hiringDate->setDate(referBase->employee(selectedNum)->hireDate());
 }
@@ -482,8 +484,11 @@ QString DescriptionField::searchLongestWord(Employee* refer)
 {
     QString longest = refer->name();
 
-    if(longest.length() < refer->surname().length()){longest = refer->surname();}
-    if(longest.length() < refer->rank()->name().length()){longest = refer->rank()->name();}
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    if(SFProDislplayMetrics.horizontalAdvance(longest) <
+        SFProDislplayMetrics.horizontalAdvance(refer->surname())){longest = refer->surname();}
+    if(SFProDislplayMetrics.horizontalAdvance(longest) <
+        SFProDislplayMetrics.horizontalAdvance(refer->rank()->name())){longest = refer->rank()->name();}
 
     return longest;
 }

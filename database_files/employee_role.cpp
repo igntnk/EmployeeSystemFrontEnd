@@ -14,13 +14,11 @@ EmployeeRole::~EmployeeRole()
 
 void EmployeeRole::setEmployee(Employee *employee)
 {
-    if(m_employee!=nullptr){delete m_employee;}
     m_employee = employee;
 }
 
 void EmployeeRole::setRole(Role *role)
 {
-    if(m_role!=nullptr){delete m_role;}
     m_role = role;
 }
 

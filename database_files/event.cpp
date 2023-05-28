@@ -42,7 +42,6 @@ void Event::setName(QString name)
 
 void Event::setEmployee(Employee *employee)
 {
-    if(m_employee!=nullptr){delete m_employee;}
     m_employee = employee;
 }
 

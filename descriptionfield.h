@@ -47,7 +47,6 @@ private:
     QLabel* profilePict;
     QLabel* chapters;
     QLabel* profileInfo;
-    QLabel* department;
     QLabel* chapter1;
     QLabel* taskDescription;
     QLabel* startLineDate;

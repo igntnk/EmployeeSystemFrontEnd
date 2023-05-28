@@ -123,63 +123,39 @@ DataBase::DataBase()
 
     m_tasks.push_back(referTask);
 
-    Department* referDep = new Department();
-    referDep->setId(departmentsAmount());
-    referDep->setName("Programming");
-
-    m_departments.push_back(referDep);
-
-    referDep = new Department();
-    referDep->setId(departmentsAmount());
-    referDep->setName("Video Editor");
-
-    m_departments.push_back(referDep);
-
-    referDep = new Department();
-    referDep->setId(departmentsAmount());
-    referDep->setName("Text editor");
-
-    m_departments.push_back(referDep);
-
     Rank* referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Admin");
-    referRank->setDepartment(department(1));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Director");
-    referRank->setDepartment(department(0));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Assistant");
-    referRank->setDepartment(department(1));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Manager");
-    referRank->setDepartment(department(0));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Instructor");
-    referRank->setDepartment(department(2));
 
     m_ranks.push_back(referRank);
 
     referRank = new Rank();
     referRank->setId(ranksAmount());
     referRank->setName("Worker");
-    referRank->setDepartment(department(2));
 
     m_ranks.push_back(referRank);
 
@@ -577,50 +553,6 @@ void DataBase::changeRank(Rank *rank, int number)
 {
     delete m_ranks[number];
     m_ranks[number] = rank;
-}
-
-////////////////////////////
-/// DataBase::department
-///
-///
-
-int DataBase::departmentsAmount()
-{
-    return m_departments.size();
-}
-
-Department *DataBase::department(int number)
-{
-    return m_departments[number];
-}
-
-Department *DataBase::department(QString name)
-{
-    for(int c=0;c<m_departments.size();c++)
-    {
-        if(m_departments[c]->name() == name)
-        {
-            return m_departments[c];
-        }
-    }
-    return nullptr;
-}
-
-void DataBase::addDepartment(Department *department)
-{
-    m_departments.push_back(department);
-}
-
-void DataBase::removeDepartment(int number)
-{
-    delete m_departments[number];
-    m_departments.erase(m_departments.begin()+number);
-}
-
-void DataBase::changeDepartment(Department *department, int number)
-{
-    delete m_departments[number];
-    m_departments[number] = department;
 }
 
 ////////////////////////////

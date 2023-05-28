@@ -30,7 +30,6 @@ void Vacation::setEndDate(QDate end_date)
 
 void Vacation::setEmployee(Employee *employee)
 {
-    if(m_employee != nullptr){delete m_employee;}
     m_employee = employee;
 }
 

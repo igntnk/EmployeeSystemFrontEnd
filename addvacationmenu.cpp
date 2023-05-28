@@ -212,7 +212,7 @@ void AddVacationMenu::showMenu()
 void AddVacationMenu::addToBase()
 {
     referVac->setId(localBase->vacation(localBase->vacationsAmount()-1)->id()+1);
-    referVac->setEmployee(localBase->employee(m_employee->currentIndex()));
+    referVac->setEmployee(localBase->employee(0));
     referVac->setBeginDate(m_beginDate->date());
     referVac->setEndDate(m_endDate->date());
 

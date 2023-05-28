@@ -310,6 +310,7 @@ void LeftPanel::updateProfilesList()
                 localBase->vacation(a)->endDate() > QDate::currentDate())
             {
                 contVac=true;
+                break;
             }
         }
         if(contVac){continue;}
@@ -341,6 +342,7 @@ void LeftPanel::updateProfilesList()
             {
                 contVac=false;
                 d++;
+                break;
             }
         }
         if(contVac){continue;}

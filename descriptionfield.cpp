@@ -45,9 +45,6 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     profileInfo = new QLabel(this);
     profileInfo->hide();
 
-    department = new QLabel(this);
-    department->hide();
-
     chapter1 = new QLabel(this);
     chapter1->setFont(SFProDisplay);
     chapter1->setText("Task Decription");
@@ -226,9 +223,6 @@ void DescriptionField::doPainting(QPainter* drawer)
         drawer->drawLine(chapter2->geometry().topRight().x()+lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2,                 //Employment Date
                          this->width()-lineShift,chapter2->geometry().topRight().y()+chapter2->height()/2+2);
 
-        myPath.moveTo(0,0);
-        myPath.addRoundedRect(QRect(department->geometry().topLeft().x()-5,
-                                    department->geometry().topLeft().y()+2,department->width()+10,department->height()),5,5);
 
         myPen.setColor(QColor(200,200,200));
         myPen.setWidth(1);
@@ -361,7 +355,6 @@ void DescriptionField::resize(QMainWindow* changed)
     chapter1->move(pictureShift,chapter1Shift);
     chapter2->move(pictureShift,this->height()-this->height()/5);
     employmentDate->move(chapter2->geometry().bottomLeft().x(), chapter2->geometry().bottomLeft().y()+20);
-    department->move(this->width()/1.6,profileInfo->geometry().center().y());
     cancel->move(this->width()/2+5,this->height()-50);
     save->move(this->width()/2-105,this->height()-50);
     deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
@@ -390,13 +383,6 @@ void DescriptionField::setInfo()
                              chapters->geometry().topRight().y(),
                              SFProDislplayMetrics.horizontalAdvance(searchLongestWord(referBase->employee(selectedNum)))+10,SFProDislplayMetrics.height()*3);
     profileInfo->setStyleSheet("color: rgb(130,130,130);");
-
-    department->setText("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name());
-    department->setFont(SFProDisplay);
-    department->setGeometry(this->width()/1.6,profileInfo->geometry().center().y(),
-                            SFProDislplayMetrics.horizontalAdvance("Depatment: " + referBase->employee(selectedNum)->rank()->department()->name()),
-                            SFProDislplayMetrics.height());
-    department->setStyleSheet("color: rgb(130,130,130);");
 
     m_name->move(profileInfo->geometry().topLeft().x(),profileInfo->geometry().topLeft().y());
     m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomLeft().y()+2);
@@ -514,7 +500,6 @@ void DescriptionField::setVisibility(bool choice)
         chapter1->show();
         chapter2->show();
         taskDescription->show();
-        department->show();
         employmentDate->show();
         startLineDate->show();
         deadLineDate->show();
@@ -529,7 +514,6 @@ void DescriptionField::setVisibility(bool choice)
         chapter1->hide();
         chapter2->hide();
         taskDescription->hide();
-        department->hide();
         employmentDate->hide();
         startLineDate->hide();
         deadLineDate->hide();

@@ -54,8 +54,6 @@ add_executable(EmployeeSystemFrontend
          database_files/document.cpp
          database_files/payment.h
          database_files/payment.cpp
-         database_files/department.h
-         database_files/department.cpp
          database_files/vacation.h
          database_files/vacation.cpp
          database_files/employee_role.h

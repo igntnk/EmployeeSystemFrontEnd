@@ -47,13 +47,6 @@ public:
     void removeRank(int number);
     void changeRank(Rank* rank, int number);
 
-    int departmentsAmount();
-    Department* department(int number);
-    Department* department(QString name);
-    void addDepartment(Department* department);
-    void removeDepartment(int number);
-    void changeDepartment(Department* department, int number);
-
     int documentsAmount();
     Document* document(int number);
     Document* document(QString name);
@@ -108,7 +101,6 @@ private:
     std::vector<Employee*> m_employeers;
     std::vector<Task*> m_tasks;
     std::vector<Rank*> m_ranks;
-    std::vector<Department*> m_departments;
     std::vector<Document*> m_documents;
     std::vector<Payment*> m_payments;
     std::vector<Event*> m_events;

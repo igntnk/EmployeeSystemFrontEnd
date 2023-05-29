@@ -63,6 +63,7 @@ void PTtab::doPainting(QPainter* drawer)
 
     QPen myPen;
     QBrush myBrush;
+    QPainterPath myPath;
 
     myPen.setColor(QColor(255,255,255,0));
     myBrush.setColor(QColor(255,255,255,30));
@@ -76,26 +77,93 @@ void PTtab::doPainting(QPainter* drawer)
         drawer->drawRect(1,1,this->width()-2,this->height()-2);
     }
 
-    if(ifTaskPanel and !lostTask)
+    if(ifTaskPanel and !lostTask and m_completeStage != 3)
     {
         myPen.setColor(QColor(152+(220-152)*pow(percentLine,2), 251-(251-20)*pow(percentLine,2), 152-(152-60)*pow(percentLine,2)));
         myPen.setWidth(3);
         drawer->setPen(myPen);
         drawer->drawLine(20,77,(this->width()-20)*percentLine,77);
     }
-    else if(ifTaskPanel and lostTask)
+    else if(ifTaskPanel and lostTask and m_completeStage != 3)
     {
         myBrush.setColor(QColor(220, 20, 60,40));
         myPen.setColor(QColor(255,255,255,0));
+        myPen.setWidth(3);
         drawer->setPen(myPen);
         drawer->setBrush(myBrush);
         drawer->drawRect(0,0,this->width(),this->height());
+    }
+    if(m_completeStage == 0)
+    {
+        myPen.setColor(QColor(120,120,120));
+        myPen.setWidth(2);
+        myBrush.setColor(QColor(0, 0, 0,0));
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+        myPath.moveTo(picture->geometry().bottomRight().x()-7,picture->geometry().bottomRight().y()-5);
+        myPath.lineTo(picture->geometry().bottomRight().x()-4,picture->geometry().bottomRight().y()-2);
+        myPath.lineTo(picture->geometry().bottomRight().x()+4,picture->geometry().bottomRight().y()-10);
+        drawer->drawPath(myPath);
+    }
+    if(m_completeStage == 1)
+    {
+        myPen.setColor(QColor(150,150,150));
+        myPen.setWidth(2);
+        myBrush.setColor(QColor(0, 0, 0,0));
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+        myPath.moveTo(picture->geometry().bottomRight().x()-7,picture->geometry().bottomRight().y()-5);
+        myPath.lineTo(picture->geometry().bottomRight().x()-4,picture->geometry().bottomRight().y()-2);
+        myPath.lineTo(picture->geometry().bottomRight().x()+4,picture->geometry().bottomRight().y()-10);
+        myPath.moveTo(picture->geometry().bottomRight().x()+1,picture->geometry().bottomRight().y()-2);
+        myPath.lineTo(picture->geometry().bottomRight().x()+9,picture->geometry().bottomRight().y()-10);
+        drawer->drawPath(myPath);
+    }
+    if(m_completeStage == 2)
+    {
+        myPen.setColor(QColor(150,150,150));
+        myPen.setWidth(2);
+        myBrush.setColor(QColor(0, 0, 0,0));
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+        drawer->drawEllipse(picture->geometry().bottomRight().x()-10,picture->geometry().bottomRight().y()-8,
+                          14,14);
+        myPen.setWidth(1);
+        drawer->setPen(myPen);
+        myPath.moveTo(picture->geometry().bottomRight().x()-3,picture->geometry().bottomRight().y()-5);
+        myPath.lineTo(picture->geometry().bottomRight().x()-3,picture->geometry().bottomRight().y());
+        myPath.lineTo(picture->geometry().bottomRight().x(),picture->geometry().bottomRight().y());
+        drawer->drawPath(myPath);
+    }
+    if(m_completeStage == 3)
+    {
+        myPen.setColor(QColor(123, 166, 101));
+        myPen.setWidth(3);
+        myBrush.setColor(QColor(0, 0, 0,0));
+        drawer->setPen(myPen);
+        drawer->setBrush(myBrush);
+
+        myPath.moveTo(picture->geometry().bottomRight().x()-7,picture->geometry().bottomRight().y()-5);
+        myPath.lineTo(picture->geometry().bottomRight().x()-4,picture->geometry().bottomRight().y()-2);
+        myPath.lineTo(picture->geometry().bottomRight().x()+4,picture->geometry().bottomRight().y()-10);
+        drawer->drawPath(myPath);
+
     }
 }
 
 QDate PTtab::deadLine() const
 {
     return m_deadLine;
+}
+
+void PTtab::setCompleteStage(int stage)
+{
+    m_completeStage  = stage;
+}
+
+int PTtab::completeStage()
+{
+    return m_completeStage;
 }
 
 void PTtab::setDeadLine(QDate newDeadLine)

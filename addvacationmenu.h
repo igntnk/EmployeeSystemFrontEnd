@@ -34,7 +34,9 @@ private:
 
     QComboBox* m_employee;
     QDateTimeEdit* m_beginDate;
+    QLabel* m_beginDate_chapter;
     QDateTimeEdit* m_endDate;
+    QLabel* m_endDate_chapter;
     QCheckBox* currentDate;
 
     QPushButton* m_enter;

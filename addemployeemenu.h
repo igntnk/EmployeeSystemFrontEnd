@@ -39,7 +39,6 @@ private:
     WritePanel* m_name;
     WritePanel* m_surname;
     QComboBox* m_document;
-    QComboBox* m_task;
     WritePanel* m_username;
     WritePanel* m_password;
     QDateTimeEdit* m_hiringDate;

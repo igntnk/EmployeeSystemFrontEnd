@@ -9,7 +9,7 @@ DataBase::DataBase()
     referTask->setDeadline(QDate(2023,8,22));
     referTask->setStartline(QDate(2023,1,12));
     referTask->setResponceId(1);
-    referTask->setCompleteStage(3);
+    referTask->setCompleteStage(0);
 
     m_tasks.push_back(referTask);
 
@@ -97,7 +97,7 @@ DataBase::DataBase()
     referTask->setDeadline(QDate(2024,2,22));
     referTask->setStartline(QDate(2023,1,12));
     referTask->setResponceId(3);
-    referTask->setCompleteStage(3);
+    referTask->setCompleteStage(0);
 
     m_tasks.push_back(referTask);
 
@@ -415,6 +415,11 @@ Employee *DataBase::employee(QString name)
         }
     }
     return nullptr;
+}
+
+Employee *DataBase::employeeByIndex(int index)
+{
+    return m_employeers[index];
 }
 
 std::vector<Employee *> DataBase::employees()
@@ -838,6 +843,16 @@ void DataBase::changeAuthority(Authority *authority, int number)
 {
     delete m_authorities[number];
     m_authorities[number] = authority;
+}
+
+void DataBase::setLoggindeId(int logginedId)
+{
+    m_logginedId = logginedId;
+}
+
+int DataBase::loggindeId()
+{
+    return m_logginedId;
 }
 
 

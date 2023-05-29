@@ -45,6 +45,8 @@ Task* Employee::task(int number)
     return nullptr;
 }
 
+Task *Employee::firstTask(){ return m_task[0];}
+
 std::vector<Task *> Employee::tasks()
 {
     return m_task;

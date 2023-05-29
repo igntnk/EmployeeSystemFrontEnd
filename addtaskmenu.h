@@ -33,7 +33,9 @@ private:
     WritePanel* m_name;
     WritePanel* m_description;
     QDateTimeEdit* m_startline;
+    QLabel* m_srartline_chapter;
     QDateTimeEdit* m_deadline;
+    QLabel* m_deadline_chapter;
     QCheckBox* currentDate;
 
     QPushButton* m_enter;

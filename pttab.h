@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QPainter>
+#include <QPainterPath>
 #include <QMainWindow>
 #include <QFontMetrics>
 #include <QFont>
@@ -34,6 +35,9 @@ public:
     void setDeadLine(QDate newDeadLine);
     QDate deadLine() const;
 
+    void setCompleteStage(int stage);
+    int completeStage();
+
 private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
@@ -58,6 +62,8 @@ private:
     QLabel* picture;
 
     QDate m_deadLine;
+
+    int m_completeStage = -1;
 };
 
 #endif // PTTAB_H

@@ -16,13 +16,17 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     addVacationChapter = new QLabel(this);
     addVacationChapter->setFont(SFProDisplay);
     addVacationChapter->setText("Creating Vacation");
+    addVacationChapter->setStyleSheet("color: rgb(200,200,200);");
     addVacationChapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Vacation"),SFProDislplayMetrics.height());
 
-    SFProDisplay.setPixelSize(13);
+    SFProDisplay.setPixelSize(15);
+    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
 
     m_employee = new QComboBox(this);
     m_beginDate = new QDateTimeEdit(this);
+    m_beginDate_chapter = new QLabel(this);
     m_endDate = new QDateTimeEdit(this);
+    m_endDate_chapter = new QLabel(this);
     currentDate = new QCheckBox(this);
     m_enter = new QPushButton(this);
     m_cancel = new QPushButton(this);
@@ -35,6 +39,21 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     addVacationChapter->move(this->width()/2-addVacationChapter->width()/2,m_employee->geometry().topLeft().y()-70);
     m_beginDate->move(m_employee->geometry().bottomLeft().x(),m_employee->geometry().bottomRight().y()+panelsShift);
     m_endDate->move(m_beginDate->geometry().bottomLeft().x(),m_beginDate->geometry().bottomRight().y()+panelsShift);
+
+    m_beginDate_chapter->setFont(SFProDisplay);
+    m_beginDate_chapter->setText("Start date:");
+    m_beginDate_chapter->resize(SFProDislplayMetrics.horizontalAdvance("Start date:"), SFProDislplayMetrics.height());
+    m_beginDate_chapter->move(m_beginDate->geometry().topLeft().x()-m_beginDate_chapter->width()-panelsShift,
+                              m_beginDate->geometry().topLeft().y()+m_beginDate_chapter->height()/1.5);
+    m_beginDate_chapter->setStyleSheet("color: rgb(180,180,180)");
+
+    m_endDate_chapter->setFont(SFProDisplay);
+    m_endDate_chapter->setText("End date:");
+    m_endDate_chapter->resize(SFProDislplayMetrics.horizontalAdvance("End date:"), SFProDislplayMetrics.height());
+    m_endDate_chapter->move(m_endDate->geometry().topLeft().x()-m_endDate_chapter->width()-panelsShift,
+                             m_endDate->geometry().topLeft().y()+m_endDate_chapter->height()/1.5);
+    m_endDate_chapter->setStyleSheet("color: rgb(180,180,180)");
+
 
     m_beginDate->setFont(SFProDisplay);
     m_beginDate->setStyleSheet("QDateTimeEdit {"
@@ -128,6 +147,7 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
 void AddVacationMenu::setDefault()
 {
     currentDate->setCheckState(Qt::Unchecked);
+    m_employee->clear();
 }
 
 void AddVacationMenu::resize(QRect parent)
@@ -141,6 +161,11 @@ void AddVacationMenu::resize(QRect parent)
 
     m_enter->move(m_endDate->geometry().center().x()-50,m_endDate->geometry().bottomLeft().y()+20);
     m_cancel->move(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10);
+
+    m_beginDate_chapter->move(m_beginDate->geometry().topLeft().x()-m_beginDate_chapter->width()-panelsShift,
+                              m_beginDate->geometry().topLeft().y()+m_beginDate_chapter->height()/2);
+    m_endDate_chapter->move(m_endDate->geometry().topLeft().x()-m_endDate_chapter->width()-panelsShift,
+                            m_endDate->geometry().topLeft().y()+m_endDate_chapter->height()/2);
 }
 
 void AddVacationMenu::paintEvent(QPaintEvent *event)
@@ -184,6 +209,8 @@ void AddVacationMenu::on_checkBox_stateChanged(int arg1)
     {
         m_beginDate->setDate(QDate::currentDate());
         m_beginDate->setTime(QTime(12,30));
+        m_endDate->setDate(QDate::currentDate());
+        m_endDate->setTime(QTime(12,30));
     }
     else
     {
@@ -212,11 +239,12 @@ void AddVacationMenu::showMenu()
 void AddVacationMenu::addToBase()
 {
     referVac->setId(localBase->vacation(localBase->vacationsAmount()-1)->id()+1);
-    referVac->setEmployee(localBase->employee(0));
+    referVac->setEmployee(localBase->employeeByIndex(m_employee->currentIndex()));
     referVac->setBeginDate(m_beginDate->date());
     referVac->setEndDate(m_endDate->date());
 
     localBase->addVacation(referVac);
+    referVac = new Vacation();
     emit baseChanged();
     setDefault();
     this->hide();

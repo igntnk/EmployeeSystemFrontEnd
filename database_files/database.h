@@ -27,6 +27,7 @@ public:
     int employeesAmount();
     Employee* employee(int number);
     Employee* employee(QString name);
+    Employee *employeeByIndex(int index);
     std::vector<Employee*> employees();
     void addEmployee(Employee* employee);
     void removeEmployee(int number);
@@ -96,7 +97,11 @@ public:
     void removeAuthority(int number);
     void changeAuthority(Authority* authority, int number);
 
+    void setLoggindeId(int);
+    int loggindeId();
+
 private:
+    int m_logginedId= -1;
     std::vector<Vacation*> m_vacations;
     std::vector<Employee*> m_employeers;
     std::vector<Task*> m_tasks;

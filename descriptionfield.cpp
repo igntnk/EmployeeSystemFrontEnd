@@ -294,6 +294,35 @@ void DescriptionField::changeDesc(int number)
                                                                     " " + referBase->employee(referBase->employee(selectedNum)->task(number)->responce_id())->surname()),
                              SFProDislplayMetrics.height());
     responceEmployee->move(deadLineDate->geometry().topRight().x()+50,deadLineDate->geometry().topRight().y());
+
+    for(int a=0;a<referBase->vacationsAmount();a++)
+    {
+        if(referBase->employee(selectedNum)->id() == referBase->vacation(a)->employee()->id() and
+            referBase->vacation(a)->endDate() > QDate::currentDate())
+        {
+            isInVac = true;
+            vacStart->setFont(SFProDisplay);
+            vacStart->setText("Vacation Start Date: " + referBase->vacation(a)->beginDate().toString());
+            vacEnd->setText("Vacation End Date: " + referBase->vacation(a)->endDate().toString());
+            vacEnd->setFont(SFProDisplay);
+
+            vacStart->resize(SFProDislplayMetrics.horizontalAdvance("Vacation Start Date: " + QString(referBase->vacation(a)->beginDate().toString())),
+                             SFProDislplayMetrics.height());
+            vacEnd->resize(SFProDislplayMetrics.horizontalAdvance("Vacation End Date: " + QString(referBase->vacation(a)->endDate().toString())),
+                           SFProDislplayMetrics.height());
+
+            vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
+            vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
+
+            vacStart->show();
+            vacEnd->show();
+            break;
+        }
+
+        isInVac = false;
+        vacStart->hide();
+        vacEnd->hide();
+    }
 }
 
 void DescriptionField::setEditMode()
@@ -402,29 +431,29 @@ void DescriptionField::setDescription()
     SFProDisplay.setPixelSize(18);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    taskDescription->setText(referBase->employee(selectedNum)->task(0)->description());
+    taskDescription->setText(referBase->employee(selectedNum)->firstTask()->description());
     taskDescription->setFont(SFProDisplay);
     taskDescription->setGeometry(chapter1->geometry().bottomLeft().x(), chapter1->geometry().bottomLeft().y()+20,
-                                 SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->task(0)->description()),SFProDislplayMetrics.height());
+                                 SFProDislplayMetrics.horizontalAdvance(referBase->employee(selectedNum)->firstTask()->description()),SFProDislplayMetrics.height());
 
-    deadLineDate->setText("Dead Line: " + referBase->employee(selectedNum)->task(0)->deadline().toString());
+    deadLineDate->setText("Dead Line: " + referBase->employee(selectedNum)->firstTask()->deadline().toString());
     deadLineDate->setFont(SFProDisplay);
-    deadLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Dead Line: " + referBase->employee(selectedNum)->task(0)->deadline().toString()),
+    deadLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Dead Line: " + referBase->employee(selectedNum)->firstTask()->deadline().toString()),
                          SFProDislplayMetrics.height());
     deadLineDate->move(this->width()/2-deadLineDate->width()/2,chapter2->geometry().topLeft().y()-30);
 
-    startLineDate->setText("Start Line: " + referBase->employee(selectedNum)->task(0)->startline().toString());
+    startLineDate->setText("Start Line: " + referBase->employee(selectedNum)->firstTask()->startline().toString());
     startLineDate->setFont(SFProDisplay);
-    startLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Start Line: " + referBase->employee(selectedNum)->task(0)->startline().toString()),
+    startLineDate->resize(SFProDislplayMetrics.horizontalAdvance("Start Line: " + referBase->employee(selectedNum)->firstTask()->startline().toString()),
                           SFProDislplayMetrics.height());
 
     startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
 
-    responceEmployee->setText("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->name()+
-                              " " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->surname());
+    responceEmployee->setText("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->firstTask()->responce_id())->name()+
+                              " " + referBase->employee(referBase->employee(selectedNum)->firstTask()->responce_id())->surname());
     responceEmployee->setFont(SFProDisplay);
-    responceEmployee->resize(SFProDislplayMetrics.horizontalAdvance("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->name()+
-                                                                    " " + referBase->employee(referBase->employee(selectedNum)->task(0)->responce_id())->surname()),
+    responceEmployee->resize(SFProDislplayMetrics.horizontalAdvance("Responce by this task: " + referBase->employee(referBase->employee(selectedNum)->firstTask()->responce_id())->name()+
+                                                                    " " + referBase->employee(referBase->employee(selectedNum)->firstTask()->responce_id())->surname()),
                           SFProDislplayMetrics.height());
     responceEmployee->move(deadLineDate->geometry().topRight().x()+50,deadLineDate->geometry().topRight().y());
 

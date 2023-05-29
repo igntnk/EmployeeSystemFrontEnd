@@ -3,7 +3,7 @@
 LockScreen::LockScreen(DataBase* passwordRefer, QMainWindow* parent):
     QLabel(parent)
 {
-    QFont SFProDisplay = QFont("SF Pro Display", 13);
+    SFProDisplay = QFont("SF Pro Display", 13);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
@@ -125,6 +125,8 @@ void LockScreen::doPainting(QPainter* drawer)
 
 void LockScreen::resizeEvent(QResizeEvent *event)
 {
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
     picture->move(this->width()/2-100,this->height()/7);
 
     username->move(picture->geometry().center().x()-username->width()/2,picture->geometry().bottomLeft().y()+30);
@@ -132,6 +134,9 @@ void LockScreen::resizeEvent(QResizeEvent *event)
 
     enter->move(password->geometry().center().x()-50,password->geometry().bottomLeft().y()+20);
     exit->move(password->geometry().center().x()-50,enter->geometry().bottomLeft().y()+10);
+
+    wrongPass->move(enter->geometry().center().x()-SFProDislplayMetrics.horizontalAdvance("Wrong password or username")/2,
+                    exit->geometry().bottomLeft().y()+20);
 }
 
 void LockScreen::checkPasswords()
@@ -143,6 +148,7 @@ void LockScreen::checkPasswords()
         {
             pass = true;
             logginedId = refer->employee(c)->id();
+            refer->setLoggindeId(logginedId);
         }
     }
 

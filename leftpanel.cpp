@@ -282,16 +282,19 @@ void LeftPanel::updateProfilesList()
     scrollShift = 0;
     inWork->move(12,10);
 
-    for(int c=0;c<profilePanelsInWork.size();)
+    for(int c =0;c<(profilePanelsInWork.size()+profilePanelsInVacation.size());c++)
     {
         generalHeight -= profilePanelsInWork[0]->height();
+    }
+
+    for(int c=0;c<profilePanelsInWork.size();)
+    {
         delete profilePanelsInWork[c];
         profilePanelsInWork.erase(profilePanelsInWork.begin());
     }
 
     for(int c=0;c<profilePanelsInVacation.size();)
     {
-        generalHeight -= profilePanelsInVacation[0]->height();
         delete profilePanelsInVacation[c];
         profilePanelsInVacation.erase(profilePanelsInVacation.begin());
     }
@@ -329,7 +332,7 @@ void LeftPanel::updateProfilesList()
     }
 
     inWork->move(12,10);
-
+    inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
 
     d=-1;
     for(auto c: localBase->employees())
@@ -358,8 +361,6 @@ void LeftPanel::updateProfilesList()
         inVacNum.push_back(c->id());
         generalHeight += profilePanelsInVacation[d]->height();
     }
-
-    inVacation->move(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y());
 
     this->update();
 

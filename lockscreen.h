@@ -20,6 +20,8 @@ public:
 
     int getLogginedId();
 private:
+    QFont SFProDisplay;
+
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 

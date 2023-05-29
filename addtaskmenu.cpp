@@ -42,6 +42,9 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
 
     chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-50);
 
+    SFProDisplay.setPixelSize(15);
+    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
+
     m_startline->setGeometry(parent->width()/2-100,m_description->geometry().bottomRight().y()+panelsShift,
                               200,40);
     m_startline->setFont(SFProDisplay);
@@ -58,6 +61,16 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
                                 "QDateTimeEdit:down-button {"
                                 "width:0px"
                                 "}");
+
+    m_srartline_chapter = new QLabel(this);
+    m_srartline_chapter->setFont(SFProDisplay);
+    m_srartline_chapter->setText("Startline date:");
+    m_srartline_chapter->resize(SFProDislplayMetrics.horizontalAdvance("Startline date:"), SFProDislplayMetrics.height());
+    m_srartline_chapter->move(m_startline->geometry().topLeft().x()-m_srartline_chapter->width()-panelsShift,
+                              m_startline->geometry().topLeft().y()+m_srartline_chapter->height()/2);
+    m_srartline_chapter->setStyleSheet("color: rgb(150,150,150)");
+
+
     m_deadline->setGeometry(parent->width()/2-100,m_startline->geometry().bottomRight().y()+panelsShift,
                              200,40);
     m_deadline->setFont(SFProDisplay);
@@ -65,7 +78,6 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
 
     currentDate->move(m_startline->geometry().bottomRight().x()+3,m_startline->geometry().topRight().y());
     currentDate->setText("Set Current Date");
-    SFProDisplay.setPixelSize(15);
     currentDate->setFont(SFProDisplay);
     currentDate->setStyleSheet("QCheckBox {"
                                      "background-color: rgb(20,20,20);"
@@ -78,6 +90,14 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
                                      "left: 5px;"
                                      "width: 20px;"
                                      "height: 20px;}");
+
+    m_deadline_chapter = new QLabel(this);
+    m_deadline_chapter->setFont(SFProDisplay);
+    m_deadline_chapter->setText("Deadline date:");
+    m_deadline_chapter->resize(SFProDislplayMetrics.horizontalAdvance("Deadline date:"), SFProDislplayMetrics.height());
+    m_deadline_chapter->move(m_deadline->geometry().topLeft().x()-m_srartline_chapter->width()-panelsShift,
+                             m_deadline->geometry().topLeft().y()+m_srartline_chapter->height()/2);
+    m_deadline_chapter->setStyleSheet("color: rgb(150,150,150)");
 
     connect(currentDate,&QCheckBox::stateChanged,this,&AddTaskMenu::on_checkBox_stateChanged);
 
@@ -130,6 +150,10 @@ void AddTaskMenu::resize(QRect parent)
     m_enter->move(m_name->geometry().center().x()-50,m_deadline->geometry().bottomLeft().y()+20);
     m_cancel->move(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10);
     chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-50);
+    m_srartline_chapter->move(m_startline->geometry().topLeft().x()-m_srartline_chapter->width()-panelsShift,
+                              m_startline->geometry().topLeft().y()+m_srartline_chapter->height()/2);
+    m_deadline_chapter->move(m_deadline->geometry().topLeft().x()-m_srartline_chapter->width()-panelsShift,
+                             m_deadline->geometry().topLeft().y()+m_srartline_chapter->height()/2);
 }
 
 
@@ -174,6 +198,8 @@ void AddTaskMenu::on_checkBox_stateChanged(int arg1)
     {
         m_startline->setDate(QDate::currentDate());
         m_startline->setTime(QTime(12,30));
+        m_deadline->setDate(QDate::currentDate());
+        m_deadline->setTime(QTime(12,30));
     }
     else
     {
@@ -230,6 +256,7 @@ void AddTaskMenu::addToBase()
     referEm->setDescription(m_description->getText());
     referEm->setStartline(m_startline->date());
     referEm->setDeadline(m_deadline->date());
+    referEm->setResponceId(localBase->loggindeId());
 
     localBase->addTask(referEm);
     emit baseChanged();

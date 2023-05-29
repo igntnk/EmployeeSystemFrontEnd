@@ -467,6 +467,8 @@ void RightPanel::sortTasks()
 
 void RightPanel::updateTaskPanel()
 {
+    scrollShift = 0;
+    employeeTasks->move(12,10);
     for(int c=0;c<taskPanels.size();)
     {
         delete taskPanels[c];

@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(QSize(1800,800));
     this->setAttribute(Qt::WA_TranslucentBackground );
     this->setMouseTracking(true);
-    this->setMinimumSize(QSize(1500,800));
+    this->setMinimumSize(QSize(1000,600));
 
     initShifts();
 
@@ -243,6 +243,7 @@ MainWindow::MainWindow(QWidget *parent)
     rightPanel = new RightPanel(dataBase,leftPanel->getSelectedPanelNum(),this);
     connect(leftPanel,&LeftPanel::changedSelected,rightPanel,&RightPanel::updateSelectedEmployee);
     connect(rightPanel,&RightPanel::changedSelected,descriptionField,&DescriptionField::changeDesc);
+    connect(descriptionField,&DescriptionField::baseChanged,rightPanel,&RightPanel::updateTaskPanel);
 
     //////////Creating lock screen//////////
 

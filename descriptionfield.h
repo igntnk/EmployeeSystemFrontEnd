@@ -39,6 +39,9 @@ private:
 
     void initShifts();
 
+    void changeToInWorkTask();
+    void changeToDoneTask();
+
     QFont SFProDisplay;
     std::vector<QGraphicsDropShadowEffect*> shadows;
 
@@ -52,6 +55,7 @@ private:
     QLabel* startLineDate;
     QLabel* deadLineDate;
     QLabel* responceEmployee;
+    QPushButton* completeStageBtn = new QPushButton();
     QLabel* chapter2;
     QLabel* employmentDate;
 
@@ -64,6 +68,7 @@ private:
     int descPanelShift;
 
     int selectedNum = -1;
+    int selectedTask = -1;
     DataBase* referBase;
 
     bool isInVac = false;

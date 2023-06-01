@@ -126,13 +126,13 @@ void PTtab::doPainting(QPainter* drawer)
         myBrush.setColor(QColor(0, 0, 0,0));
         drawer->setPen(myPen);
         drawer->setBrush(myBrush);
-        drawer->drawEllipse(picture->geometry().bottomRight().x()-10,picture->geometry().bottomRight().y()-8,
+        drawer->drawEllipse(picture->geometry().bottomRight().x()-8,picture->geometry().bottomRight().y()-10,
                           14,14);
         myPen.setWidth(1);
         drawer->setPen(myPen);
-        myPath.moveTo(picture->geometry().bottomRight().x()-3,picture->geometry().bottomRight().y()-5);
-        myPath.lineTo(picture->geometry().bottomRight().x()-3,picture->geometry().bottomRight().y());
-        myPath.lineTo(picture->geometry().bottomRight().x(),picture->geometry().bottomRight().y());
+        myPath.moveTo(picture->geometry().bottomRight().x()-1,picture->geometry().bottomRight().y()-7);
+        myPath.lineTo(picture->geometry().bottomRight().x()-1,picture->geometry().bottomRight().y()-2);
+        myPath.lineTo(picture->geometry().bottomRight().x()+2,picture->geometry().bottomRight().y()-2);
         drawer->drawPath(myPath);
     }
     if(m_completeStage == 3)

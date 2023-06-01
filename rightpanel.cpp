@@ -597,6 +597,11 @@ void RightPanel::mousePressEvent(QMouseEvent* event)
             if(isOnField(event->pos(),taskPanels[c]->geometry()))
             {
                 taskPanels[c]->setSelected(true);
+                if(!taskPanels[c]->completeStage())
+                {
+                    taskPanels[c]->setCompleteStage(1);
+                    selectedEm->task(taskIdAdded[c])->setCompleteStage(1);
+                }
                 emit changedSelected(taskIdAdded[c]);
             }
             else

@@ -257,6 +257,18 @@ void DescriptionField::initShifts()
     topBarHeight = 50;
 }
 
+void DescriptionField::changeToInWorkTask()
+{
+    referBase->task(selectedTask)->setCompleteStage(2);
+    emit baseChanged();
+}
+
+void DescriptionField::changeToDoneTask()
+{
+    referBase->task(selectedTask)->setCompleteStage(3);
+    emit baseChanged();
+}
+
 void DescriptionField::setSelectedNum(int number)
 {
     selectedNum = number;
@@ -267,6 +279,8 @@ void DescriptionField::setSelectedNum(int number)
 
 void DescriptionField::changeDesc(int number)
 {
+    selectedTask = number;
+
     SFProDisplay.setPixelSize(18);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
@@ -322,6 +336,33 @@ void DescriptionField::changeDesc(int number)
         isInVac = false;
         vacStart->hide();
         vacEnd->hide();
+    }
+
+    if(referBase->task(number)->complete_stage() == 1 and selectedNum == referBase->loggindeId())
+    {
+        delete completeStageBtn;
+        completeStageBtn = new QPushButton(this);
+        completeStageBtn->setStyleSheet(save->styleSheet());
+        completeStageBtn->setGeometry(pictureShift,chapter2->geometry().topLeft().y()-50,200,30);
+        completeStageBtn->setFont(SFProDisplay);
+        completeStageBtn->setText("Start the Task");
+        completeStageBtn->show();
+        connect(completeStageBtn,&QPushButton::clicked,this,&DescriptionField::changeToInWorkTask);
+    }
+    else if(referBase->task(number)->complete_stage() == 2 and selectedNum == referBase->loggindeId())
+    {
+        delete completeStageBtn;
+        completeStageBtn = new QPushButton(this);
+        completeStageBtn->setStyleSheet(save->styleSheet());
+        completeStageBtn->setGeometry(pictureShift,chapter2->geometry().topLeft().y()-50,200,30);
+        completeStageBtn->setFont(SFProDisplay);
+        completeStageBtn->setText("Task Completed");
+        completeStageBtn->show();
+        connect(completeStageBtn,&QPushButton::clicked,this,&DescriptionField::changeToDoneTask);
+    }
+    else
+    {
+        completeStageBtn->hide();
     }
 }
 

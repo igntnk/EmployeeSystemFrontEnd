@@ -3,11 +3,8 @@
 LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     QLabel(parent),localBase(dataBase)
 {
-    SFProDisplay = QFont("SF Pro Display");
-    SFProDisplay.setPixelSize(20);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::DemiBold);
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    localBase->setFontPixelSize(20);
+    QFontMetrics SFProDislplayMetrics(localBase->font());
 
     this->setGeometry(5,50,parent->width()/6,parent->height()-101);
     this->setMouseTracking(true);
@@ -38,7 +35,7 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     inWork = new QPushButton(this);
     inVacation = new QPushButton(this);
 
-    inWork->setFont(SFProDisplay);
+    inWork->setFont(localBase->font());
     inWork->setStyleSheet("QPushButton {"
                           "background-color: rgba(0,0,0,0);"
                           "color: rgb(200,200,200);"
@@ -53,17 +50,8 @@ LeftPanel::LeftPanel(DataBase* dataBase,QMainWindow* parent):
     inWork->setGeometry(12,10+scrollShift,SFProDislplayMetrics.horizontalAdvance("In Work"),SFProDislplayMetrics.height());
     connect(inWork,&QPushButton::clicked,this,&LeftPanel::inWorkPressed);
 
-    inVacation->setFont(SFProDisplay);
-    inVacation->setStyleSheet("QPushButton {"
-                              "background-color: rgba(0,0,0,0);"
-                              "color: rgb(200,200,200);"
-                              "}"
-                              "QPushButton:hover {"
-                              "color: rgb(180,180,180);"
-                              "}"
-                              "QPushButton:pressed {"
-                              "color: rgb(150,150,150);"
-                              "}");
+    inVacation->setFont(localBase->font());
+    inVacation->setStyleSheet(inWork->styleSheet());
     inVacation->setText("In Vacation");
     inVacation->setGeometry(14,10 + profilePanelsInWork[profilePanelsInWork.size()-1]->geometry().bottomLeft().y()+scrollShift,
                             SFProDislplayMetrics.horizontalAdvance("In Vacation"),SFProDislplayMetrics.height());

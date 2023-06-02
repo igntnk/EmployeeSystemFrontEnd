@@ -20,16 +20,14 @@ class AddEmployeeMenu : public QLabel
     Q_OBJECT
 
 public:
-    AddEmployeeMenu(DataBase*& refer,QMainWindow* parent = nullptr);
+    AddEmployeeMenu(DataBase* refer,QMainWindow* parent = nullptr);
 
     void setDefault();
     void resize(QRect parent);
     void showMenu();
 
 private:
-    QFont SFProDisplay;
-
-    DataBase*& localBase;
+    DataBase* localBase;
 
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);

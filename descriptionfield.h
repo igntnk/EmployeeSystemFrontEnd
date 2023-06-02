@@ -29,6 +29,8 @@ public:
     void setDescription();
 
 private:
+    DataBase* localBase;
+
     bool isProfileSelected = false;
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
@@ -42,9 +44,7 @@ private:
     void changeToInWorkTask();
     void changeToDoneTask();
 
-    QFont SFProDisplay;
     std::vector<QGraphicsDropShadowEffect*> shadows;
-
 
     QPixmap profilePix;
     QLabel* profilePict;
@@ -69,7 +69,6 @@ private:
 
     int selectedNum = -1;
     int selectedTask = -1;
-    DataBase* referBase;
 
     bool isInVac = false;
 

@@ -25,9 +25,9 @@ public:
     void resize(QRect parent);
 
 private:
-    QFont SFProDisplay;
-
     DataBase* localBase;
+
+    std::vector<QGraphicsDropShadowEffect*> shadows;
 
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);

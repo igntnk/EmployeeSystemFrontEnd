@@ -55,10 +55,8 @@ MainWindow::MainWindow(QWidget *parent)
     dataBase = new DataBase();
 
 
-    SFProDisplay = QFont("SF Pro Display", 13);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::Bold);
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    dataBase->setFontPixelSize(17);
+    QFontMetrics SFProDislplayMetrics(dataBase->font());
 
     for(int c=0;c<1;c++)
     {
@@ -101,8 +99,10 @@ MainWindow::MainWindow(QWidget *parent)
     myProfile->setIconSize(QSize(20,20));
     connect(myProfile,&QPushButton::clicked,this,&MainWindow::myProfileSelected);
 
+    SFProDislplayMetrics = QFontMetrics(dataBase->font());
+
     myProfileText = new QLabel(this);
-    myProfileText->setFont(SFProDisplay);
+    myProfileText->setFont(dataBase->font());
     myProfileText->setText("My Profile");
     myProfileText->setStyleSheet("color: rgb(150,150,150);");
     myProfileText->resize(SFProDislplayMetrics.horizontalAdvance("My Profile"),SFProDislplayMetrics.height());
@@ -126,7 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
                                     "border: 1px solid rgb(40, 40, 40);"
                                     "}");
     refreshButton->setGeometry(QRect(QPoint(this->width()-136,6),QSize(130,40)));
-    refreshButton->setFont(SFProDisplay);
+    refreshButton->setFont(dataBase->font());
     refreshButton->setText("Update");
 
     //////////Creating title text//////////
@@ -134,7 +134,7 @@ MainWindow::MainWindow(QWidget *parent)
     windowTitle = new QLabel(this);
     windowTitle->setText("Employee Task Control System");
     windowTitle->setGeometry(QRect(QPoint(this->width()/2-120,15),QSize(300,25)));
-    windowTitle->setFont(SFProDisplay);
+    windowTitle->setFont(dataBase->font());
     windowTitle->setStyleSheet("color: rgb(100, 100, 100)");
 
     //////////Creating control buttons//////////
@@ -214,7 +214,7 @@ MainWindow::MainWindow(QWidget *parent)
                                         "border: 1px solid rgb(40, 40, 40);"
                                         "}");
         employeeTools[c]->setGeometry(QRect(QPoint(this->width()/2-512.5+205*c,this->height()-45),QSize(200,40)));
-        employeeTools[c]->setFont(SFProDisplay);
+        employeeTools[c]->setFont(dataBase->font());
     }
 
     employeeTools[0]->setText("Add Eployee");
@@ -586,13 +586,13 @@ void MainWindow::showAddEmMenu()
 
 void MainWindow::editMenu()
 {
-    test = new MessageWindow("Warning","",true,false,this);
+    message = new MessageWindow("Warning","",true,false,this);
 
     if(selected == -1)
     {
-        test->setMainText("You haven't selected any user");
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
+        message->setMainText("You haven't selected any user");
+        connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+        message->show();
         return;
     }
 
@@ -606,31 +606,38 @@ void MainWindow::showAddTaskMenu()
 
 void MainWindow::promoteEmployee()
 {
-    test = new MessageWindow("Warning","",true,false,this);
+    message = new MessageWindow("Warning","",true,false,this);
 
     if(selected == -1)
     {
-        test->setMainText("You haven't selected any user");
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
+        message->setMainText("You haven't selected any user");
+        connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+        message->show();
         return;
     }
 
     if(lockScreen->getLogginedId() == selected)
     {
-        test->setMainText("You can't promote yourself");
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
+        message->setMainText("You can't promote yourself");
+        connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+        message->show();
+        return;
+    }
+    if(dataBase->employee(selected)->rank()->id() < 1)
+    {
+        message = new MessageWindow("Warning","You can't promote director or admin",true,false,this);
+        connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+        message->show();
         return;
     }
 
-    test->setCancelButton(true);
-    test->setMainText("Are you sure, promote " + dataBase->employee(selected)->name() + " ?");
-    test->show();
+    message->setCancelButton(true);
+    message->setMainText("Are you sure, promote " + dataBase->employee(selected)->name() + " ?");
+    message->show();
 
-    connect(test,&MessageWindow::okPressed,this,&MainWindow::promoteSlot);
-    connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-    connect(test,&MessageWindow::cnslPressed,test,&MessageWindow::close);
+    connect(message,&MessageWindow::okPressed,this,&MainWindow::promoteSlot);
+    connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+    connect(message,&MessageWindow::cnslPressed,message,&MessageWindow::close);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -658,18 +665,9 @@ void MainWindow::deleteSlot()
 
 void MainWindow::promoteSlot()
 {
-    if(dataBase->employee(selected)->rank()->id() > 1)
-    {
-        dataBase->employee(selected)->setRank(dataBase->rank(dataBase->employee(selected)->rank()->id()-1));
-        leftPanel->changePTInfo();
-        descriptionField->setInfo();
-    }
-    else
-    {
-        test = new MessageWindow("Warning","You can't promote director or admin",true,false,this);
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
-    }
+    dataBase->employee(selected)->setRank(dataBase->rank(dataBase->employee(selected)->rank()->id()-1));
+    leftPanel->changePTInfo();
+    descriptionField->setInfo();
 }
 
 void MainWindow::myProfileSelected()
@@ -697,29 +695,29 @@ void MainWindow::initShifts()
 
 void MainWindow::deleteEmployee()
 {
-    test = new MessageWindow("Warning","You can't delete yourself",true,false,this);
+    message = new MessageWindow("Warning","You can't delete yourself",true,false,this);
 
     if(selected == lockScreen->getLogginedId())
     {
-        test->show();
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
+        message->show();
+        connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
         return;
     }
 
     if(selected == -1)
     {
-        test->setMainText("You haven't selected any user");
-        connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-        test->show();
+        message->setMainText("You haven't selected any user");
+        connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+        message->show();
         return;
     }
 
-    test->setMainText("Are you sure, delete " + dataBase->employee(selected)->name() + " ?");
-    test->setCancelButton(true);
+    message->setMainText("Are you sure, delete " + dataBase->employee(selected)->name() + " ?");
+    message->setCancelButton(true);
 
-    test->show();
-    connect(test,&MessageWindow::okPressed,this,&MainWindow::deleteSlot);
-    connect(test,&MessageWindow::okPressed,test,&MessageWindow::close);
-    connect(test,&MessageWindow::cnslPressed,test,&MessageWindow::close);
+    message->show();
+    connect(message,&MessageWindow::okPressed,this,&MainWindow::deleteSlot);
+    connect(message,&MessageWindow::okPressed,message,&MessageWindow::close);
+    connect(message,&MessageWindow::cnslPressed,message,&MessageWindow::close);
 }
 

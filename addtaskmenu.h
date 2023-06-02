@@ -21,8 +21,6 @@ public:
     void resize(QRect parent);
 
 private:
-    QFont SFProDisplay;
-
     DataBase* localBase;
 
     void paintEvent(QPaintEvent *event);

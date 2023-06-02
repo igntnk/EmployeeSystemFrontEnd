@@ -35,7 +35,7 @@ private:
     QGraphicsDropShadowEffect* shadowSave;
     QGraphicsDropShadowEffect* shadowCancel;
 
-    DataBase* referBase;
+    DataBase* localBase;
     Employee* selectedEm = new Employee();
 
     QRect parentSize;
@@ -43,7 +43,6 @@ private:
 
     QLabel* employeeTasks;
     QLabel* taskToAdd;
-    QFont SFProDisplay;
 
     QPushButton* addTaskToEmployee;
 

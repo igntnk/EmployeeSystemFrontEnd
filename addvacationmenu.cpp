@@ -3,29 +3,37 @@
 AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     QLabel(parent),localBase(refer)
 {
-    SFProDisplay = QFont("SF Pro Display", 22);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::Bold);
-
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    localBase->setFontPixelSize(30);
+    QFontMetrics SFProDislplayMetrics(localBase->font());
 
     this->setGeometry(1,50,parent->width()-3,parent->height()-52);
     this->setMouseTracking(true);
     this->hide();
 
     addVacationChapter = new QLabel(this);
-    addVacationChapter->setFont(SFProDisplay);
+    addVacationChapter->setFont(localBase->font());
     addVacationChapter->setText("Creating Vacation");
     addVacationChapter->setStyleSheet("color: rgb(200,200,200);");
     addVacationChapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Vacation"),SFProDislplayMetrics.height());
 
-    SFProDisplay.setPixelSize(15);
-    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
+    for(int c=0;c<3;c++)
+    {
+        shadows.push_back(new QGraphicsDropShadowEffect(this));
+        shadows[c]->setBlurRadius(30);
+        shadows[c]->setOffset(0,0);
+        shadows[c]->setColor(QColor(0,0,0,200));
+    }
+
+    localBase->setFontPixelSize(15);
+    SFProDislplayMetrics = QFontMetrics(localBase->font());
 
     m_employee = new QComboBox(this);
+    m_employee->setGraphicsEffect(shadows[0]);
     m_beginDate = new QDateTimeEdit(this);
+    m_beginDate->setGraphicsEffect(shadows[1]);
     m_beginDate_chapter = new QLabel(this);
     m_endDate = new QDateTimeEdit(this);
+    m_endDate->setGraphicsEffect(shadows[2]);
     m_endDate_chapter = new QLabel(this);
     currentDate = new QCheckBox(this);
     m_enter = new QPushButton(this);
@@ -40,14 +48,14 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     m_beginDate->move(m_employee->geometry().bottomLeft().x(),m_employee->geometry().bottomRight().y()+panelsShift);
     m_endDate->move(m_beginDate->geometry().bottomLeft().x(),m_beginDate->geometry().bottomRight().y()+panelsShift);
 
-    m_beginDate_chapter->setFont(SFProDisplay);
+    m_beginDate_chapter->setFont(localBase->font());
     m_beginDate_chapter->setText("Start date:");
     m_beginDate_chapter->resize(SFProDislplayMetrics.horizontalAdvance("Start date:"), SFProDislplayMetrics.height());
     m_beginDate_chapter->move(m_beginDate->geometry().topLeft().x()-m_beginDate_chapter->width()-panelsShift,
                               m_beginDate->geometry().topLeft().y()+m_beginDate_chapter->height()/1.5);
     m_beginDate_chapter->setStyleSheet("color: rgb(180,180,180)");
 
-    m_endDate_chapter->setFont(SFProDisplay);
+    m_endDate_chapter->setFont(localBase->font());
     m_endDate_chapter->setText("End date:");
     m_endDate_chapter->resize(SFProDislplayMetrics.horizontalAdvance("End date:"), SFProDislplayMetrics.height());
     m_endDate_chapter->move(m_endDate->geometry().topLeft().x()-m_endDate_chapter->width()-panelsShift,
@@ -55,7 +63,7 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     m_endDate_chapter->setStyleSheet("color: rgb(180,180,180)");
 
 
-    m_beginDate->setFont(SFProDisplay);
+    m_beginDate->setFont(localBase->font());
     m_beginDate->setStyleSheet("QDateTimeEdit {"
                                 "padding-left: 5 px;"
                                 "background-color: rgb(20,20,20);"
@@ -70,13 +78,12 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
                                 "width:0px"
                                 "}");
 
-    m_endDate->setFont(SFProDisplay);
+    m_endDate->setFont(localBase->font());
     m_endDate->setStyleSheet(m_beginDate->styleSheet());
 
     currentDate->move(m_beginDate->geometry().bottomRight().x()+panelsShift,m_beginDate->geometry().topLeft().y()+3);
     currentDate->setText("Set Current Date");
-    SFProDisplay.setPixelSize(15);
-    currentDate->setFont(SFProDisplay);
+    currentDate->setFont(localBase->font());
     currentDate->setStyleSheet("QCheckBox {"
                                      "background-color: rgb(20,20,20);"
                                      "color: rgb(80,80,80);"
@@ -92,7 +99,7 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     connect(currentDate,&QCheckBox::stateChanged,this,&AddVacationMenu::on_checkBox_stateChanged);
 
     m_employee->resize(200,40);
-    m_employee->setFont(SFProDisplay);
+    m_employee->setFont(localBase->font());
     m_employee->setStyleSheet("QComboBox {"
                                 "padding-left: 5 px;"
                                 "background-color: rgb(20,20,20);"
@@ -116,26 +123,12 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
                          "color: rgb(60,60,60);"
                          "border: 1px solid rgb(40, 40, 40);"
                          "}");
-    m_enter->setFont(SFProDisplay);
+    m_enter->setFont(localBase->font());
     m_enter->setText("Enter");
     m_enter->setGeometry(m_endDate->geometry().center().x()-50,m_endDate->geometry().bottomLeft().y()+20,
                        100,30);
-    m_cancel->setStyleSheet("QPushButton {"
-                           "background-color: rgb(28, 28, 28);"
-                           "color: rgb(100,100,100);"
-                           "border: 2px solid rgb(120,120,120);"
-                           "border-radius: 7px"
-                           "}"
-                           "QPushButton:hover {"
-                           "background-color: rgb(20, 20, 20);"
-                           "color: rgb(80,80,80);"
-                           "}"
-                           "QPushButton:pressed {"
-                           "background-color: rgb(10,10,10);"
-                           "color: rgb(60,60,60);"
-                           "border: 1px solid rgb(40, 40, 40);"
-                           "}");
-    m_cancel->setFont(SFProDisplay);
+    m_cancel->setStyleSheet(m_enter->styleSheet());
+    m_cancel->setFont(localBase->font());
     m_cancel->setText("Cancel");
     m_cancel->setGeometry(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10,
                          100,30);

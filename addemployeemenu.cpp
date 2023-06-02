@@ -1,25 +1,21 @@
 #include "addemployeemenu.h"
 
-AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
+AddEmployeeMenu::AddEmployeeMenu(DataBase* refer, QMainWindow* parent):
     QLabel(parent),localBase(refer)
 {
-    SFProDisplay = QFont("SF Pro Display", 22);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::Bold);
-
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    QFontMetrics SFProDislplayMetrics(localBase->font());
 
     this->setGeometry(1,50,parent->width()-3,parent->height()-52);
     this->setMouseTracking(true);
     this->hide();
 
     chapter = new QLabel(this);
-    chapter->setFont(SFProDisplay);
+    chapter->setFont(localBase->font());
     chapter->setText("Creating Employee");
     chapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Employee"),SFProDislplayMetrics.height());
     chapter->setStyleSheet("color: rgb(200,200,200);");
 
-    SFProDisplay.setPixelSize(13);
+    localBase->setFontPixelSize(13);
 
     shadow = new QGraphicsDropShadowEffect(this);
     shadow->setBlurRadius(30);
@@ -45,13 +41,13 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
     m_cancel = new QPushButton(this);
 
     m_name->setText("Name");
-    m_name->setFont(SFProDisplay);
+    m_name->setFont(localBase->font());
     m_surname->setText("Surname");
-    m_surname->setFont(SFProDisplay);
+    m_surname->setFont(localBase->font());
     m_username->setText("Username");
-    m_username->setFont(SFProDisplay);
+    m_username->setFont(localBase->font());
     m_password->setText("Password");
-    m_password->setFont(SFProDisplay);
+    m_password->setFont(localBase->font());
 
     m_name->move(parent->width()/2-m_name->width()/2,parent->height()/2-200);
     chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-70);
@@ -61,7 +57,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
 
     m_hiringDate->setGeometry(m_name->geometry().bottomLeft().x(),m_password->geometry().bottomRight().y()+panelsShift,
                               200,40);
-    m_hiringDate->setFont(SFProDisplay);
+    m_hiringDate->setFont(localBase->font());
     m_hiringDate->setStyleSheet("QDateTimeEdit {"
                                 "padding-left: 5 px;"
                                 "background-color: rgb(20,20,20);"
@@ -77,8 +73,8 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
                                 "}");
     currentHiringDate->move(m_hiringDate->geometry().bottomRight().x()+panelsShift,m_password->geometry().bottomRight().y()+panelsShift+3);
     currentHiringDate->setText("Set Current Date");
-    SFProDisplay.setPixelSize(15);
-    currentHiringDate->setFont(SFProDisplay);
+    localBase->setFontPixelSize(15);
+    currentHiringDate->setFont(localBase->font());
     currentHiringDate->setStyleSheet("QCheckBox {"
                                      "background-color: rgb(20,20,20);"
                                      "color: rgb(80,80,80);"
@@ -95,7 +91,7 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
 
     m_document->setGeometry(m_name->geometry().bottomLeft().x(),m_hiringDate->geometry().bottomRight().y()+panelsShift,
                             200,40);
-    m_document->setFont(SFProDisplay);
+    m_document->setFont(localBase->font());
     m_document->setStyleSheet("QComboBox {"
                           "padding-left: 5 px;"
                           "background-color: rgb(20,20,20);"
@@ -124,26 +120,12 @@ AddEmployeeMenu::AddEmployeeMenu(DataBase*& refer, QMainWindow* parent):
                          "color: rgb(60,60,60);"
                          "border: 1px solid rgb(40, 40, 40);"
                          "}");
-    m_enter->setFont(SFProDisplay);
+    m_enter->setFont(localBase->font());
     m_enter->setText("Enter");
     m_enter->setGeometry(m_hiringDate->geometry().center().x()-50,m_document->geometry().bottomLeft().y()+20,
                        100,30);
-    m_cancel->setStyleSheet("QPushButton {"
-                           "background-color: rgb(28, 28, 28);"
-                           "color: rgb(100,100,100);"
-                           "border: 2px solid rgb(120,120,120);"
-                           "border-radius: 7px"
-                           "}"
-                           "QPushButton:hover {"
-                           "background-color: rgb(20, 20, 20);"
-                           "color: rgb(80,80,80);"
-                           "}"
-                           "QPushButton:pressed {"
-                           "background-color: rgb(10,10,10);"
-                           "color: rgb(60,60,60);"
-                           "border: 1px solid rgb(40, 40, 40);"
-                           "}");
-    m_cancel->setFont(SFProDisplay);
+    m_cancel->setStyleSheet(m_enter->styleSheet());
+    m_cancel->setFont(localBase->font());
     m_cancel->setText("Cancel");
     m_cancel->setGeometry(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10,
                          100,30);

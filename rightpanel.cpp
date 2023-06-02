@@ -1,30 +1,27 @@
 #include "rightpanel.h"
 
 RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
-    QLabel(parent)
+    QLabel(parent),localBase(refer)
 {
-    SFProDisplay = QFont("SF Pro Display", 13);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::Bold);
+    localBase->setFontPixelSize(17);
 
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    QFontMetrics SFProDislplayMetrics(localBase->font());
 
     parentSize = parent->geometry();
     this->setGeometry(parent->width()-parent->width()/6-2,50,parent->width()/6-5,parent->height()-101);
     this->setMouseTracking(true);
     selectedEm->setId(-1);
-    referBase = refer;
 
     employeeTasks = new QLabel(this);
     employeeTasks->setText("Employee Tasks");
-    employeeTasks->setFont(SFProDisplay);
+    employeeTasks->setFont(localBase->font());
     employeeTasks->setGeometry(12,10,
                                SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
     employeeTasks->setStyleSheet("color: rgb(200,200,200);");
 
     taskToAdd = new QLabel(this);
     taskToAdd->setText("Task(s) to Add");
-    taskToAdd->setFont(SFProDisplay);
+    taskToAdd->setFont(localBase->font());
     taskToAdd->hide();
     taskToAdd->setStyleSheet("color: rgb(200,200,200);");
 
@@ -45,7 +42,7 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
                               "border: 1px solid rgb(40, 40, 40);"
                               "}");
     addTaskToEmployee->setText("Add Task to Employee");
-    addTaskToEmployee->setFont(SFProDisplay);
+    addTaskToEmployee->setFont(localBase->font());
     addTaskToEmployee->resize(200,30);
     addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
     addTaskToEmployee->hide();
@@ -122,7 +119,7 @@ void RightPanel::resize()
 
 void RightPanel::setAddingPanels()
 {
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    QFontMetrics SFProDislplayMetrics(localBase->font());
 
     MessageWindow* test = new MessageWindow("Warning","You haven't selected any user",true,false,this);
 
@@ -159,7 +156,7 @@ void RightPanel::setAddingPanels()
     delete cancelAddBtn;
     delete deadSoon;
 
-    for(auto refTask:referBase->tasks())
+    for(auto refTask:localBase->tasks())
     {
         for(auto emTask:selectedEm->tasks())
         {
@@ -239,7 +236,7 @@ void RightPanel::setAddingPanels()
                               "color: rgb(60,60,60);"
                               "border: 1px solid rgb(40, 40, 40);"
                               "}");
-    addTaskBtn->setFont(SFProDisplay);
+    addTaskBtn->setFont(localBase->font());
     addTaskBtn->setText("Add");
     addTaskBtn->setGeometry(this->width()/2-105,this->height()-50,
                             100,30);
@@ -249,7 +246,7 @@ void RightPanel::setAddingPanels()
 
     cancelAddBtn = new QPushButton(this);
     cancelAddBtn->setStyleSheet(addTaskBtn->styleSheet());
-    cancelAddBtn->setFont(SFProDisplay);
+    cancelAddBtn->setFont(localBase->font());
     cancelAddBtn->setText("Cancel");
     cancelAddBtn->setGeometry(this->width()/2+5,this->height()-50,
                               100,30);
@@ -261,7 +258,7 @@ void RightPanel::setAddingPanels()
     cancelAddBtn->show();
 
     deadSoon = new QPushButton(this);
-    deadSoon->setFont(SFProDisplay);
+    deadSoon->setFont(localBase->font());
     deadSoon->setText("Soon Dead");
     deadSoon->setGeometry(this->width()/2+5,taskToAdd->geometry().topRight().y(),
                               100,20);
@@ -346,7 +343,7 @@ void RightPanel::updateSelectedEmployee(int refer)
     }
 
     showTaskPanels();
-    selectedEm = referBase->employee(refer);
+    selectedEm = localBase->employee(refer);
     updateTaskPanel();
     taskPanels[0]->setSelected(true);
     addTaskToEmployee->show();
@@ -423,7 +420,7 @@ void RightPanel::addEmployeeTask()
         connect(warning,&MessageWindow::okPressed,warning,&MessageWindow::close);
         return;
     }
-    selectedEm->addTask(referBase->task(addTaskId));
+    selectedEm->addTask(localBase->task(addTaskId));
     hideAddTaskMode();
     updateTaskPanel();
     addTaskId = -1;
@@ -490,8 +487,8 @@ void RightPanel::updateTaskPanel()
             taskDead.truncate(this->width()/14);
             taskDead += " ...";
         }
-        QString taskResp = "Responce: " + referBase->employee(task->responce_id())->name() + " " +
-            referBase->employee(task->responce_id())->surname();
+        QString taskResp = "Responce: " + localBase->employee(task->responce_id())->name() + " " +
+            localBase->employee(task->responce_id())->surname();
         if(taskResp.length()>this->width()/14)
         {
             taskResp.truncate(this->width()/14);

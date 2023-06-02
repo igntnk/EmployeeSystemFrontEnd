@@ -41,13 +41,12 @@ protected:
     bool isOnField(const QPointF& point, const QRectF& rect);
 
 private:
-
-    MessageWindow* test;
     DataBase* dataBase;
+
+    MessageWindow* message;
 
     LockScreen* lockScreen;
 
-    QFont SFProDisplay;
     std::vector<QGraphicsDropShadowEffect*> shadows;
 
     DescriptionField* descriptionField;

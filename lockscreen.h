@@ -20,7 +20,7 @@ public:
 
     int getLogginedId();
 private:
-    QFont SFProDisplay;
+    DataBase* localBase;
 
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
@@ -39,8 +39,6 @@ private:
     QPushButton* exit;
 
     QLabel* wrongPass;
-
-    DataBase* refer;
 
     int logginedId;
 };

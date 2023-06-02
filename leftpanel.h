@@ -27,16 +27,15 @@ protected:
     bool isOnField(const QPointF& point, const QRectF& rect);
 
 private:
+    DataBase* localBase;
+
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
     void checkScroller();
     void setDrag(QMouseEvent* event);
 
-    DataBase* localBase;
     PTtab* referPT;
-
-    QFont SFProDisplay;
 
     QPushButton* inWork;
     QPushButton* inVacation;

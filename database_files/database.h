@@ -2,16 +2,14 @@
 #define DATABASE_H
 
 #include <QMessageBox>
-#include "employee_role.h"
 #include "role.h"
-#include "roleauthority.h"
-#include "authority.h"
 #include "employee.h"
 #include "event.h"
 #include "vacation.h"
 #include "task.h"
 #include "rank.h"
 #include <vector>
+#include "QFont"
 
 class DataBase
 {
@@ -69,13 +67,6 @@ public:
     void removeEvent(int number);
     void changeEvent(Event* event, int number);
 
-    int employeeRoleAmount();
-    EmployeeRole* employeeRole(int number);
-    EmployeeRole* employeeRole(QString name);
-    void addEmployeeRole(EmployeeRole* employeeRole);
-    void removeEmployeeRole(int number);
-    void changeEmployeeRole(EmployeeRole* employeeRole, int number);
-
     int rolesAmount();
     Role* role(int number);
     Role* role(QString name);
@@ -83,24 +74,15 @@ public:
     void removeRole(int number);
     void changeRole(Role* role, int number);
 
-    int roleAuthorityAmount();
-    RoleAuthority* roleAuthority(int number);
-    RoleAuthority* roleAuthority(QString name);
-    void addRoleAuthority(RoleAuthority* roleAuthority);
-    void removeRoleAuthority(int number);
-    void changeRoleAuthority(RoleAuthority* roleAuthority, int number);
-
-    int authoritiesAmount();
-    Authority* authority(int number);
-    Authority* authority(QString name);
-    void addAuthority(Authority* authority);
-    void removeAuthority(int number);
-    void changeAuthority(Authority* authority, int number);
-
     void setLoggindeId(int);
     int loggindeId();
 
+    QFont font();
+    void setFontPixelSize(int size);
+
 private:
+    QFont SFProDisplay;
+
     int m_logginedId= -1;
     std::vector<Vacation*> m_vacations;
     std::vector<Employee*> m_employeers;
@@ -109,10 +91,8 @@ private:
     std::vector<Document*> m_documents;
     std::vector<Payment*> m_payments;
     std::vector<Event*> m_events;
-    std::vector<EmployeeRole*> m_employee_role;
     std::vector<Role*> m_roles;
-    std::vector<RoleAuthority*> m_role_authority;
-    std::vector<Authority*> m_authorities;
+
 };
 
 #endif // DATABASE_H

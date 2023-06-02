@@ -2,6 +2,10 @@
 
 DataBase::DataBase()
 {
+    SFProDisplay = QFont("SF Pro Display", 22);
+    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
+    SFProDisplay.setWeight(QFont::Bold);
+
     Task* referTask = new Task();
     referTask->setId(tasksAmount());
     referTask->setName("Create DataBase");
@@ -853,6 +857,16 @@ void DataBase::setLoggindeId(int logginedId)
 int DataBase::loggindeId()
 {
     return m_logginedId;
+}
+
+QFont DataBase::font()
+{
+    return SFProDisplay;
+}
+
+void DataBase::setFontPixelSize(int size)
+{
+    SFProDisplay.setPixelSize(size);
 }
 
 

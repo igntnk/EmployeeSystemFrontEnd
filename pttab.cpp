@@ -30,14 +30,14 @@ PTtab::PTtab(QString text,int choice,QLabel* parent):
     {
         pixmap.load(":icons/profile_icon.png");
         picture->setPixmap(pixmap);
-        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*3)/2,
+        infoText->setGeometry(picture->geometry().topRight().x()+15,(this->height()-SFProDislplayMetrics.height()*3)/2,
                               SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*3);
     }
     else
     {
         pixmap.load(":icons/devices_icon.png");
         picture->setPixmap(pixmap);
-        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*3)/2,
+        infoText->setGeometry(picture->geometry().topRight().x()+15,(this->height()-SFProDislplayMetrics.height()*3)/2,
                               SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*3);
         ifTaskPanel = true;
     }
@@ -179,14 +179,14 @@ void PTtab::setPicture(int choice)
         picture->setPixmap(pixmap);
         infoString = "Unknown Name\nUnknown Surname\nUnknown Rank";
         infoText->setText(infoString);
-        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*3)/2,
+        infoText->setGeometry(picture->geometry().topRight().x()+15,(this->height()-SFProDislplayMetrics.height()*3)/2,
                               SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*3);
     }
     else{
         pixmap.load(":icons/devices_icon.png");
         infoString = "Unknown Task\nUnknown Task Responsible;";
         infoText->setText(infoString);
-        infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*3)/2,
+        infoText->setGeometry(picture->geometry().topRight().x()+15,(this->height()-SFProDislplayMetrics.height()*3)/2,
                               SFProDislplayMetrics.horizontalAdvance(infoString),SFProDislplayMetrics.height()*3);
         ifTaskPanel = true;
     }
@@ -202,7 +202,7 @@ void PTtab::setPText(const QString& text, int rowsNum)
 {
     infoString = text;
     infoText->setText(infoString);
-    infoText->setGeometry(picture->geometry().topRight().x()+10,(this->height()-SFProDislplayMetrics.height()*rowsNum)/2,
+    infoText->setGeometry(picture->geometry().topRight().x()+15,(this->height()-SFProDislplayMetrics.height()*rowsNum)/2,
                           SFProDislplayMetrics.horizontalAdvance(infoString)+20,SFProDislplayMetrics.height()*rowsNum);
 }
 

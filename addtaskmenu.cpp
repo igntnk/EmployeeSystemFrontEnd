@@ -4,23 +4,20 @@
 AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
     QLabel(parent),localBase(dataBase)
 {
-    SFProDisplay = QFont("SF Pro Display", 22);
-    SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
-    SFProDisplay.setWeight(QFont::Bold);
-
-    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+    localBase->setFontPixelSize(30);
+    QFontMetrics SFProDislplayMetrics(localBase->font());
 
     this->setGeometry(1,50,parent->width()-3,parent->height()-52);
     this->setMouseTracking(true);
     this->hide();
 
     chapter = new QLabel(this);
-    chapter->setFont(SFProDisplay);
+    chapter->setFont(localBase->font());
     chapter->setText("Creating Task");
     chapter->resize(SFProDislplayMetrics.horizontalAdvance("Creating Task"),SFProDislplayMetrics.height());
     chapter->setStyleSheet("color: rgb(200,200,200);");
 
-    SFProDisplay.setPixelSize(13);
+    localBase->setFontPixelSize(13);
 
     m_name = new WritePanel(this);
     m_description = new WritePanel(this);
@@ -31,10 +28,10 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
     m_cancel = new QPushButton(this);
 
     m_name->setText("Task Name");
-    m_name->setFont(SFProDisplay);
+    m_name->setFont(localBase->font());
     m_name->resize(300,40);
     m_description->setText("Description");
-    m_description->setFont(SFProDisplay);
+    m_description->setFont(localBase->font());
     m_description->resize(800,40);
 
     m_name->move(parent->width()/2-m_name->width()/2,parent->height()/4);
@@ -42,12 +39,12 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
 
     chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-50);
 
-    SFProDisplay.setPixelSize(15);
-    SFProDislplayMetrics = QFontMetrics(SFProDisplay);
+    localBase->setFontPixelSize(15);
+    SFProDislplayMetrics = QFontMetrics(localBase->font());
 
     m_startline->setGeometry(parent->width()/2-100,m_description->geometry().bottomRight().y()+panelsShift,
                               200,40);
-    m_startline->setFont(SFProDisplay);
+    m_startline->setFont(localBase->font());
     m_startline->setStyleSheet("QDateTimeEdit {"
                                 "padding-left: 5 px;"
                                 "background-color: rgb(20,20,20);"
@@ -63,7 +60,7 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
                                 "}");
 
     m_srartline_chapter = new QLabel(this);
-    m_srartline_chapter->setFont(SFProDisplay);
+    m_srartline_chapter->setFont(localBase->font());
     m_srartline_chapter->setText("Startline date:");
     m_srartline_chapter->resize(SFProDislplayMetrics.horizontalAdvance("Startline date:"), SFProDislplayMetrics.height());
     m_srartline_chapter->move(m_startline->geometry().topLeft().x()-m_srartline_chapter->width()-panelsShift,
@@ -73,12 +70,12 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
 
     m_deadline->setGeometry(parent->width()/2-100,m_startline->geometry().bottomRight().y()+panelsShift,
                              200,40);
-    m_deadline->setFont(SFProDisplay);
+    m_deadline->setFont(localBase->font());
     m_deadline->setStyleSheet(m_startline->styleSheet());
 
     currentDate->move(m_startline->geometry().bottomRight().x()+3,m_startline->geometry().topRight().y());
     currentDate->setText("Set Current Date");
-    currentDate->setFont(SFProDisplay);
+    currentDate->setFont(localBase->font());
     currentDate->setStyleSheet("QCheckBox {"
                                      "background-color: rgb(20,20,20);"
                                      "color: rgb(80,80,80);"
@@ -92,7 +89,7 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
                                      "height: 20px;}");
 
     m_deadline_chapter = new QLabel(this);
-    m_deadline_chapter->setFont(SFProDisplay);
+    m_deadline_chapter->setFont(localBase->font());
     m_deadline_chapter->setText("Deadline date:");
     m_deadline_chapter->resize(SFProDislplayMetrics.horizontalAdvance("Deadline date:"), SFProDislplayMetrics.height());
     m_deadline_chapter->move(m_deadline->geometry().topLeft().x()-m_srartline_chapter->width()-panelsShift,
@@ -116,13 +113,13 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
                            "color: rgb(60,60,60);"
                            "border: 1px solid rgb(40, 40, 40);"
                            "}");
-    m_enter->setFont(SFProDisplay);
+    m_enter->setFont(localBase->font());
     m_enter->setText("Enter");
     m_enter->setGeometry(m_deadline->geometry().center().x()-50,m_deadline->geometry().bottomLeft().y()+20,
                          100,30);
     m_cancel->setStyleSheet(m_enter->styleSheet());
 
-    m_cancel->setFont(SFProDisplay);
+    m_cancel->setFont(localBase->font());
     m_cancel->setText("Cancel");
     m_cancel->setGeometry(m_enter->geometry().topLeft().x(),m_enter->geometry().bottomLeft().y()+10,
                           100,30);

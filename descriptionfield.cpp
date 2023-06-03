@@ -83,10 +83,10 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     m_hiringDate = new QDateEdit(this);
 
     m_name->setFont(localBase->font());
-    m_name->resize(250,SFProDislplayMetrics.height());
+    m_name->resize(150,SFProDislplayMetrics.height());
     m_name->hide();
     m_surname->setFont(localBase->font());
-    m_surname->resize(250,SFProDislplayMetrics.height());
+    m_surname->resize(150,SFProDislplayMetrics.height());
     m_surname->hide();
 
     m_hiringDate->resize(200,50);

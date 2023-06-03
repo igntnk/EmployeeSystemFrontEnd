@@ -3,9 +3,10 @@
 AddEmployeeMenu::AddEmployeeMenu(DataBase* refer, QMainWindow* parent):
     QLabel(parent),localBase(refer)
 {
+    localBase->setFontPixelSize(30);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
-    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
+    this->setGeometry(1,30,parent->width()-3,parent->height()-32);
     this->setMouseTracking(true);
     this->hide();
 
@@ -146,7 +147,7 @@ void AddEmployeeMenu::setDefault()
 
 void AddEmployeeMenu::resize(QRect parent)
 {
-    this->setGeometry(1,50,parent.width()-3,parent.height()-52);
+    this->setGeometry(1,30,parent.width()-3,parent.height()-32);
     m_name->move(parent.width()/2-m_name->width()/2,parent.height()/2-200);
     chapter->move(this->width()/2-chapter->width()/2,m_name->geometry().topLeft().y()-70);
     m_surname->move(m_name->geometry().bottomLeft().x(),m_name->geometry().bottomRight().y()+panelsShift);

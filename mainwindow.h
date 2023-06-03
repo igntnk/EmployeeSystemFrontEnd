@@ -84,6 +84,7 @@ private:
     bool maxTrigger = false;
     bool waiting = false;
     bool mouseResize = false;
+    bool movingWindow = false;
 
     int selected = -1;
 

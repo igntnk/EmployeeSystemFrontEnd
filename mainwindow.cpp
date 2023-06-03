@@ -19,7 +19,7 @@ void MainWindow::resizeWindow()
     myProfile->move((topPanelHeight-myProfileBtnSize.width()+strokeWidth)/2,this->height()-topPanelHeight+(topPanelHeight-myProfileBtnSize.width())/2);
     myProfileText->move(myProfile->geometry().topRight().x()+buttonShift,
                         myProfile->geometry().topRight().y()+(myProfile->height()/2-myProfileText->height()/2));
-    lockScreen->setGeometry(1,51,this->width()-3,this->height()-53);
+    lockScreen->setGeometry(1,30,this->width()-3,this->height()-32);
     leftPanel->setGeometry(shiftForScrolling,topPanelHeight,this->width()/6-shiftForScrolling,this->height()-strokeWidth - topPanelHeight*2);;
     leftPanel->resizePanel();
     rightPanel->setGeometry(this->width()-this->width()/6,topPanelHeight,this->width()/6-shiftForScrolling,this->height()-topPanelHeight*2-strokeWidth);
@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     initShifts();
 
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    resize(QSize(1800,800));
+    resize(QSize(1300,700));
     setAttribute(Qt::WA_TranslucentBackground );
     setMouseTracking(true);
     setMinimumSize(mainWindowMinimumSize);
@@ -238,7 +238,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     lockScreen = new LockScreen(dataBase, this);
     lockScreen->setMouseTracking(true);
-    lockScreen->hide();
 
     addEmMenu = new AddEmployeeMenu(dataBase,this);
     connect(addEmMenu,&AddEmployeeMenu::baseChanged,leftPanel,&LeftPanel::updateProfilesList);
@@ -341,12 +340,18 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
     currentTopLeft = this->geometry().topLeft();
     currentBottomRigth = this->geometry().bottomRight();
     isClicked = true;
+
+    if(isClicked &&
+        isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-20,30))))
+    {
+        movingWindow = true;
+    }
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
 
-    if(isOnField(event->pos(),QRect(0,this->height()-10,10,10)) or (mouseResize and whichSide == 8))///////                         BOTTOM LEFT
+    if(isOnField(event->pos(),QRect(0,this->height()-10,10,10)) or (mouseResize and whichSide == 8) and !movingWindow)///////                         BOTTOM LEFT
     {
         whichSide =8;
         this->setCursor(Qt::SizeBDiagCursor);
@@ -371,7 +376,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(this->width()-10,this->height()-10,10,10))or (mouseResize and whichSide == 6)) ///////          BOTTOM RIGTH
+    if(isOnField(event->pos(),QRect(this->width()-10,this->height()-10,10,10))or (mouseResize and whichSide == 6) and !movingWindow) ///////          BOTTOM RIGTH
     {
         whichSide =6;
         this->setCursor(Qt::SizeFDiagCursor);
@@ -388,7 +393,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(this->width()-10,0,10,10)) or (mouseResize and whichSide == 4)) ///////                         TOP RIGHT
+    if(isOnField(event->pos(),QRect(this->width()-10,0,10,10)) or (mouseResize and whichSide == 4) and !movingWindow) ///////                         TOP RIGHT
     {
         whichSide =4;
         this->setCursor(Qt::SizeBDiagCursor);
@@ -412,7 +417,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(0,0,10,10)) or (mouseResize and whichSide == 2)) ///////                                        TOP LEFT
+    if(isOnField(event->pos(),QRect(0,0,10,10)) or (mouseResize and whichSide == 2) and !movingWindow) ///////                                        TOP LEFT
     {
         whichSide =2;
         this->setCursor(Qt::SizeFDiagCursor);
@@ -445,7 +450,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(0,10,10,this->height()-20)) or (mouseResize and whichSide == 1)) ///////                        LEFT SIDE
+    if(isOnField(event->pos(),QRect(0,10,10,this->height()-20)) or (mouseResize and whichSide == 1)and !movingWindow) ///////                        LEFT SIDE
     {
         whichSide =1;
         this->setCursor(Qt::SizeHorCursor);
@@ -469,7 +474,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(10,0,this->width()-20,10)) or (mouseResize and whichSide == 3)) ///////                         TOP SIDE
+    if(isOnField(event->pos(),QRect(10,0,this->width()-20,10)) or (mouseResize and whichSide == 3) and !movingWindow) ///////                         TOP SIDE
     {
         whichSide =3;
         this->setCursor(Qt::SizeVerCursor);
@@ -491,7 +496,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(this->width()-10,10,10,this->height()-20)) or (mouseResize and whichSide == 5)) ///////         RIGHT SIDE
+    if(isOnField(event->pos(),QRect(this->width()-10,10,10,this->height()-20)) or (mouseResize and whichSide == 5)and !movingWindow) ///////         RIGHT SIDE
     {
         whichSide =5;
         this->setCursor(Qt::SizeHorCursor);
@@ -507,7 +512,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isOnField(event->pos(),QRect(10,this->height()-10,this->width()-20,20)) or (mouseResize and whichSide == 7)) ///////         BOTTOM SIDE
+    if(isOnField(event->pos(),QRect(10,this->height()-10,this->width()-20,20)) or (mouseResize and whichSide == 7)and !movingWindow) ///////         BOTTOM SIDE
     {
         whichSide =7;
         this->setCursor(Qt::SizeVerCursor);
@@ -523,9 +528,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    if(isClicked &&
-        event->modifiers() == Qt::NoModifier &&
-        isOnField(event->pos(),QRect(QPoint(10,10),QPoint(this->width()-10,50))))
+    if(isClicked && movingWindow)
     {
         this->move(event->globalPosition().x()-pressPoint.x(),event->globalPosition().y()-pressPoint.y());
     }
@@ -542,6 +545,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* event)
     Q_UNUSED(event);
     isClicked = false;
     mouseResize = false;
+    movingWindow = false;
     whichSide = 0;
 
 }

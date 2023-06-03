@@ -6,7 +6,7 @@ LockScreen::LockScreen(DataBase* passwordRefer, QMainWindow* parent):
     localBase->setFontPixelSize(17);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
-    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
+    this->setGeometry(1,30,parent->width()-3,parent->height()-32);
 
     shadow = new QGraphicsDropShadowEffect(this);
     shadow->setBlurRadius(30);

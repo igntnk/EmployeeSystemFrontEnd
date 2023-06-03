@@ -6,7 +6,7 @@ AddVacationMenu::AddVacationMenu(DataBase* refer,QMainWindow* parent):
     localBase->setFontPixelSize(30);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
-    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
+    this->setGeometry(1,30,parent->width()-3,parent->height()-32);
     this->setMouseTracking(true);
     this->hide();
 
@@ -145,7 +145,7 @@ void AddVacationMenu::setDefault()
 
 void AddVacationMenu::resize(QRect parent)
 {
-    this->setGeometry(1,50,parent.width()-3,parent.height()-52);
+    this->setGeometry(1,30,parent.width()-3,parent.height()-32);
     m_employee->move(this->width()/2-m_employee->width()/2,this->height()/3);
     addVacationChapter->move(this->width()/2-addVacationChapter->width()/2,m_employee->geometry().topLeft().y()-70);
     m_beginDate->move(m_employee->geometry().bottomLeft().x(),m_employee->geometry().bottomRight().y()+panelsShift);

@@ -7,7 +7,7 @@ AddTaskMenu::AddTaskMenu(DataBase* dataBase,QMainWindow* parent):
     localBase->setFontPixelSize(30);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
-    this->setGeometry(1,50,parent->width()-3,parent->height()-52);
+    this->setGeometry(1,30,parent->width()-3,parent->height()-32);
     this->setMouseTracking(true);
     this->hide();
 
@@ -138,7 +138,7 @@ void AddTaskMenu::setDefault()
 
 void AddTaskMenu::resize(QRect parent)
 {
-    this->setGeometry(1,50,parent.width()-3,parent.height()-52);
+    this->setGeometry(1,30,parent.width()-3,parent.height()-32);
     m_name->move(parent.width()/2-m_name->width()/2,parent.height()/4);
     m_description->move(parent.width()/2-m_description->width()/2,m_name->geometry().bottomRight().y()+panelsShift);
     m_startline->move(parent.width()/2-100,m_description->geometry().bottomRight().y()+panelsShift);

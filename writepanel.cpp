@@ -108,8 +108,11 @@ void WritePanel::setPasswordType(bool type)
 
 void WritePanel::setText(const QString& refer)
 {
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
     edit->clear();
     text->setText(refer);
+    text->resize(this->width(),SFProDislplayMetrics.height());
 }
 
 QLineEdit* WritePanel::getEditPanel()
@@ -119,8 +122,12 @@ QLineEdit* WritePanel::getEditPanel()
 
 void WritePanel::resizeEvent(QResizeEvent *event)
 {
+    QFontMetrics SFProDislplayMetrics(SFProDisplay);
+
     Q_UNUSED(event);
+
     edit->setGeometry(8,5,this->width()-10,this->height()-10);
+    text->move(edit->geometry().topLeft().x(),(this->height()-text->height())/2);
 }
 
 void WritePanel::hideText()

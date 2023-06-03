@@ -10,8 +10,9 @@ SearchByPar::SearchByPar(QMainWindow* parent):
 
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    this->resize(parent->width()/6-20,30);
-    this->setMouseTracking(true);
+    initShifts();
+    resize(parent->width()/6-panelShift,ellipsesRad*2+strokeWidth);
+    setMouseTracking(true);
 
     searchText = new QLineEdit(this);
     searchText->setStyleSheet("QLineEdit{"
@@ -19,16 +20,16 @@ SearchByPar::SearchByPar(QMainWindow* parent):
                         "background-color: rgba(0,0,0,0);"
                         "}");
     searchText->setFrame(false);
-    searchText->setGeometry(this->geometry().topLeft().x()+5,this->geometry().topLeft().y(),this->width()-10,this->height());
+    searchText->setGeometry(this->geometry().topLeft().x()+lineEditShift,this->geometry().topLeft().y(),this->width()-panelShift/2,defaultSearchPanelHeight);
     searchText->setFont(SFProDisplay);
     searchText->hide();
     connect(searchText,&QLineEdit::textChanged,this,&SearchByPar::textChanged);
 
-    SFProDisplay.setPixelSize(22);
+    SFProDisplay.setPixelSize(14);
 
     searchTextShower = new QLabel(this);
     searchTextShower->setFont(SFProDisplay);
-    searchTextShower->move(40,1);
+    searchTextShower->move(ellipsesRad*3,strokeWidth);
     searchTextShower->setStyleSheet("color: rgb(140,140,140);");
 
     for(int c=0;c<3;c++)
@@ -52,16 +53,16 @@ void SearchByPar::resizeEvent(QRect refer)
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
     if(searchPressed or (!searchPressed and !settingsPressed))
     {
-        this->resize(refer.width()/6-20,30);
-        this->move(10,refer.height()-90);
+        resize(refer.width()/6-panelShift,defaultSearchPanelHeight+strokeWidth);
+        move(leftShift,refer.height()-topPanelHeight-defaultSearchPanelHeight-leftShift);
     }
     else if (settingsPressed)
     {
-        this->resize(refer.width()/6-20,90);
-        this->move(10,refer.height()-150);
+        resize(refer.width()/6-panelShift,extendedSearchPanelHeight+strokeWidth);
+        move(leftShift,refer.height()-topPanelHeight-extendedSearchPanelHeight-leftShift);
         replaceChoicePanels();
     }
-    sortText->move(2,this->width()-40-sortText->text().length()*SFProDislplayMetrics.horizontalAdvance(sortText->text()));
+    sortText->move(this->width()-ellipsesRad*3-SFProDislplayMetrics.horizontalAdvance(sortText->text()),strokeWidth);
 }
 
 void SearchByPar::mousePressEvent(QMouseEvent *event)
@@ -148,22 +149,22 @@ void SearchByPar::keyPressEvent(QKeyEvent *event)
         {
             case -1:
             sortText->setText("");
-            sortText->setGeometry(this->width()-40-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
+            sortText->setGeometry(this->width()-ellipsesRad*3-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
                                   SFProDislplayMetrics.horizontalAdvance(sortText->text()),SFProDislplayMetrics.height());
             break;
             case 0:
             sortText->setText(":Name");
-            sortText->setGeometry(this->width()-40-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
+            sortText->setGeometry(this->width()-ellipsesRad*3-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
                                   SFProDislplayMetrics.horizontalAdvance(sortText->text()),SFProDislplayMetrics.height());
             break;
             case 1:
             sortText->setText(":Surname");
-            sortText->setGeometry(this->width()-40-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
+            sortText->setGeometry(this->width()-ellipsesRad*3-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
                                   SFProDislplayMetrics.horizontalAdvance(sortText->text()),SFProDislplayMetrics.height());
             break;
             case 2:
             sortText->setText(":Rank");
-            sortText->setGeometry(this->width()-40-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
+            sortText->setGeometry(this->width()-ellipsesRad*3-SFProDislplayMetrics.horizontalAdvance(sortText->text()),1,
                                   SFProDislplayMetrics.horizontalAdvance(sortText->text()),SFProDislplayMetrics.height());
             break;
         }
@@ -173,7 +174,6 @@ void SearchByPar::keyPressEvent(QKeyEvent *event)
 
     }
 }
-
 
 void SearchByPar::paintEvent(QPaintEvent *event)
 {
@@ -201,10 +201,10 @@ void SearchByPar::doPainting(QPainter *drawer)
 
     if(!searchPressed and !settingsPressed)
     {
-        drawer->drawEllipse(QRect(1,1,28,28));
-        drawer->drawEllipse(QRect(this->width()-30,1,28,28));
+        drawer->drawEllipse(QRect(strokeWidth,strokeWidth,ellipsesRad*2-strokeWidth,ellipsesRad*2-strokeWidth));
+        drawer->drawEllipse(QRect(this->width()-ellipsesRad*2-strokeWidth,strokeWidth,ellipsesRad*2-strokeWidth,ellipsesRad*2-strokeWidth));
 
-        myPath.addEllipse(QRect(8,8,12,12));
+        myPath.addEllipse(QRect(strokeWidth*5,strokeWidth*5,ellipsesRad-strokeWidth,ellipsesRad-strokeWidth));
         myBrush.setColor(QColor(0,0,0,0));
         myPen.setWidth(3);
         drawer->setPen(myPen);
@@ -214,25 +214,25 @@ void SearchByPar::doPainting(QPainter *drawer)
 
         myPath.clear();
 
-        drawer->drawLine(21,21,19,19);
+        drawer->drawLine(strokeWidth*4+ellipsesRad,strokeWidth*4+ellipsesRad,ellipsesRad*2-strokeWidth*5,ellipsesRad*2-strokeWidth*5);
 
         myBrush.setColor(QColor(29,29,29));
         drawer->setPen(myPen);
         drawer->setBrush(myBrush);
 
-        myPath.moveTo(this->width()-23,10);
-        myPath.lineTo(this->width()-9,10);
-        myPath.lineTo(this->width()-16,18);
-        myPath.lineTo(this->width()-23,10);
-        myPath.moveTo(this->width()-16,18);
-        myPath.lineTo(this->width()-16,22);
+        myPath.moveTo(this->width()-ellipsesRad*2+4,8);
+        myPath.lineTo(this->width()-ellipsesRad*2+13,8);
+        myPath.lineTo(this->width()-ellipsesRad*2+8.5,13);
+        myPath.lineTo(this->width()-ellipsesRad*2+4,8);
+        myPath.moveTo(this->width()-ellipsesRad*2+8.5,13);
+        myPath.lineTo(this->width()-ellipsesRad*2+8.5,14);
 
         drawer->drawPath(myPath);
         myPath.clear();
     }
     else if(searchPressed)
     {
-        myPath.addRoundedRect(1,1,this->width()-2,this->height()-2,15,15);
+        myPath.addRoundedRect(1,1,this->width()-2,this->height()-2,10,10);
         drawer->drawPath(myPath);
         myPath.clear();
     }
@@ -244,7 +244,7 @@ void SearchByPar::doPainting(QPainter *drawer)
         drawer->setPen(myPen);
         drawer->setBrush(myBrush);
 
-        myPath.addRoundedRect(100,1,this->width()-101,this->height()-2,15,15);
+        myPath.addRoundedRect(this->width()/2,1,this->width()/2-strokeWidth,this->height()-2,10,10);
 
         drawer->drawPath(myPath);
         myPath.clear();
@@ -255,8 +255,8 @@ void SearchByPar::replaceChoicePanels()
 {
     for(int c=0;c<choicePanel.size();c++)
     {
-        choicePanel[c]->resize(this->width()-101,choicePanel[c]->height());
-        choicePanel[c]->move(100,2+c*choicePanel[c]->height());
+        choicePanel[c]->resize(this->width()/2-strokeWidth,choicePanel[c]->height());
+        choicePanel[c]->move(this->width()/2,2+c*choicePanel[c]->height());
     }
 }
 
@@ -275,6 +275,20 @@ void SearchByPar::hideChoicePanel()
     {
         choicePanel[c]->hide();
     }
+}
+
+void SearchByPar::initShifts()
+{
+    panelShift =20;
+    lineEditShift =5;
+    leftShift = 6;
+    strokeWidth = 1;
+    ellipsesRad = 10;
+
+    defaultSearchPanelHeight = 20;
+    extendedSearchPanelHeight = 60;
+
+    topPanelHeight = 30;
 }
 
 bool SearchByPar::isOnField(const QPointF& point, const QRectF& rect)

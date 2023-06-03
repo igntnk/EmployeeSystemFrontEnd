@@ -59,13 +59,14 @@ private:
     QLabel* chapter2;
     QLabel* employmentDate;
 
+    QSize buttonSize;
     int pictureShift;
     int pictureSideSize;
     int mainProfileInfoShift;
     int chapter1Shift;
     int lineShift;
-    int topBarHeight;
     int descPanelShift;
+    int topPanelHeight;
 
     int selectedNum = -1;
     int selectedTask = -1;

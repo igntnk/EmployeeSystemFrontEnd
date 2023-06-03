@@ -6,7 +6,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
 {
     initShifts();
 
-    this->setGeometry(parent->width()/6,topBarHeight,parent->width()/3*2,parent->height()-topBarHeight*2);
+    this->setGeometry(parent->width()/6,topPanelHeight,parent->width()/3*2,parent->height()-topPanelHeight*2);
 
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
@@ -26,7 +26,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
     profilePict->setGraphicsEffect(shadows[0]);
     profilePict->hide();
 
-    localBase->setFontPixelSize(30);
+    localBase->setFontPixelSize(20);
     SFProDislplayMetrics = QFontMetrics(localBase->font());
 
     chapters = new QLabel(this);
@@ -168,7 +168,7 @@ DescriptionField::DescriptionField(DataBase* base, QMainWindow* parent):
                                   "}");
     addVacationBtn->setFont(localBase->font());
     addVacationBtn->setText("Create Vacation");
-    addVacationBtn->resize(200,40);
+    addVacationBtn->resize(buttonSize);
     addVacationBtn->move(this->width()/2-addVacationBtn->width()/2,20);
     addVacationBtn->setGraphicsEffect(shadows[3]);
     addVacationBtn->hide();
@@ -233,8 +233,8 @@ void DescriptionField::doPainting(QPainter* drawer)
 
         if(isInVac)
         {
-            vacRect = QRect(QPoint(vacEnd->geometry().topLeft().x()-5,vacEnd->geometry().topLeft().y()-5),
-                            QPoint(vacStart->geometry().bottomRight().x()+5,vacStart->geometry().bottomRight().y()+5));
+            vacRect = QRect(QPoint(vacEnd->geometry().bottomRight().x()+5,vacEnd->geometry().bottomRight().y()+5),
+                            QPoint(vacStart->geometry().topLeft().x()-5,vacStart->geometry().topLeft().y()-5));
             myPath.addRoundedRect(vacRect,5,5);
             drawer->drawPath(myPath);
         }
@@ -244,12 +244,14 @@ void DescriptionField::doPainting(QPainter* drawer)
 
 void DescriptionField::initShifts()
 {
+    buttonSize = QSize(150,20);
+
     pictureShift = 40;
-    pictureSideSize = 200;
+    pictureSideSize = 150;
     mainProfileInfoShift = 30;
     chapter1Shift = 300;
     lineShift = 50;
-    topBarHeight = 50;
+    topPanelHeight = 30;
 }
 
 void DescriptionField::changeToInWorkTask()
@@ -276,7 +278,7 @@ void DescriptionField::changeDesc(int number)
 {
     selectedTask = number;
 
-    localBase->setFontPixelSize(18);
+    localBase->setFontPixelSize(15);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
     taskDescription->setFont(localBase->font());
@@ -296,13 +298,19 @@ void DescriptionField::changeDesc(int number)
                           SFProDislplayMetrics.height());
     startLineDate->move(this->width()/2-startLineDate->width()/2,deadLineDate->geometry().topLeft().y()-25);
 
-    responceEmployee->setText("Responce by this task: " + localBase->employee(localBase->employee(selectedNum)->task(number)->responce_id())->name()+
+    localBase->setFontPixelSize(13);
+    SFProDislplayMetrics = QFontMetrics(localBase->font());
+
+    responceEmployee->setText("Responsible: " + localBase->employee(localBase->employee(selectedNum)->task(number)->responce_id())->name()+
                               " " + localBase->employee(localBase->employee(selectedNum)->task(number)->responce_id())->surname());
     responceEmployee->setFont(localBase->font());
-    responceEmployee->resize(SFProDislplayMetrics.horizontalAdvance("Responce by this task: " + localBase->employee(localBase->employee(selectedNum)->task(number)->responce_id())->name()+
+    responceEmployee->resize(SFProDislplayMetrics.horizontalAdvance("Responsible: " + localBase->employee(localBase->employee(selectedNum)->task(number)->responce_id())->name()+
                                                                     " " + localBase->employee(localBase->employee(selectedNum)->task(number)->responce_id())->surname()),
                              SFProDislplayMetrics.height());
     responceEmployee->move(deadLineDate->geometry().topRight().x()+50,deadLineDate->geometry().topRight().y());
+
+    localBase->setFontPixelSize(15);
+    SFProDislplayMetrics = QFontMetrics(localBase->font());
 
     for(int a=0;a<localBase->vacationsAmount();a++)
     {
@@ -320,8 +328,8 @@ void DescriptionField::changeDesc(int number)
             vacEnd->resize(SFProDislplayMetrics.horizontalAdvance("Vacation End Date: " + QString(localBase->vacation(a)->endDate().toString())),
                            SFProDislplayMetrics.height());
 
-            vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
-            vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
+            vacStart->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
+            vacEnd->move((this->width()-vacEnd->width())/2,chapter1->geometry().topLeft().y()-30);
 
             vacStart->show();
             vacEnd->show();
@@ -359,6 +367,7 @@ void DescriptionField::changeDesc(int number)
     {
         completeStageBtn->hide();
     }
+    this->update();
 }
 
 void DescriptionField::setEditMode()
@@ -415,7 +424,7 @@ void DescriptionField::saveChanges()
 
 void DescriptionField::resize(QMainWindow* changed)
 {
-    this->setGeometry(changed->width()/6,topBarHeight,changed->width()/3*2,changed->height()-topBarHeight*2);
+    this->setGeometry(changed->width()/6,topPanelHeight,changed->width()/3*2,changed->height()-topPanelHeight*2);
 
     chapter1->move(pictureShift,chapter1Shift);
     chapter2->move(pictureShift,this->height()-this->height()/5);
@@ -428,6 +437,9 @@ void DescriptionField::resize(QMainWindow* changed)
     vacStart->move((this->width()-vacStart->width())/2,chapter1->geometry().topLeft().y()-30);
     vacEnd->move((this->width()-vacStart->width())/2,vacStart->geometry().topLeft().y()-25);
     addVacationBtn->move(this->width()/2-addVacationBtn->width()/2,20);
+
+    if(this->width() < 820){responceEmployee->hide();}
+    else{responceEmployee->show();}
 }
 
 void DescriptionField::setInfo()
@@ -437,7 +449,7 @@ void DescriptionField::setInfo()
         return;
     }
 
-    localBase->setFontPixelSize(30);
+    localBase->setFontPixelSize(20);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
     QString info = localBase->employee(selectedNum)->name() + '\n' + localBase->employee(selectedNum)->surname()
@@ -464,7 +476,7 @@ void DescriptionField::setDescription()
         return;
     }
 
-    localBase->setFontPixelSize(18);
+    localBase->setFontPixelSize(13);
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
     taskDescription->setText(localBase->employee(selectedNum)->firstTask()->description());

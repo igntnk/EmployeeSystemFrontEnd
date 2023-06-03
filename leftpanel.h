@@ -58,6 +58,18 @@ private:
     int selectedNum = -1;
     int sortType = 0;
 
+    void initShifts();
+
+    int shiftForScrolling;
+    int topPanelShift;
+    int strokeWidth;
+    int usersShift;
+    int panelHeight;
+    int besidePanelsShift;
+    int scrollerShiftX;
+    int scrollerShiftY;
+    int scrollerWidth;
+
 public slots:
     void inWorkPressed();
     void inVacationPressed();

@@ -697,39 +697,6 @@ void DataBase::changeEvent(Event *event, int number)
 }
 
 ////////////////////////////
-/// DataBase::employeeRole
-///
-///
-
-int DataBase::employeeRoleAmount()
-{
-    return m_employee_role.size();
-}
-
-EmployeeRole *DataBase::employeeRole(int number)
-{
-    return m_employee_role[number];
-}
-
-
-void DataBase::addEmployeeRole(EmployeeRole *employeeRole)
-{
-    m_employee_role.push_back(employeeRole);
-}
-
-void DataBase::removeEmployeeRole(int number)
-{
-    delete m_employee_role[number];
-    m_employee_role.erase(m_employee_role.begin()+number);
-}
-
-void DataBase::changeEmployeeRole(EmployeeRole *employeeRole, int number)
-{
-    delete m_employee_role[number];
-    m_employee_role[number] = employeeRole;
-}
-
-////////////////////////////
 /// DataBase::role
 ///
 ///
@@ -771,82 +738,6 @@ void DataBase::changeRole(Role *role, int number)
 {
     delete m_roles[number];
     m_roles[number] = role;
-}
-
-////////////////////////////
-/// DataBase::roleAuthority
-///
-///
-
-int DataBase::roleAuthorityAmount()
-{
-    return m_role_authority.size();
-}
-
-RoleAuthority *DataBase::roleAuthority(int number)
-{
-    return m_role_authority[number];
-}
-
-void DataBase::addRoleAuthority(RoleAuthority *roleAuthority)
-{
-    m_role_authority.push_back(roleAuthority);
-}
-
-void DataBase::removeRoleAuthority(int number)
-{
-    delete m_role_authority[number];
-    m_role_authority.erase(m_role_authority.begin()+number);
-}
-
-void DataBase::changeRoleAuthority(RoleAuthority *roleAuthority, int number)
-{
-    delete m_role_authority[number];
-    m_role_authority[number] = roleAuthority;
-}
-
-////////////////////////////
-/// DataBase::authoritie
-///
-///
-
-int DataBase::authoritiesAmount()
-{
-    return m_authorities.size();
-}
-
-Authority *DataBase::authority(int number)
-{
-    return m_authorities[number];
-}
-
-Authority *DataBase::authority(QString name)
-{
-    for(int c=0;c<m_authorities.size();c++)
-    {
-        if(m_authorities[c]->name() == name)
-        {
-            return m_authorities[c];
-        }
-    }
-    return nullptr;
-}
-
-void DataBase::addAuthority(Authority *authority)
-{
-    m_authorities.push_back(authority);
-}
-
-void DataBase::removeAuthority(int number)
-{
-    delete m_authorities[number];
-    m_authorities.erase(m_authorities.begin()+number);
-}
-
-void DataBase::changeAuthority(Authority *authority, int number)
-{
-    delete m_authorities[number];
-    m_authorities[number] = authority;
 }
 
 void DataBase::setLoggindeId(int logginedId)

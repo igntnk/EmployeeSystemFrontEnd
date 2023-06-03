@@ -71,6 +71,15 @@ private:
     void paintEvent(QPaintEvent *event);
     void doPainting(QPainter* drawer);
 
+    void initShifts();
+
+    QSize addTaskBtnSize;
+    QSize addCancelButtonsSize;
+    int topPanelHeight;
+    int strokeWidth;
+    int leftSideShift;
+    int shiftForResize;
+
 public slots:
     void updateSelectedEmployee(int number);
 

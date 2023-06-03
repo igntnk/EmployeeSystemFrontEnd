@@ -40,6 +40,7 @@ protected:
 
     bool isOnField(const QPointF& point, const QRectF& rect);
 
+
 private:
     DataBase* dataBase;
 
@@ -55,7 +56,6 @@ private:
     QPushButton* exitButton;
     QPushButton* resizeButton;
     QPushButton* hideButton;
-    QPushButton* refreshButton;
 
     std::vector<QPushButton*> employeeTools;
 
@@ -85,7 +85,6 @@ private:
     bool waiting = false;
     bool mouseResize = false;
 
-    int descPanelShift;
     int selected = -1;
 
     AddEmployeeMenu* addEmMenu;
@@ -100,6 +99,22 @@ private:
     void showAddTaskMenu();
     void promoteEmployee();
 
+    QSize mainWindowMinimumSize;
+    QSize controlButtonSize;
+    QSize employeeControllButtonSize;
+    QSize myProfileIconSize;
+    QSize myProfileBtnSize;
+    int employeeControllButtonShift;
+    int descPanelShift;
+    int leftSideShift;
+    int buttonShift;
+    int topPanelHeight;
+    int strokeWidth;
+    int toCenterShift;
+    int defaultSearchPanelHeight;
+    int extendedSearchPanelHeight;
+    int bootomLeftSideShift;
+    int shiftForScrolling;
 
 public slots:
 

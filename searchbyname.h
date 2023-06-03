@@ -45,6 +45,17 @@ private:
     int sortType= 0;
     QLabel* sortText;
 
+    void initShifts();
+
+    int panelShift;
+    int lineEditShift;
+    int strokeWidth;
+    int ellipsesRad;
+    int defaultSearchPanelHeight;
+    int extendedSearchPanelHeight;
+    int topPanelHeight;
+    int leftShift;
+
 signals:
     void textChanged(const QString &text);
     void changeSize(bool opened);

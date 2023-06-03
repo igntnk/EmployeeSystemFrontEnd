@@ -3,13 +3,14 @@
 ChoiceText::ChoiceText(QString referText,QLabel* parent):
     QLabel(parent)
 {
-    SFProDisplay = QFont("SF Pro Display", 13);
+    SFProDisplay = QFont("SF Pro Display");
+    SFProDisplay.setPixelSize(14);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
 
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
 
-    this->resize(parent->width()-100,SFProDislplayMetrics.height()+8);
+    this->resize(parent->width()/2,SFProDislplayMetrics.height()+SFProDislplayMetrics.height()/4);
     this->setMouseTracking(true);
 
     text = new QLabel(this);
@@ -18,7 +19,7 @@ ChoiceText::ChoiceText(QString referText,QLabel* parent):
     text->setMouseTracking(true);
     text->setText(referText);
     text->resize(SFProDislplayMetrics.horizontalAdvance(referText),SFProDislplayMetrics.height());
-    text->move(this->geometry().topLeft().x()+12,this->geometry().topLeft().y()+4);
+    text->move(this->geometry().topLeft().x()+12,(this->height()-text->height())/2);
 }
 
 void ChoiceText::setText(QString refer)

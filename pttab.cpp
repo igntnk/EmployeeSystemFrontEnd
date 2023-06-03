@@ -3,7 +3,7 @@
 PTtab::PTtab(QString text,int choice,QLabel* parent):
     infoString(text),QLabel(parent)
 {
-    SFProDisplay = QFont("SF Pro Display", 12);
+    SFProDisplay = QFont("SF Pro Display", 10);
     SFProDisplay.setStyleStrategy(QFont::PreferAntialias);
     SFProDisplay.setWeight(QFont::Bold);
     QFontMetrics SFProDislplayMetrics(SFProDisplay);
@@ -201,6 +201,7 @@ void PTtab::setPicture(QString file)
 void PTtab::setPText(const QString& text, int rowsNum)
 {
     infoString = text;
+    infoText->clear();
     infoText->setText(infoString);
     infoText->setGeometry(picture->geometry().topRight().x()+15,(this->height()-SFProDislplayMetrics.height()*rowsNum)/2,
                           SFProDislplayMetrics.horizontalAdvance(infoString)+20,SFProDislplayMetrics.height()*rowsNum);

@@ -3,19 +3,20 @@
 RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
     QLabel(parent),localBase(refer)
 {
-    localBase->setFontPixelSize(17);
+    localBase->setFontPixelSize(15);
 
     QFontMetrics SFProDislplayMetrics(localBase->font());
 
     parentSize = parent->geometry();
-    this->setGeometry(parent->width()-parent->width()/6-2,50,parent->width()/6-5,parent->height()-101);
-    this->setMouseTracking(true);
+    initShifts();
+    setGeometry(parent->width()-parent->width()/6,topPanelHeight,parent->width()/6-shiftForResize,parent->height()-topPanelHeight*2-strokeWidth);
+    setMouseTracking(true);
     selectedEm->setId(-1);
 
     employeeTasks = new QLabel(this);
     employeeTasks->setText("Employee Tasks");
     employeeTasks->setFont(localBase->font());
-    employeeTasks->setGeometry(12,10,
+    employeeTasks->setGeometry(leftSideShift,10,
                                SFProDislplayMetrics.horizontalAdvance("Employee Tasks"),SFProDislplayMetrics.height());
     employeeTasks->setStyleSheet("color: rgb(200,200,200);");
 
@@ -41,9 +42,9 @@ RightPanel::RightPanel(DataBase* refer,int number, QMainWindow *parent):
                               "color: rgb(60,60,60);"
                               "border: 1px solid rgb(40, 40, 40);"
                               "}");
-    addTaskToEmployee->setText("Add Task to Employee");
+    addTaskToEmployee->setText("Add Task");
     addTaskToEmployee->setFont(localBase->font());
-    addTaskToEmployee->resize(200,30);
+    addTaskToEmployee->resize(addTaskBtnSize);
     addTaskToEmployee->move((this->width()-addTaskToEmployee->width())/2,this->height()-50);
     addTaskToEmployee->hide();
 
@@ -93,8 +94,8 @@ void RightPanel::resize()
         scroller = true;
     }
 
-    addTaskRect = QRect(QPoint(1,taskToAdd->geometry().topLeft().y()-10)
-                        ,QPoint(this->width(),this->height()));
+    addTaskRect = QRect(QPoint(0,taskToAdd->geometry().topLeft().y()-10)
+                        ,QPoint(this->width()+2,this->height()));
 
     employeeTasks->move(12,10);
     for(int c =0;c < addTaskPanels.size();c++)
@@ -113,6 +114,8 @@ void RightPanel::resize()
     if(addTaskMode)
     {
        setAddingPanels();
+        if(this->width() < 255){deadSoon->hide();}
+        else{deadSoon->show();}
     }
 
 }
@@ -175,17 +178,7 @@ void RightPanel::setAddingPanels()
         generalHeight += addTaskPanels[0]->height();
         taskId.push_back(refTask->id());
         QString taskText = refTask->name();
-        if(taskText.length()>this->width()/16)
-        {
-            taskText.truncate(this->width()/16);
-            taskText += " ...";
-        }
         QString taskDead = "Deadline: " + refTask->deadline().toString();
-        if(taskDead.length()>this->width()/16)
-        {
-            taskDead.truncate(this->width()/16);
-            taskDead += " ...";
-        }
         taskText = taskText +'\n' + taskDead;
 
         float taskLength = refTask->startline().daysTo(refTask->deadline());
@@ -201,7 +194,6 @@ void RightPanel::setAddingPanels()
             addTaskPanels[panNum]->setUndone(true);
         }
 
-        taskText = taskText +'\n' + taskDead;
         addTaskPanels[panNum]->setPText(QString(taskText),2);
         addTaskPanels[panNum]->setDeadLine(refTask->deadline());
         addTaskPanels[panNum]->setCompleteStage(refTask->complete_stage());
@@ -238,8 +230,8 @@ void RightPanel::setAddingPanels()
                               "}");
     addTaskBtn->setFont(localBase->font());
     addTaskBtn->setText("Add");
-    addTaskBtn->setGeometry(this->width()/2-105,this->height()-50,
-                            100,30);
+    addTaskBtn->resize(addCancelButtonsSize);
+    addTaskBtn->move(this->width()/2-82,this->height()-50);
     addTaskBtn->setGraphicsEffect(shadowSave);
     addTaskBtn->hide();
     connect(addTaskBtn,&QPushButton::clicked,this,&RightPanel::addEmployeeTask);
@@ -248,8 +240,8 @@ void RightPanel::setAddingPanels()
     cancelAddBtn->setStyleSheet(addTaskBtn->styleSheet());
     cancelAddBtn->setFont(localBase->font());
     cancelAddBtn->setText("Cancel");
-    cancelAddBtn->setGeometry(this->width()/2+5,this->height()-50,
-                              100,30);
+    cancelAddBtn->resize(addCancelButtonsSize);
+    cancelAddBtn->move(this->width()/2+2,this->height()-50);
     cancelAddBtn->setGraphicsEffect(shadowCancel);
     cancelAddBtn->hide();
     connect(cancelAddBtn,&QPushButton::clicked,this,&RightPanel::hideAddTaskMode);
@@ -263,7 +255,8 @@ void RightPanel::setAddingPanels()
     deadSoon->setGeometry(this->width()/2+5,taskToAdd->geometry().topRight().y(),
                               100,20);
     deadSoon->setStyleSheet(addTaskBtn->styleSheet());
-    deadSoon->show();
+    if(this->width() < 255){deadSoon->hide();}
+    else{deadSoon->show();}
     connect(deadSoon,&QPushButton::clicked,this,&RightPanel::sortTasks);
 
     double panelHeight = this->height()-employeeTasks->geometry().bottomLeft().y()-selectedEm->tasksAmount()*taskPanels[0]->height()-4;
@@ -282,7 +275,7 @@ void RightPanel::setAddingPanels()
     }
 
     addTaskRect = QRect(QPoint(1,employeeTasks->height()+10+selectedEm->tasksAmount()*taskPanels[0]->height()+4)
-                        ,QPoint(this->width(),this->height()));
+                        ,QPoint(this->width()-2,this->height()));
 
 }
 
@@ -302,6 +295,8 @@ void RightPanel::doPainting(QPainter* drawer)
     QPen myPen;
     QPainterPath myPath;
 
+    myPen.setColor(QColor(150,150,150,150));
+    drawer->setPen(myPen);
     drawer->drawLine(employeeTasks->width()+30,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2,    //Employee Task
                      this->width()-20,employeeTasks->geometry().topRight().y()+employeeTasks->height()/2);
 
@@ -333,6 +328,17 @@ void RightPanel::doPainting(QPainter* drawer)
 
         drawer->drawPath(myPath);
     }
+}
+
+void RightPanel::initShifts()
+{
+    addTaskBtnSize = QSize(120,25);
+    addCancelButtonsSize = QSize(80,25);
+
+    topPanelHeight = 30;
+    strokeWidth = 1;
+    leftSideShift = 10;
+    shiftForResize = 5;
 }
 
 void RightPanel::updateSelectedEmployee(int refer)
@@ -476,24 +482,10 @@ void RightPanel::updateTaskPanel()
     for(auto task:selectedEm->tasks())
     {
         QString taskText = task->name();
-        if(taskText.length()>this->width()/14)
-        {
-            taskText.truncate(this->width()/14);
-            taskText += " ...";
-        }
         QString taskDead = "Deadline: " + task->deadline().toString();
-        if(taskDead.length()>this->width()/14)
-        {
-            taskDead.truncate(this->width()/14);
-            taskDead += " ...";
-        }
         QString taskResp = "Responce: " + localBase->employee(task->responce_id())->name() + " " +
             localBase->employee(task->responce_id())->surname();
-        if(taskResp.length()>this->width()/14)
-        {
-            taskResp.truncate(this->width()/14);
-            taskResp += " ...";
-        }
+
         taskText = taskText +'\n' + taskDead + '\n' + taskResp;
         taskPanels.push_back(new PTtab(taskText,0,this));
         taskIdAdded.push_back(task->id());

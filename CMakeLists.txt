@@ -30,6 +30,8 @@ add_executable(EmployeeSystemFrontend
          database_files/task.cpp
          database_files/rank.h
          database_files/rank.cpp
+	 database_files/requester.cpp
+	 database_files/requester.h
          writepanel.h
          messagewindow.h
          messagewindow.cpp

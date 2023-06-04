@@ -433,7 +433,14 @@ std::vector<Employee *> DataBase::employees()
 
 void DataBase::addEmployee(Employee *employee)
 {
+    if(employee != nullptr)
+        m_requester.createEmployee(*employee);
+
     m_employeers.push_back(employee);
+
+    QObject::connect(&m_requester, &Requester::requestFailed, [](const QString& error) {
+        std::cout << "Request failed:" << error.toStdString();
+    });
 }
 
 void DataBase::removeEmployee(int number)
@@ -454,6 +461,7 @@ void DataBase::removeEmployee(int number)
             }
         }
     }
+    m_requester.deleteEmployee(number);
     delete this->employee(number);
     m_employeers.erase(m_employeers.begin()+pos);
 }

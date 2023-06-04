@@ -10,6 +10,7 @@
 #include "rank.h"
 #include <vector>
 #include "QFont"
+#include "requester.h"
 
 class DataBase
 {
@@ -82,6 +83,8 @@ public:
 
 private:
     QFont SFProDisplay;
+
+    Requester m_requester;
 
     int m_logginedId= -1;
     std::vector<Vacation*> m_vacations;

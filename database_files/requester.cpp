@@ -57,7 +57,7 @@ void Requester::makePostRequest(const QString& path, const QByteArray& data)
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
-            std::cout << "success" << std::endl;
+            // Log success request
         } else {
             QString errorString = reply->errorString();
             emit requestFailed(errorString);
@@ -80,7 +80,7 @@ void Requester::makeDeleteRequest(const QString& path)
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
-            std::cout << "success" << std::endl;
+            // Log success request
         } else {
             QString errorString = reply->errorString();
             emit requestFailed(errorString);

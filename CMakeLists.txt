@@ -10,6 +10,7 @@ find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
+        Network
         REQUIRED)
 
 set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons/appIcon.rc")
@@ -30,6 +31,8 @@ add_executable(EmployeeSystemFrontend
          database_files/task.cpp
          database_files/rank.h
          database_files/rank.cpp
+	 database_files/requester.cpp
+	 database_files/requester.h
          writepanel.h
          messagewindow.h
          messagewindow.cpp
@@ -69,6 +72,7 @@ target_link_libraries(EmployeeSystemFrontend
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt6::Network
         )
 
 if (WIN32)

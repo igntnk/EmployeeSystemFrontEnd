@@ -10,6 +10,7 @@ find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
+        Network
         REQUIRED)
 
 set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons/appIcon.rc")
@@ -71,6 +72,7 @@ target_link_libraries(EmployeeSystemFrontend
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt6::Network
         )
 
 if (WIN32)

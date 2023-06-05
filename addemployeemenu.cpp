@@ -242,6 +242,8 @@ void AddEmployeeMenu::addToBase()
 
     referEm->setName(m_name->getText());
     referEm->setSurname(m_surname->getText());
+    referEm->setUsername(m_username->getText());
+    referEm->setPassword(m_password->getText());
     referEm->setRank(localBase->rank(localBase->ranksAmount()-1));
     referEm->addDocument(localBase->document(m_document->currentText()));
 
